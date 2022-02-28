@@ -165,7 +165,6 @@ namespace Promax.Entities
                 _siloList.Add(silo);
                 silo.Stock = this;
                 OnPropertyChanged(nameof(Silos));
-                _binding.CreateBinding().Source(silo).SourceProperty(nameof(Silo.EjectedQuantity)).WhenSourcePropertyChanged(() => OnPropertyChanged(nameof(EjectedQuantity))).Behaviour(MyBindingBehaviour.Invoke);
             }
         }
         public void RemoveSilo(Silo silo)
@@ -175,15 +174,10 @@ namespace Promax.Entities
                 _siloList.Remove(silo);
                 silo.Do(x => x.Stock = null);
                 OnPropertyChanged(nameof(Silos));
-                _binding.RemoveBinding(_binding.Handlers.FirstOrDefault(x => x.SourceObject.IsEqual(silo)));
             }
         }
         public void ClearSilos()
         {
-            foreach (var item in Silos)
-            {
-                _binding.RemoveBinding(_binding.Handlers.FirstOrDefault(x => x.SourceObject.IsEqual(item)));
-            }
             _siloList.Clear();
             OnPropertyChanged(nameof(Silos));
         }
