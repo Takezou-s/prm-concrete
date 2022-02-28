@@ -1,8 +1,10 @@
 ﻿using EasyModbus;
 using Extensions;
+using Promax.Core;
 using RemoteVariableHandler.Core;
 using RemoteVariableHandler.Modbus;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

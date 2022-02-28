@@ -145,19 +145,19 @@
       <Name>Promax.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\RemoteVariableHandler.Core\RemoteVariableHandler.Core.csproj">
-      <Project>{A39A21E8-CA19-4F56-9CCA-A09D847511A5}</Project>
+      <Project>{a39a21e8-ca19-4f56-9cca-a09d847511a5}</Project>
       <Name>RemoteVariableHandler.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\RemoteVariableHandler.Modbus\RemoteVariableHandler.Modbus.csproj">
-      <Project>{29AE25C1-A9C5-463B-B2DC-3BFA11EEC835}</Project>
+      <Project>{29ae25c1-a9c5-463b-b2dc-3bfa11eec835}</Project>
       <Name>RemoteVariableHandler.Modbus</Name>
     </ProjectReference>
     <ProjectReference Include="..\Utility.Binding\Utility.Binding.csproj">
-      <Project>{D2513BF6-73B6-48FB-8B9F-C2154EF284C2}</Project>
+      <Project>{d2513bf6-73b6-48fb-8b9f-c2154ef284c2}</Project>
       <Name>Utility.Binding</Name>
     </ProjectReference>
     <ProjectReference Include="..\Utility\Utility.csproj">
-      <Project>{E4C930A6-8778-4E89-832D-238591AC886F}</Project>
+      <Project>{e4c930a6-8778-4e89-832d-238591ac886f}</Project>
       <Name>Utility</Name>
     </ProjectReference>
   </ItemGroup>
