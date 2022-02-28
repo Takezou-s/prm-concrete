@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{63D8B883-B216-4DA2-8733-2FEA6367144B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Promax.DataAccess</RootNamespace>
+    <AssemblyName>Promax.DataAccess</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.10.1.1\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.Firebird, Version=8.5.2.0, Culture=neutral, PublicKeyToken=42d22d092898e5f8, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.Firebird.8.5.2\lib\net48\EntityFramework.Firebird.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="FirebirdSql.Data.FirebirdClient, Version=8.5.2.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c, processorArchitecture=MSIL">
+      <HintPath>..\packages\FirebirdSql.Data.FirebirdClient.8.5.2\lib\net48\FirebirdSql.Data.FirebirdClient.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Abstract\IComplexNonRetentiveEntityRepository.cs" />
+    <Compile Include="Abstract\IComplexRetentiveEntityRepository.cs" />
+    <Compile Include="Abstract\IEntityRepository.cs" />
+    <Compile Include="Abstract\INonRetentiveBatchedStockRepository.cs" />
+    <Compile Include="Abstract\INonRetentiveConsumedStockRepository.cs" />
+    <Compile Include="Abstract\INonRetentiveProductRepository.cs" />
+    <Compile Include="Abstract\INonRetentiveStockEntryRepository.cs" />
+    <Compile Include="Abstract\IRetentiveClientRepository.cs" />
+    <Compile Include="Abstract\IRetentiveDriverRepository.cs" />
+    <Compile Include="Abstract\IRetentiveOrderRepository.cs" />
+    <Compile Include="Abstract\IRetentiveRecipeContentRepository.cs" />
+    <Compile Include="Abstract\IRetentiveRecipeRepository.cs" />
+    <Compile Include="Abstract\IRetentiveServiceCategoryRepository.cs" />
+    <Compile Include="Abstract\IRetentiveServiceRepository.cs" />
+    <Compile Include="Abstract\IRetentiveSiloRepository.cs" />
+    <Compile Include="Abstract\IRetentiveSiteRepository.cs" />
+    <Compile Include="Abstract\IRetentiveStockRepository.cs" />
+    <Compile Include="Abstract\IRetentiveUserRepository.cs" />
+    <Compile Include="Concrete\ComplexNonRetentiveEntityRepository.cs" />
+    <Compile Include="Concrete\ComplexRetentiveEntityRepository.cs" />
+    <Compile Include="Concrete\EntityRepository.cs" />
+    <Compile Include="Concrete\NonRetentiveBatchedStockRepository.cs" />
+    <Compile Include="Concrete\NonRetentiveConsumedStockRepository.cs" />
+    <Compile Include="Concrete\NonRetentiveProductRepository.cs" />
+    <Compile Include="Concrete\NonRetentiveStockEntryRepository.cs" />
+    <Compile Include="Concrete\RetentiveClientRepository.cs" />
+    <Compile Include="Concrete\RetentiveDriverRepository.cs" />
+    <Compile Include="Concrete\RetentiveOrderRepository.cs" />
+    <Compile Include="Concrete\RetentiveRecipeContentRepository.cs" />
+    <Compile Include="Concrete\RetentiveRecipeRepository.cs" />
+    <Compile Include="Concrete\RetentiveServiceCategoryRepository.cs" />
+    <Compile Include="Concrete\RetentiveServiceRepository.cs" />
+    <Compile Include="Concrete\RetentiveSiloRepository.cs" />
+    <Compile Include="Concrete\RetentiveSiteRepository.cs" />
+    <Compile Include="Concrete\RetentiveStockRepository.cs" />
+    <Compile Include="Concrete\RetentiveUserRepository.cs" />
+    <Compile Include="DatabaseTableInfo.cs" />
+    <Compile Include="ExpertContext.cs" />
+    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="Infrastructure.cs" />
+    <Compile Include="InMemoryController.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Promax.Core\Promax.Core.csproj">
+      <Project>{6054CD87-4FD7-487E-8329-91BC74E3D526}</Project>
+      <Name>Promax.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Promax.Entities\Promax.Entities.csproj">
+      <Project>{02A2D5D2-4B39-4040-9738-94E11CA24806}</Project>
+      <Name>Promax.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utility.Triggers\Utility.Triggers.csproj">
+      <Project>{C0EF156D-6E6F-4B24-BF76-6D08DC06A3FF}</Project>
+      <Name>Utility.Triggers</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+</Project>

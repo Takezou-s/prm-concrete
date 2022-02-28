@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C8BDD0F4-DAF5-4607-9E3A-04891975AAEE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Promax.Business</RootNamespace>
+    <AssemblyName>Promax.Business</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.10.1.1\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.7.12\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AnimationControllers\AnimationController.cs" />
+    <Compile Include="BackgroundProcessors\BackgroundProcessor.cs" />
+    <Compile Include="Communication\BitOfShortVariable.cs" />
+    <Compile Include="Communication\BitOfShortVariableDefinition.cs" />
+    <Compile Include="Communication\EasyModbusCommunicator.cs" />
+    <Compile Include="Communication\EasyModbusDriver.cs" />
+    <Compile Include="Communication\ModbusVariableRepo.cs" />
+    <Compile Include="Communication\RemoteVariableException.cs" />
+    <Compile Include="Communication\RemoteVariableExceptionHandler.cs" />
+    <Compile Include="Communication\VariableController.cs" />
+    <Compile Include="Communication\VariableOperationPair.cs" />
+    <Compile Include="Communication\VariablesBase.cs" />
+    <Compile Include="Communication\VariableStack.cs" />
+    <Compile Include="Communication\VariableStackCreater.cs" />
+    <Compile Include="Communication\VariableWithExecute.cs" />
+    <Compile Include="Controllers\Abstract\IBatchedStockManager.cs" />
+    <Compile Include="Controllers\Abstract\IClientManager.cs" />
+    <Compile Include="Controllers\Abstract\IComplexNonRetentiveManager.cs" />
+    <Compile Include="Controllers\Abstract\IConsumedStockManager.cs" />
+    <Compile Include="Controllers\Abstract\IDriverManager.cs" />
+    <Compile Include="Controllers\Abstract\IManager.cs" />
+    <Compile Include="Controllers\Abstract\IOrderManager.cs" />
+    <Compile Include="Controllers\Abstract\IProductManager.cs" />
+    <Compile Include="Controllers\Abstract\IRecipeContentManager.cs" />
+    <Compile Include="Controllers\Abstract\IRecipeManager.cs" />
+    <Compile Include="Controllers\Abstract\IServiceCategoryManager.cs" />
+    <Compile Include="Controllers\Abstract\IServiceManager.cs" />
+    <Compile Include="Controllers\Abstract\ISiloManager.cs" />
+    <Compile Include="Controllers\Abstract\ISiteManager.cs" />
+    <Compile Include="Controllers\Abstract\IStockEntryManager.cs" />
+    <Compile Include="Controllers\Abstract\IStockManager.cs" />
+    <Compile Include="Controllers\Abstract\IUserManager.cs" />
+    <Compile Include="Controllers\Concrete\BatchedStockManager.cs" />
+    <Compile Include="Controllers\Concrete\ClientManager.cs" />
+    <Compile Include="Controllers\Concrete\ConsumedStockManager.cs" />
+    <Compile Include="Controllers\Concrete\DriverManager.cs" />
+    <Compile Include="Controllers\Concrete\Manager.cs" />
+    <Compile Include="Controllers\Concrete\NonRetentiveManager.cs" />
+    <Compile Include="Controllers\Concrete\OrderManager.cs" />
+    <Compile Include="Controllers\Concrete\ProductManager.cs" />
+    <Compile Include="Controllers\Concrete\RecipeContentManager.cs" />
+    <Compile Include="Controllers\Concrete\RecipeManager.cs" />
+    <Compile Include="Controllers\Concrete\ServiceCategoryManager.cs" />
+    <Compile Include="Controllers\Concrete\ServiceManager.cs" />
+    <Compile Include="Controllers\Concrete\SiloManager.cs" />
+    <Compile Include="Controllers\Concrete\SiteManager.cs" />
+    <Compile Include="Controllers\Concrete\StockEntryManager.cs" />
+    <Compile Include="Controllers\Concrete\StockManager.cs" />
+    <Compile Include="Controllers\Concrete\UserManager.cs" />
+    <Compile Include="AnimationControllers\IDesignModeController.cs" />
+    <Compile Include="Loggers\NLogger.cs" />
+    <Compile Include="Mappers\MappingProfile.cs" />
+    <Compile Include="Mappers\MyMapper.cs" />
+    <Compile Include="ParameterHandlers\ParameterDomain\ParameterDomain.cs" />
+    <Compile Include="ParameterHandlers\ParameterOwnerContext\MyParameterOwnerContext.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RecipeHandlers\RecipeController.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EasyModbus\EasyModbus.csproj">
+      <Project>{233D18B8-EC42-4A0A-B380-3048E3D38E94}</Project>
+      <Name>EasyModbus</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Extensions\Extensions.csproj">
+      <Project>{8540A8EE-59CE-4035-99F9-7DDC6584BC3F}</Project>
+      <Name>Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Promax.Core\Promax.Core.csproj">
+      <Project>{6054CD87-4FD7-487E-8329-91BC74E3D526}</Project>
+      <Name>Promax.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Promax.DataAccess\Promax.DataAccess.csproj">
+      <Project>{63D8B883-B216-4DA2-8733-2FEA6367144B}</Project>
+      <Name>Promax.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Promax.Entities\Promax.Entities.csproj">
+      <Project>{02A2D5D2-4B39-4040-9738-94E11CA24806}</Project>
+      <Name>Promax.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RemoteVariableHandler.Core\RemoteVariableHandler.Core.csproj">
+      <Project>{A39A21E8-CA19-4F56-9CCA-A09D847511A5}</Project>
+      <Name>RemoteVariableHandler.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RemoteVariableHandler.Modbus\RemoteVariableHandler.Modbus.csproj">
+      <Project>{29AE25C1-A9C5-463B-B2DC-3BFA11EEC835}</Project>
+      <Name>RemoteVariableHandler.Modbus</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utility.Binding\Utility.Binding.csproj">
+      <Project>{D2513BF6-73B6-48FB-8B9F-C2154EF284C2}</Project>
+      <Name>Utility.Binding</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utility\Utility.csproj">
+      <Project>{E4C930A6-8778-4E89-832D-238591AC886F}</Project>
+      <Name>Utility</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ParameterHandlers\ParameterOwners\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+</Project>

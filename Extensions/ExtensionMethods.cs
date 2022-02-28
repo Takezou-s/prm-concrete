@@ -58,6 +58,10 @@ namespace Extensions
         {
             return value.ToLower() != "false" && value.ToLower() != "true" ? "false" : value.ToLower();
         }
+        public static bool GetBool(this string value)
+        {
+            return value.ToLower() == "true";
+        }
         public static DateTime MakeFirstDate(this DateTime dt)
         {
             return new DateTime(dt.Year, dt.Month, dt.Day, 0, 0, 0);
