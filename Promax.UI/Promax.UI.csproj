@@ -66,6 +66,257 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="MyMenuButton.cs" />
+    <Compile Include="NewMenuButton.xaml.cs">
+      <DependentUpon>NewMenuButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\BelgeKartı.xaml.cs">
+      <DependentUpon>BelgeKartı.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\FirmaKartı.xaml.cs">
+      <DependentUpon>FirmaKartı.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\GörevKartı.xaml.cs">
+      <DependentUpon>GörevKartı.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\KalibrasyonKartı.xaml.cs">
+      <DependentUpon>KalibrasyonKartı.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\KullanıcıPaneliKartı.xaml.cs">
+      <DependentUpon>KullanıcıPaneliKartı.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\LoginKartı.xaml.cs">
+      <DependentUpon>LoginKartı.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\MüşteriKartı.xaml.cs">
+      <DependentUpon>MüşteriKartı.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ParametrelerKartı.xaml.cs">
+      <DependentUpon>ParametrelerKartı.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Reklam.xaml.cs">
+      <DependentUpon>Reklam.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ReçeteKartı.xaml.cs">
+      <DependentUpon>ReçeteKartı.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ServisKartı.xaml.cs">
+      <DependentUpon>ServisKartı.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SiparişKartı.xaml.cs">
+      <DependentUpon>SiparişKartı.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\StokKartı.xaml.cs">
+      <DependentUpon>StokKartı.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SürücüKartı.xaml.cs">
+      <DependentUpon>SürücüKartı.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\WarningWindow.xaml.cs">
+      <DependentUpon>WarningWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ÜretimKartı.xaml.cs">
+      <DependentUpon>ÜretimKartı.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ŞantiyeKartı.xaml.cs">
+      <DependentUpon>ŞantiyeKartı.xaml</DependentUpon>
+    </Compile>
+    <Page Include="CustomTools\MainTabControlButon\MainTabControlAyarlarButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\MainTabControlButon\MainTabControlMarkaButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\MainTabControlButon\MainTabControlMenüButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\MainTabControlButon\MainTabControlMüşterilerButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\MainTabControlButon\MainTabControlRaporlarButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\MainTabControlButon\MainTabControlReçetelerButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\MainTabControlButon\MainTabControlScadaButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\MainTabControlButon\MainTabControlServislerButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\MainTabControlButon\MainTabControlStoklarButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\MainTabControlButon\MainTabControlTeknikButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\MainTabControlButon\MainTabControlÜretimlerButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\MainTabControlButon\MyMenuItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\PencereButon\SaatText.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\PencereButon\TamamButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\PencereButon\İptalButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\ScadaKontrolButon\BoşaltButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\ScadaKontrolButon\DurdurButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\ScadaKontrolButon\HassasKapakSecimButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\ScadaKontrolButon\SiloDeğiştirButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\ScadaKontrolButon\SiloFiltreButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\ScadaKontrolButon\SürgüButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\ScadaKontrolButon\TransferButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\ScadaKontrolButon\TransferDurdurButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\ScadaKontrolButon\VibroButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\ScadaTabKontrolButon\BoşaltımButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\ScadaTabKontrolButon\DevamButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\ScadaTabKontrolButon\DolumButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\ScadaTabKontrolButon\DurdurButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\ScadaTabKontrolButon\HidrolikButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\ScadaTabKontrolButon\KarışımButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\ScadaTabKontrolButon\KompresörButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\ScadaTabKontrolButon\NemlerButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\ScadaTabKontrolButon\OnayButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\ScadaTabKontrolButon\SirenButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\ScadaTabKontrolButon\SonlandırButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\ScadaTabKontrolButon\StartButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\VeritabanıButon\DüzeltButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\VeritabanıButon\EkleButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\VeritabanıButon\GönderilenBetonButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\VeritabanıButon\KareIzgaraButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\VeritabanıButon\SilButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\VeritabanıButon\TakvimButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\VeritabanıButon\TarihButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\VeritabanıButon\YazdırButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\VeritabanıButon\YenileButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\VeritabanıButon\ÜretimDüzeltButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\VeritabanıButon\İadeBetonButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\WarningCaller.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomTools\ÖzelButon\KilitButon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -74,12 +325,293 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\Converters\BoolifiedStringToShortConverter.cs" />
+    <Compile Include="Controllers\Converters\BoolToBrushConverter.cs" />
+    <Compile Include="Controllers\Converters\ConnectionStatusToImageConverter.cs" />
+    <Compile Include="Controllers\Converters\ConsistencyIndexToTextConverter.cs" />
+    <Compile Include="Controllers\Converters\OrderStatusToImageConverter.cs" />
+    <Compile Include="Controllers\Converters\OrderStatusToTextConverter.cs" />
+    <Compile Include="Controllers\Converters\ProductionStatusToImageConverter.cs" />
+    <Compile Include="Controllers\Converters\SiloScalifyConverter.cs" />
+    <Compile Include="Controllers\Converters\StockTypeToComboboxItemConverter.cs" />
+    <Compile Include="Controllers\Converters\StockTypeToImageConverter.cs" />
+    <Compile Include="Controllers\Converters\TimerRemoteVariableConverter.cs" />
+    <Compile Include="Controllers\Extensions.cs" />
+    <Compile Include="Controllers\Strings.cs" />
+    <Compile Include="CustomTools\MainTabControlButon\MainTabControlAyarlarButon.xaml.cs">
+      <DependentUpon>MainTabControlAyarlarButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\MainTabControlButon\MainTabControlMarkaButon.xaml.cs">
+      <DependentUpon>MainTabControlMarkaButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\MainTabControlButon\MainTabControlMenüButon.xaml.cs">
+      <DependentUpon>MainTabControlMenüButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\MainTabControlButon\MainTabControlMüşterilerButon.xaml.cs">
+      <DependentUpon>MainTabControlMüşterilerButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\MainTabControlButon\MainTabControlRaporlarButon.xaml.cs">
+      <DependentUpon>MainTabControlRaporlarButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\MainTabControlButon\MainTabControlReçetelerButon.xaml.cs">
+      <DependentUpon>MainTabControlReçetelerButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\MainTabControlButon\MainTabControlScadaButon.xaml.cs">
+      <DependentUpon>MainTabControlScadaButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\MainTabControlButon\MainTabControlServislerButon.xaml.cs">
+      <DependentUpon>MainTabControlServislerButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\MainTabControlButon\MainTabControlStoklarButon.xaml.cs">
+      <DependentUpon>MainTabControlStoklarButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\MainTabControlButon\MainTabControlTeknikButon.xaml.cs">
+      <DependentUpon>MainTabControlTeknikButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\MainTabControlButon\MainTabControlÜretimlerButton.xaml.cs">
+      <DependentUpon>MainTabControlÜretimlerButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\MainTabControlButon\MyMenuItem.xaml.cs">
+      <DependentUpon>MyMenuItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\PencereButon\SaatText.xaml.cs">
+      <DependentUpon>SaatText.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\PencereButon\TamamButon.xaml.cs">
+      <DependentUpon>TamamButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\PencereButon\İptalButon.xaml.cs">
+      <DependentUpon>İptalButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\ScadaKontrolButon\BoşaltButon.xaml.cs">
+      <DependentUpon>BoşaltButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\ScadaKontrolButon\DurdurButon.xaml.cs">
+      <DependentUpon>DurdurButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\ScadaKontrolButon\HassasKapakSecimButon.xaml.cs">
+      <DependentUpon>HassasKapakSecimButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\ScadaKontrolButon\SiloDeğiştirButon.xaml.cs">
+      <DependentUpon>SiloDeğiştirButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\ScadaKontrolButon\SiloFiltreButon.xaml.cs">
+      <DependentUpon>SiloFiltreButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\ScadaKontrolButon\SürgüButon.xaml.cs">
+      <DependentUpon>SürgüButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\ScadaKontrolButon\TransferButon.xaml.cs">
+      <DependentUpon>TransferButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\ScadaKontrolButon\TransferDurdurButon.xaml.cs">
+      <DependentUpon>TransferDurdurButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\ScadaKontrolButon\VibroButon.xaml.cs">
+      <DependentUpon>VibroButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\ScadaTabKontrolButon\BoşaltımButon.xaml.cs">
+      <DependentUpon>BoşaltımButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\ScadaTabKontrolButon\DevamButon.xaml.cs">
+      <DependentUpon>DevamButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\ScadaTabKontrolButon\DolumButon.xaml.cs">
+      <DependentUpon>DolumButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\ScadaTabKontrolButon\DurdurButon.xaml.cs">
+      <DependentUpon>DurdurButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\ScadaTabKontrolButon\HidrolikButon.xaml.cs">
+      <DependentUpon>HidrolikButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\ScadaTabKontrolButon\KarışımButon.xaml.cs">
+      <DependentUpon>KarışımButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\ScadaTabKontrolButon\KompresörButon.xaml.cs">
+      <DependentUpon>KompresörButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\ScadaTabKontrolButon\NemlerButon.xaml.cs">
+      <DependentUpon>NemlerButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\ScadaTabKontrolButon\OnayButon.xaml.cs">
+      <DependentUpon>OnayButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\ScadaTabKontrolButon\SirenButon.xaml.cs">
+      <DependentUpon>SirenButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\ScadaTabKontrolButon\SonlandırButon.xaml.cs">
+      <DependentUpon>SonlandırButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\ScadaTabKontrolButon\StartButon.xaml.cs">
+      <DependentUpon>StartButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\VeritabanıButon\DüzeltButon.xaml.cs">
+      <DependentUpon>DüzeltButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\VeritabanıButon\EkleButon.xaml.cs">
+      <DependentUpon>EkleButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\VeritabanıButon\GönderilenBetonButon.xaml.cs">
+      <DependentUpon>GönderilenBetonButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\VeritabanıButon\KareIzgaraButon.xaml.cs">
+      <DependentUpon>KareIzgaraButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\VeritabanıButon\SilButon.xaml.cs">
+      <DependentUpon>SilButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\VeritabanıButon\TakvimButon.xaml.cs">
+      <DependentUpon>TakvimButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\VeritabanıButon\TarihButon.xaml.cs">
+      <DependentUpon>TarihButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\VeritabanıButon\YazdırButon.xaml.cs">
+      <DependentUpon>YazdırButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\VeritabanıButon\YenileButon.xaml.cs">
+      <DependentUpon>YenileButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\VeritabanıButon\ÜretimDüzeltButon.xaml.cs">
+      <DependentUpon>ÜretimDüzeltButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\VeritabanıButon\İadeBetonButon.xaml.cs">
+      <DependentUpon>İadeBetonButon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\WarningCaller.xaml.cs">
+      <DependentUpon>WarningCaller.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTools\ÖzelButon\KilitButon.xaml.cs">
+      <DependentUpon>KilitButon.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="NewMenuButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\MüşterilerSayfası.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\RaporlarSayfası.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ReçetelerSayfası.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ScadaSayfası.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ServislerSayfası.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\StoklarSayfası.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ÜretimlerSayfası.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\BelgeKartı.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\FirmaKartı.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\GörevKartı.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\KalibrasyonKartı.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\KullanıcıPaneliKartı.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\LoginKartı.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\MüşteriKartı.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ParametrelerKartı.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\Reklam.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ReçeteKartı.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ServisKartı.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\SiparişKartı.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\StokKartı.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\SürücüKartı.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\WarningWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ÜretimKartı.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ŞantiyeKartı.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Pages\MüşterilerSayfası.xaml.cs">
+      <DependentUpon>MüşterilerSayfası.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\RaporlarSayfası.xaml.cs">
+      <DependentUpon>RaporlarSayfası.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ReçetelerSayfası.xaml.cs">
+      <DependentUpon>ReçetelerSayfası.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ScadaSayfası.xaml.cs">
+      <DependentUpon>ScadaSayfası.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ServislerSayfası.xaml.cs">
+      <DependentUpon>ServislerSayfası.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\StoklarSayfası.xaml.cs">
+      <DependentUpon>StoklarSayfası.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ÜretimlerSayfası.xaml.cs">
+      <DependentUpon>ÜretimlerSayfası.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -105,6 +637,117 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Extensions\Extensions.csproj">
+      <Project>{8540A8EE-59CE-4035-99F9-7DDC6584BC3F}</Project>
+      <Name>Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Promax.Core\Promax.Core.csproj">
+      <Project>{6054CD87-4FD7-487E-8329-91BC74E3D526}</Project>
+      <Name>Promax.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Promax.Entities\Promax.Entities.csproj">
+      <Project>{02A2D5D2-4B39-4040-9738-94E11CA24806}</Project>
+      <Name>Promax.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utility.Binding\Utility.Binding.csproj">
+      <Project>{D2513BF6-73B6-48FB-8B9F-C2154EF284C2}</Project>
+      <Name>Utility.Binding</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utility\Utility.csproj">
+      <Project>{E4C930A6-8778-4E89-832D-238591AC886F}</Project>
+      <Name>Utility</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\greenloader.png" />
+    <Resource Include="images\grid.png" />
+    <Resource Include="images\hydrolic.png" />
+    <Resource Include="images\lock.png" />
+    <Resource Include="images\menu.png" />
+    <Resource Include="images\plus_button.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Pictures\Icons\add.png" />
+    <Resource Include="Pictures\Icons\as-medikal-logo-retina.png" />
+    <Resource Include="Pictures\Icons\automation.png" />
+    <Resource Include="Pictures\Icons\binoculars.png" />
+    <Resource Include="Pictures\Icons\blackFlag.png" />
+    <Resource Include="Pictures\Icons\calendar.png" />
+    <Resource Include="Pictures\Icons\check.png" />
+    <Resource Include="Pictures\Icons\checklist.png" />
+    <Resource Include="Pictures\Icons\cimento_silo_filtre.png" />
+    <Resource Include="Pictures\Icons\compressor.png" />
+    <Resource Include="Pictures\Icons\concretes.png" />
+    <Resource Include="Pictures\Icons\consult.png" />
+    <Resource Include="Pictures\Icons\contract.png" />
+    <Resource Include="Pictures\Icons\CWP.JPG" />
+    <Resource Include="Pictures\Icons\diskette.png" />
+    <Resource Include="Pictures\Icons\down-arrow.png" />
+    <Resource Include="Pictures\Icons\down-arrow1.png" />
+    <Resource Include="Pictures\Icons\downarrow.png" />
+    <Resource Include="Pictures\Icons\dushbin.png" />
+    <Resource Include="Pictures\Icons\edit.png" />
+    <Resource Include="Pictures\Icons\excel.png" />
+    <Resource Include="Pictures\Icons\false.gif" />
+    <Resource Include="Pictures\Icons\flask.png" />
+    <Resource Include="Pictures\Icons\folders.png" />
+    <Resource Include="Pictures\Icons\graph-bar.png" />
+    <Resource Include="Pictures\Icons\graphicbar.png" />
+    <Resource Include="Pictures\Icons\greencircle.png" />
+    <Resource Include="Pictures\Icons\greenFlag.png" />
+    <Resource Include="Pictures\Icons\greenloader.png" />
+    <Resource Include="Pictures\Icons\greenProd.png" />
+    <Resource Include="Pictures\Icons\grid.png" />
+    <Resource Include="Pictures\Icons\growth.png" />
+    <Resource Include="Pictures\Icons\hydrolic.png" />
+    <Resource Include="Pictures\Icons\kare_agrega.png" />
+    <Resource Include="Pictures\Icons\kare_cimento.png" />
+    <Resource Include="Pictures\Icons\kare_katkı.png" />
+    <Resource Include="Pictures\Icons\kare_su.png" />
+    <Resource Include="Pictures\Icons\lock.png" />
+    <Resource Include="Pictures\Icons\logo.png" />
+    <Resource Include="Pictures\Icons\manager.png" />
+    <Resource Include="Pictures\Icons\menu.png" />
+    <Resource Include="Pictures\Icons\mixer.png" />
+    <Resource Include="Pictures\Icons\next_blue.png" />
+    <Resource Include="Pictures\Icons\next_grey.png" />
+    <Resource Include="Pictures\Icons\packages.png" />
+    <Resource Include="Pictures\Icons\padlock.png" />
+    <Resource Include="Pictures\Icons\pencil.png" />
+    <Resource Include="Pictures\Icons\percent.png" />
+    <Resource Include="Pictures\Icons\pinkpausebutton.png" />
+    <Resource Include="Pictures\Icons\play-button.png" />
+    <Resource Include="Pictures\Icons\plus.png" />
+    <Resource Include="Pictures\Icons\plus_button.png" />
+    <Resource Include="Pictures\Icons\printer.png" />
+    <Resource Include="Pictures\Icons\promax.png" />
+    <Resource Include="Pictures\Icons\recycle.png" />
+    <Resource Include="Pictures\Icons\redcircle.png" />
+    <Resource Include="Pictures\Icons\redFlag.png" />
+    <Resource Include="Pictures\Icons\redloader.png" />
+    <Resource Include="Pictures\Icons\redProd.png" />
+    <Resource Include="Pictures\Icons\reload.png" />
+    <Resource Include="Pictures\Icons\remove.png" />
+    <Resource Include="Pictures\Icons\right-arrow.png" />
+    <Resource Include="Pictures\Icons\Scada.png" />
+    <Resource Include="Pictures\Icons\sigma.png" />
+    <Resource Include="Pictures\Icons\sound.png" />
+    <Resource Include="Pictures\Icons\square.png" />
+    <Resource Include="Pictures\Icons\square1.png" />
+    <Resource Include="Pictures\Icons\square1red.png" />
+    <Resource Include="Pictures\Icons\true.gif" />
+    <Resource Include="Pictures\Icons\unlock.png" />
+    <Resource Include="Pictures\Icons\uparrow.png" />
+    <Resource Include="Pictures\Icons\vibro.png" />
+    <Resource Include="Pictures\Icons\waterdrop.png" />
+    <Resource Include="Pictures\Icons\wrenchgear.png" />
+    <Resource Include="Pictures\Icons\x-button.png" />
+    <Resource Include="Pictures\Icons\yellowcircle.png" />
+    <Resource Include="Pictures\Icons\yellowFlag.png" />
+    <Resource Include="Pictures\Icons\yellowpausebutton.png" />
+    <Resource Include="Pictures\Icons\yellowProd.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

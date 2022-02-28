@@ -1,0 +1,12 @@
+﻿<Button x:Class="Promax.UI.CustomTools.ScadaTabKontrolButon.BoşaltımButon"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" Style="{StaticResource ScadaTabControlSquenceButtonStyle}">
+    <Button.Content >
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Name="BtnText" Text="Boşaltım" Margin="5,5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        </StackPanel>
+    </Button.Content>
+</Button>

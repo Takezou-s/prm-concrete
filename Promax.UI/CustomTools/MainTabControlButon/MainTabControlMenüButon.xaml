@@ -1,0 +1,44 @@
+﻿<Menu     x:Class="Promax.UI.MainTabControlMenüButon"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:Promax.UI="clr-namespace:Promax.UI"
+          mc:Ignorable="d" Width="25" Height="25" Margin="0,0,3,0">
+
+    <MenuItem Template="{DynamicResource  MainTabControlMenuButonStyle}">
+        <MenuItem.Icon>
+            <Image Source="/Promax.UI;component/Pictures/Icons/Menu.png" />
+        </MenuItem.Icon>
+        <Promax.UI:MyMenuItem Header="Şimdi Yedekle"/>
+        <Separator/>
+        <MenuItem Template="{DynamicResource MenuItemTemplate2}" >
+            <MenuItem.Header>
+                <TextBlock Text="Diller"/>
+            </MenuItem.Header>
+            <Promax.UI:MyMenuItem Header="_Türkçe" />
+            <Promax.UI:MyMenuItem Header="_İngilizce" IsCheckable="True"/>
+            <Promax.UI:MyMenuItem Header="_Russian" IsCheckable="True" />
+            <Promax.UI:MyMenuItem Header="_French" IsCheckable="True"/>
+            <Promax.UI:MyMenuItem Header="_Arabic" IsCheckable="True" />
+            <Promax.UI:MyMenuItem Header="_Farsi" IsCheckable="True"/>
+            <Promax.UI:MyMenuItem Header="_Espanol" IsCheckable="True" />
+            <Promax.UI:MyMenuItem Header="_Serbian" IsCheckable="True"/>
+            <Promax.UI:MyMenuItem Header="_Macedonian" IsCheckable="True" />
+            <Promax.UI:MyMenuItem Header="_Hungarian" IsCheckable="True"/>
+            <Promax.UI:MyMenuItem Header="_Polish" IsCheckable="True" />
+            <Promax.UI:MyMenuItem Header="_Deutsch" IsCheckable="True"/>
+            <Promax.UI:MyMenuItem Header="_Romanian" IsCheckable="True" />
+            <Promax.UI:MyMenuItem Header="_Chinese" IsCheckable="True"/>
+            <Promax.UI:MyMenuItem Header="_Czech" IsCheckable="True" />
+            <Promax.UI:MyMenuItem Header="_Slovak" IsCheckable="True"/>
+        </MenuItem>
+        <Separator/>
+        <Promax.UI:MyMenuItem Header="_Kalibrasyon" />
+        <Promax.UI:MyMenuItem Header="_Ayarlar" />
+        <Separator/>
+        <Promax.UI:MyMenuItem Header="_Firma Bilgileri" />
+        <Separator/>
+        <Promax.UI:MyMenuItem Header="_Uygulamayı Kapat" />
+    </MenuItem>
+</Menu>

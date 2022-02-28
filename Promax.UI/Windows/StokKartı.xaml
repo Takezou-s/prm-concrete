@@ -1,0 +1,66 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pencerebuton="clr-namespace:Promax.UI.CustomTools.PencereButon"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:Wpf="clr-namespace:Promax.UI" x:Class="Promax.UI.Windows.StokKartı"
+        mc:Ignorable="d"
+         Title="Stok Kartı" Background="#FFF0F0F0" MinWidth="300" Width="350" MaxWidth="476" MinHeight="200" Height="250" MaxHeight="300" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+
+    </Window.Resources>
+    <DockPanel Margin="0">
+        <Grid DockPanel.Dock="Top" Margin="24,24,24,16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Label Content="Kod" Grid.Row="0" Padding="0,0,5,0" VerticalAlignment="Center"/>
+            <xctk:IntegerUpDown Value="{Binding Path=Stock.StockCode, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Grid.Row="0" Grid.Column="1" Margin="5,3,0,3" Minimum="0" ShowButtonSpinner="False"/>
+            <Label Content="Stok Sınıfı" Grid.Row="1" VerticalAlignment="Center" Padding="0,0,5,0"/>
+            <ComboBox SelectedIndex="{Binding Path=Stock.StockCatNum, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Converter={StaticResource StockTypeToComboboxItemConverter}}" Grid.Row="1" Grid.Column="1" Margin="5,3,0,3" Style="{DynamicResource ComboBoxStyle}">
+                <ComboBoxItem>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Promax.UI;component/Pictures/Icons/kare_agrega.png"/>
+                        <TextBlock Text="Agrega" Margin="5,0,0,0"/>
+                    </StackPanel>
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Promax.UI;component/Pictures/Icons/kare_cimento.png"/>
+                        <TextBlock Text="Çimento" Margin="5,0,0,0"/>
+                    </StackPanel>
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Promax.UI;component/Pictures/Icons/kare_su.png"/>
+                        <TextBlock Text="Su" Margin="5,0,0,0"/>
+                    </StackPanel>
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Promax.UI;component/Pictures/Icons/kare_katkı.png"/>
+                        <TextBlock Text="Katkı" Margin="5,0,0,0"/>
+                    </StackPanel>
+                </ComboBoxItem>
+            </ComboBox>
+            <Label Content="Stok Adı" Grid.Row="2" VerticalAlignment="Center" Padding="0,0,5,0"/>
+            <TextBox Text="{Binding Path=Stock.StockName, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Grid.Row="2" Grid.Column="1" Margin="5,5,0,5" />
+        </Grid>
+        <Grid DockPanel.Dock="Bottom" Background="#FFDBDBDB" VerticalAlignment="Bottom" Height="40" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <pencerebuton:İptalButon Click="İptalButon_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,10,0" />
+            <pencerebuton:TamamButon Click="TamamButon_Click" HorizontalAlignment="Right" Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,0" />
+        </Grid>
+    </DockPanel>
+</Window>

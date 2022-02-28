@@ -1,0 +1,67 @@
+﻿<Window x:Class="Promax.UI.Windows.FirmaKartı"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         xmlns:pencerebuton="clr-namespace:Promax.UI.CustomTools.PencereButon"
+        mc:Ignorable="d"
+        Title="Firma Kartı" Height="480" Width="476" Background="#FFF0F0F0" MinWidth="476" MinHeight="470"  MaxWidth="676" MaxHeight="610" ShowInTaskbar="False">
+    <DockPanel Margin="0">
+        <Grid DockPanel.Dock="Top" Margin="24,24,24,16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Label Content="Firma Tipi" VerticalAlignment="Center" Padding="0,0,5,0"/>
+            <ComboBox Grid.Column="1" Margin="5,5,0,5" Height="23"/>
+            <Border Grid.Row="1" Grid.ColumnSpan="5" Background="#FFBFBFBF" Height="1" Margin="0,5"/>
+            <Label Content="Şirket Ünvanı" Grid.Row="2" Padding="0,0,5,0" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Margin="5,5,0,5" />
+            <Border Grid.Row="3" Grid.ColumnSpan="5" Background="#FFBFBFBF" Height="1" Margin="0,5"/>
+            <Label Content="Adres" Grid.Row="4" VerticalAlignment="Center" Padding="0,0,5,0"/>
+            <TextBox Grid.Row="4" Grid.Column="1" Margin="5,5,0,5" />
+            <Label Content="İlçe" Grid.Row="5" Padding="0,0,5,0" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="5" Grid.Column="1" Margin="5,5,0,5"/>
+            <Label Content="İl" Grid.Row="6" Padding="0,0,5,0" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="6" Grid.Column="1" Margin="5,5,0,5"/>
+            <Border Grid.Row="7" Grid.ColumnSpan="5" Background="#FFBFBFBF" Height="1" Margin="0,5"/>
+            <Label Content="Vergi Numarası" Grid.Row="8" VerticalAlignment="Center" Padding="0,0,5,0"/>
+            <TextBox Grid.Row="8" Grid.Column="1" Margin="5,5,0,5"/>
+            <Label Content="Vergi Dairesi" Grid.Row="9" VerticalAlignment="Center" Margin="0" Padding="0,0,5,0"/>
+            <TextBox Grid.Row="9" Grid.Column="1" Margin="5,5,0,5"/>
+            <Border Grid.Row="10" Grid.ColumnSpan="5" Background="#FFBFBFBF" Height="1" Margin="0,5"/>
+            <Label Content="Telefon" Grid.Row="11" Padding="0,0,5,0" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="11" Grid.Column="1" Margin="5,5,0,5"/>
+            <Label Content="Email" Grid.Row="12" Padding="0,0,5,0" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="12" Grid.Column="1" Margin="5,5,0,5"/>
+            <Border Grid.Row="13" Grid.ColumnSpan="5" Background="#FFBFBFBF" Height="1" Margin="0,5"/>
+            <Label Content="Tesis" Grid.Row="14" Padding="0,0,5,0" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="14" Grid.Column="1" Margin="5,5,0,5"/>
+        </Grid>
+        <Grid DockPanel.Dock="Bottom" Background="#FFDBDBDB" VerticalAlignment="Bottom" Height="40" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <pencerebuton:İptalButon HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,10,0" />
+            <pencerebuton:TamamButon HorizontalAlignment="Right" Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,0" />
+        </Grid>
+    </DockPanel>
+</Window>

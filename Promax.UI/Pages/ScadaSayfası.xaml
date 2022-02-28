@@ -1,0 +1,488 @@
+﻿<Page
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+      xmlns:local="clr-namespace:Promax.UI"
+      xmlns:Converters="clr-namespace:Promax.UI.Controllers.Converters"
+    xmlns:oldanimations="clr-namespace:Promax.UI.OldAnimations" x:Class="Promax.UI.ScadaSayfası"
+      mc:Ignorable="d"
+      Title="ScadaSayfası" Loaded="Page_Loaded" d:DesignHeight="1080" d:DesignWidth="1920">
+    <Page.Resources>
+        <Converters:BoolToBrushConverter x:Key="BoolToBrushConverter"/>
+        <local:ConnectionStatusToImageConverter x:Key="ConnectionStatusToImageConverter"/>
+        <oldanimations:VariableOwnerContainer x:Key="VariableOwnerContainer1"/>
+    </Page.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="55"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" x:Name="girid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" MinWidth="250"/>
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="3*" MinWidth="50"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="188"/>
+                </Grid.RowDefinitions>
+                <Grid x:Name="grid" Grid.Row="0" Background="#FFF0F0F0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="24"/>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition />
+                        <RowDefinition Height="35"/>
+                    </Grid.RowDefinitions>
+                    <TextBox Text="SİPARİŞLER" IsReadOnly="True" Background="#FFCEDEEC" BorderBrush="#FFBCBCBC" FontSize="14" FontWeight="Bold"/>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Click="CreateNewOrder" Style="{DynamicResource MainTabControlButtonStyle}">
+                            <Image  Source="/Promax.UI;component/Pictures/Icons/plus_button.png" Margin="5" />
+                        </Button>
+                        <Border Grid.Column="1" Style="{StaticResource MainTabControlBorderStyle}"/>
+                        <Button Grid.Column="2" Click="EditOrder" Style="{DynamicResource MainTabControlButtonStyle}">
+                            <Image Source="/Promax.UI;component/Pictures/Icons/pencil.png" Margin="5" />
+                        </Button>
+                        <Border Grid.Column="3" Style="{StaticResource MainTabControlBorderStyle}"/>
+                        <Button Grid.Column="4" Click="DeleteOrder" Style="{DynamicResource MainTabControlButtonStyle}">
+                            <Image Source="/Promax.UI;component/Pictures/Icons/dushbin.png" Margin="5" />
+                        </Button>
+                        <Border Grid.Column="5" Style="{StaticResource MainTabControlBorderStyle}"/>
+                        <Menu Grid.Column="6">
+                            <MenuItem Template="{DynamicResource MainTabControlMenuButonStyle}" Height="35">
+                                <MenuItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="/Promax.UI;component/Pictures/Icons/calendar.png" Width="25" Height="25" />
+                                        <Image Source="/Promax.UI;component/Pictures/Icons/right-arrow.png" Width="8" Height="8" Margin="2,2,2,2"/>
+                                    </StackPanel>
+                                </MenuItem.Header>
+                                <MenuItem IsCheckable="True" Click="BugünClicked" Header="_Bugün" Template="{DynamicResource MenuItemPopUpStyle}" IsChecked="{Binding Bugün, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ScadaSayfası}}}" />
+                                <MenuItem IsCheckable="True" Click="BuHaftaClicked" Header="_Bu Hafta" Template="{DynamicResource MenuItemPopUpStyle}" IsChecked="{Binding BuHafta, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ScadaSayfası}}}"/>
+                                <MenuItem IsCheckable="True" Click="BuAyClicked" Header="Bu Ay" Template="{DynamicResource MenuItemPopUpStyle}" IsChecked="{Binding BuAy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ScadaSayfası}}}"/>
+                                <MenuItem IsCheckable="True" Click="BuYılClicked" Header="Bu Yıl" Template="{DynamicResource MenuItemPopUpStyle}" IsChecked="{Binding BuYıl, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ScadaSayfası}}}" />
+                                <MenuItem IsCheckable="True" Click="TümüClicked" Header="Tümü" Template="{DynamicResource MenuItemPopUpStyle}" IsChecked="{Binding Tümü, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ScadaSayfası}}}"/>
+                            </MenuItem>
+                        </Menu>
+                        <xctk:DateTimePicker Grid.Column="7" Margin="5" Height="25" Width="90" ShowButtonSpinner="False" Value="{Binding FirstDate, RelativeSource={RelativeSource AncestorType={x:Type Page}, Mode=FindAncestor}}" ValueChanged="DateTimePicker_ValueChanged"/>
+                        <xctk:DateTimePicker Grid.Column="8" Margin="5" Height="25" Width="90" ShowButtonSpinner="False" Value="{Binding LastDate, RelativeSource={RelativeSource AncestorType={x:Type Page}, Mode=FindAncestor}}" ValueChanged="DateTimePicker_ValueChanged"/>
+                    </Grid>
+                    <DataGrid x:Name="orderDataGrid"
+                              SelectedItem="{Binding selectedOrder, RelativeSource={RelativeSource AncestorType={x:Type Page}, Mode=FindAncestor}}" Background="White" Grid.Row="2" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Click="CreateNewOrder" Header="Yeni Sipariş">
+                                    <MenuItem.Icon>
+                                        <Image Source="/Promax.UI;component/Pictures/Icons/plus_button.png"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Click="EditOrder" Header="Düzelt">
+                                    <MenuItem.Icon>
+                                        <Image Source="/Promax.UI;component/Pictures/Icons/pencil.png"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <Separator />
+                                <MenuItem Click="DeleteOrder" Header="Sil">
+                                    <MenuItem.Icon>
+                                        <Image Source="/Promax.UI;component/Pictures/Icons/dushbin.png"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <Separator />
+                                <MenuItem Header="Hizalama">
+                                    <MenuItem Header="Solda"/>
+                                    <MenuItem Header="Sağda"/>
+                                    <MenuItem Header="Altta"/>
+                                </MenuItem>
+                                <MenuItem Click="RefreshOrders" Header="Yenile">
+                                    <MenuItem.Icon>
+                                        <Image Source="/Promax.UI;component/Pictures/Icons/reload.png"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn x:Name="col1" SortMemberPath="OrderStatus" CanUserResize="False" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image  Source="{Binding OrderStatus, Converter={StaticResource OrderStatusToImageConverter}}" Margin="3" Width="16" Height="16"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn x:Name="col2" Header="MÜŞTERİ ADI" Binding="{Binding Client.ClientName}" IsReadOnly="True"/>
+                            <DataGridTextColumn x:Name="col3" Header="REÇETE ADI" Binding="{Binding Recipe.RecipeName}" IsReadOnly="True"/>
+                            <DataGridTextColumn x:Name="dataGridTextColumn" Header="MİKTAR" Binding="{Binding Quantity}" IsReadOnly="True"/>
+                            <DataGridTextColumn x:Name="üretilenColumn" Header="ÜRETİLEN" Binding="{Binding Produced}" IsReadOnly="True"/>
+                            <DataGridTextColumn x:Name="kalanColumn" Header="KALAN" Width="*" Binding="{Binding Remaining}" IsReadOnly="True"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Grid Grid.Row="3" Height="35" Background="#FFF0F0F0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{Binding Width.DisplayValue, ElementName=col1, Mode=OneWay}"/>
+                            <ColumnDefinition Width="{Binding Width.DisplayValue, ElementName=col2, Mode=OneWay}"/>
+                            <ColumnDefinition Width="{Binding Width.DisplayValue, ElementName=col3, Mode=OneWay}"/>
+                            <ColumnDefinition Width="{Binding Width.DisplayValue, ElementName=dataGridTextColumn, Mode=OneWay}"/>
+                            <ColumnDefinition Width="{Binding Width.DisplayValue, ElementName=üretilenColumn, Mode=OneWay}"/>
+                            <ColumnDefinition Width="{Binding Width.DisplayValue, ElementName=kalanColumn, Mode=OneWay}"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="35"/>
+                        </Grid.RowDefinitions>
+                        <TextBox Grid.Column="3" Margin="3" />
+                        <TextBox Grid.Column="4" Margin="3"/>
+                        <TextBox Grid.Column="5" Margin="3"/>
+
+                    </Grid>
+                </Grid>
+                <GridSplitter Background="#FFC3C3C3" Grid.Row="1" Height="5" HorizontalAlignment="Stretch" />
+                <Grid Background="#FFF0F0F0" Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="24"/>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBox Grid.Row="0" Text="GÖREVLER" Background="#FFCEDEEC" BorderBrush="#FFBCBCBC" FontSize="14" FontWeight="Bold"/>
+                    <Grid  Grid.Row="1">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <Button Click="CreateNewProduction" Style="{DynamicResource MainTabControlButtonStyle}">
+                                <Image  Source="/Promax.UI;component/Pictures/Icons/plus_button.png" Margin="5" />
+                            </Button>
+                            <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+                            <Button Click="EditProduction" Style="{DynamicResource MainTabControlButtonStyle}">
+                                <Image Source="/Promax.UI;component/Pictures/Icons/pencil.png" Margin="5" />
+                            </Button>
+                            <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+                            <Button Click="DeleteProduction" Style="{DynamicResource MainTabControlButtonStyle}">
+                                <Image Source="/Promax.UI;component/Pictures/Icons/dushbin.png" Margin="5" />
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Click="UretimKartı_Click" Style="{DynamicResource MainTabControlButtonStyle}">
+                                <Image  Source="/Promax.UI;component/Pictures/Icons/contract.png" Margin="5" />
+                            </Button>
+                            <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+                            <Button Style="{DynamicResource MainTabControlButtonStyle}">
+                                <Image Source="/Promax.UI;component/Pictures/Icons/binoculars.png" Margin="5" />
+                            </Button>
+                            <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+                            <Button Style="{DynamicResource MainTabControlButtonStyle}">
+                                <Image Source="/Promax.UI;component/Pictures/Icons/recycle.png" Margin="5" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                    <DataGrid x:Name="productionDataGrid" SelectedItem="{Binding selectedProduct, RelativeSource={RelativeSource AncestorType={x:Type Page}, Mode=FindAncestor}}" Background="White" Grid.Row="2" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Click="StartProduction" Header="Üretimi Başlat">
+                                    <MenuItem.Icon>
+                                        <Image Source="/Promax.UI;component/Pictures/Icons/greenProd.png"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <Separator/>
+                                <MenuItem Click="CreateNewProduction" Header="Yeni Görev">
+                                    <MenuItem.Icon>
+                                        <Image Source="/Promax.UI;component/Pictures/Icons/plus_button.png"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Click="EditProduction" Header="Düzelt">
+                                    <MenuItem.Icon>
+                                        <Image Source="/Promax.UI;component/Pictures/Icons/pencil.png"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <Separator />
+                                <MenuItem Click="DeleteProduction" Header="Sil">
+                                    <MenuItem.Icon>
+                                        <Image Source="/Promax.UI;component/Pictures/Icons/dushbin.png"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Click="DeleteAllProductions" Header="Tümünü Sil">
+                                    <MenuItem.Icon>
+                                        <Image Source="/Promax.UI;component/Pictures/Icons/dushbin.png"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <Separator />
+                                <MenuItem Header="Hizalama">
+                                    <MenuItem Header="Solda"/>
+                                    <MenuItem Header="Sağda"/>
+                                    <MenuItem Header="Altta"/>
+                                </MenuItem>
+                                <MenuItem Click="RefreshProductions" Header="Yenile">
+                                    <MenuItem.Icon>
+                                        <Image Source="/Promax.UI;component/Pictures/Icons/reload.png"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn  SortMemberPath="Pos" CanUserResize="False" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image  Source="{Binding Pos, Converter={StaticResource ProductionStatusToImageConverter}}" Margin="3" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="MÜŞTERİ ADI" Binding="{Binding Client.ClientName}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="REÇETE ADI" Binding="{Binding Recipe.RecipeName}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="HEDEF" Width="*" Binding="{Binding Target}" IsReadOnly="True"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+                <Grid Grid.Row="3" Background="#FFF0F0F0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0" Grid.Row="0" Margin="5" BorderBrush="#FFB4B4B4" Background="#FFF7F7F7"/>
+                    <TextBox Grid.Column="1" Grid.Row="0" Margin="5" BorderBrush="#FFB4B4B4" Background="#FFF7F7F7"/>
+                    <TextBox Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Margin="5" BorderBrush="#FFB4B4B4" Background="#FFF7F7F7"/>
+                    <TextBox Grid.Column="0" Grid.Row="2" Margin="5" BorderBrush="#FFB4B4B4" Background="#FFF7F7F7"/>
+                    <TextBox Grid.Column="1" Grid.Row="2" Margin="5" BorderBrush="#FFB4B4B4" Background="#FFF7F7F7"/>
+                    <TextBox Grid.Column="0" Grid.Row="3" Margin="5" BorderBrush="#FFB4B4B4" Background="#FFF7F7F7"/>
+                    <TextBox Grid.Column="1" Grid.Row="3" Margin="5" BorderBrush="#FFB4B4B4" Background="#FFF7F7F7"/>
+                    <TextBox Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Margin="5" BorderBrush="#FFB4B4B4" Background="#FFF7F7F7"/>
+                </Grid>
+            </Grid>
+            <GridSplitter Grid.Column="1" Background="#FFC3C3C3" HorizontalAlignment="Stretch" />
+            <Grid Grid.Column="2" MinWidth="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="83"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" Background="#FFFAFAFA">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                        <DataGrid x:Name="batchInfoGrid"
+                                  CanUserDeleteRows="False"
+                                  AutoGenerateColumns="False"
+                                  HorizontalScrollBarVisibility="Hidden" 
+                                  VerticalScrollBarVisibility="Hidden" 
+                                  HeadersVisibility="None" 
+                                  CanUserResizeColumns="False" 
+                                  CanUserAddRows="False" 
+                                  GridLinesVisibility="All" 
+                                  ColumnWidth="Auto" RowHeight="80" HorizontalAlignment="Left" VerticalAlignment="Top" ColumnHeaderHeight="15" IsReadOnly="True" IsEnabled="False">
+                            <DataGrid.LayoutTransform>
+                                <RotateTransform Angle="-90"/>
+                            </DataGrid.LayoutTransform>
+                            <DataGrid.ColumnHeaderStyle>
+                                <Style TargetType="{x:Type DataGridColumnHeader}">
+                                    <Setter Property="LayoutTransform">
+                                        <Setter.Value>
+                                            <TransformGroup>
+                                                <RotateTransform Angle="90"/>
+                                            </TransformGroup>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGrid.ColumnHeaderStyle>
+                            <DataGrid.CellStyle>
+                                <Style TargetType="{x:Type DataGridCell}">
+                                    <Setter Property="LayoutTransform">
+                                        <Setter.Value>
+                                            <TransformGroup>
+                                                <RotateTransform Angle="90"/>
+                                            </TransformGroup>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGrid.CellStyle>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Fark" Binding="{Binding RemainingQuantity}" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Ölçülen" Binding="{Binding EjectedQuantity}" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="İstenen" Binding="{Binding DesiredQuantity}" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Stok" Binding="{Binding StockName}" IsReadOnly="True"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </ScrollViewer>
+                </Grid>
+                <Grid Grid.Row="1" Background="#FFF0F0F0">
+                    <Grid x:Name="OldAnimationsGrid">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid x:Name="ÜstSatır">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Visibility="Collapsed">
+                                <StackPanel>
+                                    <TextBox x:Name="BitAdres"  Margin="5"/>
+                                    <TextBox x:Name="BitDeğer"  Margin="5"/>
+                                    <Button x:Name="BitGönder" Click="BitGönder_Click"  Margin="5" Height="40"/>
+                                    <TextBox x:Name="WordAdres"  Margin="5"/>
+                                    <TextBox x:Name="WordDeğer"  Margin="5"/>
+                                    <Button x:Name="WordGönder"  Click="WordGönder_Click"  Margin="5" Height="40"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid x:Name="SuGrid">
+                                <oldanimations:SuBunkeriAnimation VariableOwnerName="Weg5" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" FontSize="20" Margin="357,0,-357,0"/>
+                                <oldanimations:SuSilo VariableOwnerName="WTR51" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="0,10,0,-10"/>
+                                <oldanimations:SuSilo VariableOwnerName="WTR52" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="0,122,0,-122"/>
+                                <oldanimations:SuSilo VariableOwnerName="WTR53" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="0,231,0,-231"/>
+                                <oldanimations:SuSilo VariableOwnerName="WTR54" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="0,344,0,-344"/>
+                            </Grid>
+                            <Grid x:Name="KatkıGrid" Grid.Column="1">
+                                <oldanimations:KatkıBunkeriAnimation VariableOwnerName="Weg7" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" FontSize="20"/>
+                                <oldanimations:KatkıSilo VariableOwnerName="ADV71" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="125,-13,-125,13"/>
+                                <oldanimations:KatkıSilo VariableOwnerName="ADV72" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="192,-13,-192,13"/>
+                                <oldanimations:KatkıSilo VariableOwnerName="ADV73" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="261,-13,-261,13"/>
+                                <oldanimations:KatkıSilo VariableOwnerName="ADV74" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="328,-13,-328,13"/>
+                            </Grid>
+                            <Grid x:Name="ÇimentoGrid" Grid.Column="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <oldanimations:ÇimentoBunkeriAnimation VariableOwnerName="Weg3" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" FontSize="20"/>
+                                <oldanimations:ÇimentoSilo Grid.Column="1" VariableOwnerName="CEM31" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}"/>
+                                <oldanimations:ÇimentoSilo Grid.Column="2" VariableOwnerName="CEM32" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}"/>
+                                <oldanimations:ÇimentoSilo Grid.Column="3" VariableOwnerName="CEM33" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}"/>
+                                <oldanimations:ÇimentoSilo Grid.Column="4" VariableOwnerName="CEM34" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}"/>
+                            </Grid>
+                        </Grid>
+                        <Grid x:Name="AltSatır" Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid x:Name="AgregaGrid">
+                                <oldanimations:AgregaSilo VariableOwnerName="AGG11" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="0,10,0,-10" />
+                                <oldanimations:AgregaSilo VariableOwnerName="AGG12" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="116,10,-116,-10" />
+                                <oldanimations:AgregaSilo VariableOwnerName="AGG13" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="239,10,-239,-10" />
+                                <oldanimations:AgregaSilo VariableOwnerName="AGG14" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="361,10,-361,-10" />
+                                <oldanimations:AgregaSilo  VariableOwnerName="AGG15" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="0,215,0,-215" />
+                                <oldanimations:AgregaSilo  VariableOwnerName="AGG16" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="116,215,-116,-215" />
+                                <oldanimations:AgregaSilo  VariableOwnerName="AGG17" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="239,215,-239,-215" />
+                                <oldanimations:AgregaSilo  VariableOwnerName="AGG18" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="361,215,287,150" />
+                                <oldanimations:TartıBandıAnimation VariableOwnerName="Weg1" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" FontSize="20" Margin="0,225,0,-225" />
+                                <oldanimations:TartıBandıAnimation VariableOwnerName="Transfer1" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" FontSize="20" Margin="408,225,-408,-225"/>
+                                <oldanimations:AggBunkerAnimation VariableOwnerName="AggBunker1" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" FontSize="20" Foreground="Black" Margin="580,34,-580,-34" />
+                            </Grid>
+                            <Grid x:Name="MikserGrid" Grid.Column="1" Width="Auto">
+                                <oldanimations:MikserAnimation VariableOwnerName="Mixer1" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="242,100,-242,-100" />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+        <StackPanel Grid.Row="1" Background="#FFEAEAEA" Orientation="Horizontal">
+            <Border BorderBrush="{x:Null}" Style="{StaticResource MainTabControlBorderStyle}"/>
+            <Image Source="{Binding Connected, Converter={StaticResource ConnectionStatusToImageConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ScadaSayfası}}}" Width="25" Height="25"/>
+            <Border BorderBrush="{x:Null}" Style="{StaticResource MainTabControlBorderStyle}"/>
+            <Button x:Name="StartButton" Height="35" Style="{StaticResource ScadaTabControlSquenceButtonStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="StartButtonText" Text="Start" VerticalAlignment="Center" Margin="5,5"/>
+                </StackPanel>
+            </Button>
+            <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+            <Button x:Name="DolumButton" Click="DolumButton_Click" Height="35" Style="{StaticResource ScadaTabControlSquenceButtonStyle}" Background="{Binding OtoDolum, Converter={StaticResource BoolToBrushConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ScadaSayfası}}}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="DolumButtonText" Text="Dolum" VerticalAlignment="Center" Margin="5,5"/>
+                </StackPanel>
+            </Button>
+            <Border BorderBrush="{x:Null}" Style="{StaticResource MainTabControlBorderStyle}"/>
+            <Button x:Name="BosaltimButton" Click="BosaltimButton_Click" Height="35" Style="{StaticResource ScadaTabControlSquenceButtonStyle}" Background="{Binding OtoBoşaltım, Converter={StaticResource BoolToBrushConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ScadaSayfası}}}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="BosaltimButtonText" Text="Boşaltım" VerticalAlignment="Center" Margin="5,5"/>
+                </StackPanel>
+            </Button>
+            <Border BorderBrush="{x:Null}" Style="{StaticResource MainTabControlBorderStyle}"/>
+            <Button x:Name="KarisimButton" Click="KarisimButton_Click" Height="35" Style="{StaticResource ScadaTabControlSquenceButtonStyle}" Background="{Binding OtoKarışım, Converter={StaticResource BoolToBrushConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ScadaSayfası}}}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="KarisimButtonText" Text="Karışım" VerticalAlignment="Center" Margin="5,5"/>
+                </StackPanel>
+            </Button>
+            <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+            <Button Style="{StaticResource BlackWhiteStyle}" Height="35" Width="57">
+                <Image  Source="/Promax.UI;component/Pictures/Icons/Sound.png" Margin="10,2,10,2"/>
+            </Button>
+            <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+            <Button Style="{StaticResource BlackWhiteStyle}" Height="35" Width="28">
+                <Image  Source="/Promax.UI;component/Pictures/Icons/compressor.png" Margin="1"/>
+            </Button>
+            <Border BorderBrush="{x:Null}" Style="{StaticResource MainTabControlBorderStyle}"/>
+            <Button Style="{StaticResource BlackWhiteStyle}" Height="35" Width="28">
+                <Image  Source="/Promax.UI;component/Pictures/Icons/hydrolic.png" Margin="1"/>
+            </Button>
+            <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+            <Button Style="{StaticResource ScadaTabKontrolButonStyle}">
+                <StackPanel Orientation="Vertical">
+                    <Image  Source="/Promax.UI;component/Pictures/Icons/check.png" Width="32" Height="32" Margin="5,2,5,2" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="F5I" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                        <TextBlock x:Name="BtnText" Text="Onay" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </Button>
+            <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+            <Button Style="{StaticResource ScadaTabKontrolButonStyle}">
+                <StackPanel Orientation="Vertical">
+                    <Image Source="/Promax.UI;component/Pictures/Icons/play-button.png" Width="32" Height="32" Margin="5,2,5,2" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="F2I" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                        <TextBlock Text="Devam" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </Button>
+            <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+            <Button  Style="{StaticResource ScadaTabKontrolButonStyle}">
+                <StackPanel Orientation="Vertical">
+                    <Image Source="/Promax.UI;component/Pictures/Icons/pinkpausebutton.png" Width="32" Height="32" Margin="5,2,5,2" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="F10I" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                        <TextBlock Text="Dur" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </Button>
+            <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+            <Button  Style="{StaticResource ScadaTabKontrolButonStyle}">
+                <StackPanel Orientation="Vertical">
+                    <Image  Source="/Promax.UI;component/Pictures/Icons/yellowpausebutton.png" Width="32" Height="32" Margin="5,2,5,2" />
+                    <TextBlock Text="Sonlandır" VerticalAlignment="Center" Margin="5,0,5,0"/>
+                </StackPanel>
+            </Button>
+            <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+            <Button Style="{StaticResource ScadaTabKontrolButonStyle}">
+                <StackPanel Orientation="Vertical">
+                    <Image  Source="/Promax.UI;component/Pictures/Icons/waterdrop.png" Width="32" Height="32" Margin="5,2,5,2" />
+                    <TextBlock Text="Nemler" VerticalAlignment="Center" Margin="5,0,5,0"/>
+                </StackPanel>
+            </Button>
+            <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+            <Button Style="{StaticResource ScadaTabKontrolButonStyle}">
+                <StackPanel Orientation="Vertical">
+                    <Image  Source="/Promax.UI;component/Pictures/Icons/printer.png" Width="32" Height="32" Margin="5,2,5,2" />
+                    <TextBlock Text="Yazdır" VerticalAlignment="Center" Margin="5,0,5,0"/>
+                </StackPanel>
+            </Button>
+            <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+        </StackPanel>
+    </Grid>
+</Page>

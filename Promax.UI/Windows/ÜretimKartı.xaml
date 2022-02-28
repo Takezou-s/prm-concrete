@@ -1,0 +1,259 @@
+﻿<Window x:Class="Promax.UI.Windows.ÜretimKartı"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:pencerebuton="clr-namespace:Promax.UI.CustomTools.PencereButon"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+         Title="Üretim Kartı" Height="511" Width="465" MaxHeight="710" MaxWidth="620" MinWidth="420" MinHeight="620" Loaded="Window_Loaded">
+    <Window.Resources>
+        <System:Boolean x:Key="CentralServiceIsEnabled">True</System:Boolean>
+        <System:Boolean x:Key="MixerServiceIsEnabled">True</System:Boolean>
+        <System:Boolean x:Key="PumpServiceIsEnabled">True</System:Boolean>
+    </Window.Resources>
+    <DockPanel Background="#FFF0F0F0">
+        <Grid Margin="20" DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="5*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="26"/>
+                <RowDefinition Height="2"/>
+            </Grid.RowDefinitions>
+            <CheckBox Content="Belge Numarası Üret" IsChecked="{Binding Product.IsBill, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}" Grid.Row="0" Margin="5,5" Grid.ColumnSpan="2"/>
+
+            <Label Content="Üretilen" Grid.Row="0" Grid.Column="2"/>
+            <xctk:DoubleUpDown ShowButtonSpinner="False" Grid.Row="0" Grid.Column="3" Margin="5,5,1,5" 
+                               Value="{Binding Product.Produced, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"/>
+
+            <Label Content="Belge No" Grid.Row="1" />
+            <xctk:IntegerUpDown Grid.Row="1" Grid.Column="1" Margin="5,5,15,5" Value="{Binding Product.BillNumber, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}" ShowButtonSpinner="False"/>
+
+            <Label Content="Geri Dönüşüm" Grid.Row="1" Grid.Column="2" IsEnabled="False"/>
+            <xctk:DoubleUpDown ShowButtonSpinner="False" Grid.Row="1" Grid.Column="3" Margin="5,5,1,5" IsEnabled="False"
+                               Value="{Binding Product.Addon, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"/>
+
+            <Label Content="Tarih " Grid.Row="2"/>
+            <xctk:DateTimePicker Grid.Row="2" Grid.Column="1" Margin="5,5,15,5" Value="{Binding Product.ProductDate, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}" Format="ShortDate" FormatString="dd/MM/yyyy" ShowButtonSpinner="False" TimePickerVisibility="Hidden" />
+
+            <Label Content="Sevk" Grid.Row="2" Grid.Column="2" IsEnabled="False"/>
+            <xctk:DoubleUpDown ShowButtonSpinner="False" Grid.Row="2" Grid.Column="3" Margin="5,8,1,7" IsEnabled="False"
+                               Value="{Binding Product.Shipped, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"
+                               />
+
+            <Label Content="Saat" Grid.Row="3" />
+            <xctk:DateTimePicker Grid.Row="3" Grid.Column="1" Margin="5,5,15,5" Value="{Binding Product.ProductTime, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}" ShowDropDownButton="False" TimeFormatString="HH:mm:ss" Format="ShortTime" />
+
+            <Label Content="İade" Grid.Row="3" Grid.Column="2"/>
+            <xctk:DoubleUpDown ShowButtonSpinner="False" Grid.Row="3" Grid.Column="3" Margin="5,5,1,5" 
+                               Value="{Binding Product.Returned, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"
+                               />
+
+            <Label Content="Çıkış Saati" Grid.Row="4" />
+            <xctk:DateTimePicker Grid.Row="4" Grid.Column="1" Margin="5,5,15,5" Value="{Binding Product.DepTime, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}" ShowDropDownButton="False" TimeFormatString="HH:mm:ss" Format="ShortTime" />
+
+            <Label Content="Teslim" Grid.Row="4" Grid.Column="2" IsEnabled="False"/>
+            <xctk:DoubleUpDown ShowButtonSpinner="False" Grid.Row="4" Grid.Column="3" Margin="5,5,1,5" IsEnabled="False"
+                               Value="{Binding Product.Delivered, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"
+                               />
+
+            <Label Content="Müşteri Adı" Grid.Row="5" />
+            <ComboBox Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="5" Margin="0,3" 
+                      SelectionChanged="ClientSelected"
+                      ItemsSource="{Binding Clients, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"
+                      SelectedValuePath="ClientId" 
+                      SelectedValue="{Binding Product.ClientId, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding ClientName}" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <Label Content="Şantiye Adı" Grid.Row="6" />
+            <ComboBox Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="6" Margin="0,3" 
+                      ItemsSource="{Binding Sites, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}" 
+                      SelectedValuePath="SiteId" 
+                      SelectedValue="{Binding Product.SiteId, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"
+                      >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding SiteName}" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <Border BorderBrush="#FFBFBFBF" BorderThickness="1" Grid.Row="7" Grid.ColumnSpan="4" Margin="0,17,0,17"/>
+
+            <Label Content="Reçete Adı" Grid.Row="8" />
+            <ComboBox Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="8" Margin="0,3" 
+                      ItemsSource="{Binding Recipes, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}" 
+                      SelectedValuePath="RecipeId" 
+                      SelectedValue="{Binding Product.RecipeId, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"
+                      >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding RecipeName}" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <Border BorderBrush="#FFBFBFBF"  BorderThickness="1" Grid.Row="9" Grid.ColumnSpan="4" Margin="0,17,0,17"/>
+
+            <Label Content="Servis Sınıfı" Grid.Row="10" />
+            <ComboBox Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="10" Margin="0,3"
+                      SelectionChanged="ServiceCategorySelected"
+                      ItemsSource="{Binding ServiceCategories, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}" 
+                      SelectedValuePath="CatNum" 
+                      SelectedValue="{Binding Product.ServiceCatNum, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"
+                      >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding CatName}" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <Label Content="Servis Adı" Grid.Row="11" 
+                   IsEnabled="{DynamicResource CentralServiceIsEnabled}"/>
+            <ComboBox Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="11" Margin="0,3" 
+                      IsEnabled="{DynamicResource CentralServiceIsEnabled}"
+                      ItemsSource="{Binding CentralServices, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}" 
+                      SelectedValuePath="ServiceId" 
+                      SelectedValue="{Binding Product.SelfServiceId, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"
+                      >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding ServiceName}" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <Label Content="Sürücü Adı" Grid.Row="12" 
+                   IsEnabled="{DynamicResource CentralServiceIsEnabled}"/>
+            <ComboBox Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="12" Margin="0,3" 
+                      IsEnabled="{DynamicResource CentralServiceIsEnabled}"
+                      ItemsSource="{Binding Drivers, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}" 
+                      SelectedValuePath="DriverId" 
+                      SelectedValue="{Binding Product.SelfDriverId, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"
+                      >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding DriverName}" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <Label Content="Beton Mikseri" Grid.Row="13" 
+                   IsEnabled="{DynamicResource MixerServiceIsEnabled}"/>
+            <ComboBox Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="13" Margin="0,3" 
+                      IsEnabled="{DynamicResource MixerServiceIsEnabled}"
+                      ItemsSource="{Binding MixerServices, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}" 
+                      SelectedValuePath="ServiceId" 
+                      SelectedValue="{Binding Product.MixerServiceId, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"
+                      >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding ServiceName}" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <Label Content="Mikser Sürücü" Grid.Row="14" 
+                   IsEnabled="{DynamicResource MixerServiceIsEnabled}"/>
+            <ComboBox Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="14" Margin="0,3" 
+                      IsEnabled="{DynamicResource MixerServiceIsEnabled}"
+                      ItemsSource="{Binding Drivers, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}" 
+                      SelectedValuePath="DriverId" 
+                      SelectedValue="{Binding Product.MixerDriverId, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"
+                      >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding DriverName}" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <Label Content="Beton Pompası" Grid.Row="15" 
+                   IsEnabled="{DynamicResource PumpServiceIsEnabled}"/>
+            <ComboBox Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="15" Margin="0,3" 
+                      IsEnabled="{DynamicResource PumpServiceIsEnabled}"
+                      ItemsSource="{Binding CentralServices, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}" 
+                      SelectedValuePath="ServiceId" 
+                      SelectedValue="{Binding Product.PumpServiceId, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"
+                      >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding ServiceName}" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <Label Content="Pompa Sürücü" Grid.Row="16" Grid.RowSpan="2" 
+                   IsEnabled="{DynamicResource PumpServiceIsEnabled}"/>
+            <ComboBox Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="16" Margin="0,3,0,1" 
+                      IsEnabled="{DynamicResource PumpServiceIsEnabled}"
+                      ItemsSource="{Binding Drivers, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}" 
+                      SelectedValuePath="DriverId" 
+                      SelectedValue="{Binding Product.PumpDriverId, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"
+                      >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding DriverName}" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+        </Grid>
+        <Grid DockPanel.Dock="Bottom" Background="#FFDBDBDB" VerticalAlignment="Bottom" Height="40" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <pencerebuton:İptalButon Click="İptalButon_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,10,0" />
+            <pencerebuton:TamamButon Click="TamamButon_Click" HorizontalAlignment="Right" Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,0" />
+        </Grid>
+    </DockPanel>
+</Window>

@@ -1,0 +1,87 @@
+﻿<Window x:Class="Promax.UI.Windows.BelgeKartı"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:pencerebuton="clr-namespace:Promax.UI.CustomTools.PencereButon"
+        mc:Ignorable="d"
+        Title="Belge" Loaded="Window_Loaded" MinHeight="370" Height="420" MaxHeight="470" MinWidth="330" Width="360" MaxWidth="560" Background="#FFF0F0F0"  WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Border Padding="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="5"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="5"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="5"/>
+                    <RowDefinition Height="25"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Stok Adı" Grid.Row="0" VerticalAlignment="Center"/>
+                <ComboBox SelectionChanged="ComboBox_SelectionChanged" ItemsSource="{Binding Path=Stocks, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" SelectedValuePath="StockId" SelectedValue="{Binding Path=StockEntry.StockId, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" Style="{DynamicResource ComboBoxStyle}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="{Binding Path=StockCatNum, Converter={StaticResource StockTypeToImageConverter}}"/>
+                                <TextBlock Text="{Binding Path=StockName}" Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <TextBlock Text="Silo" Name="_silotextblock" Grid.Row="1" VerticalAlignment="Center"/>
+                <ComboBox ItemsSource="{Binding Path=Silos, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" SelectedValuePath="SiloId" SelectedValue="{Binding Path=StockEntry.SiloId, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Grid.Row="1" Name="_silocombobox" Grid.Column="2" VerticalAlignment="Center" Style="{DynamicResource ComboBoxStyle}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Path=SiloApparentName}" Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <Separator Grid.Row="2" Grid.ColumnSpan="3"/>
+
+                <TextBlock Text="Tarih" Grid.Row="3" VerticalAlignment="Center"/>
+                <xctk:DateTimePicker Value="{Binding Path=StockEntry.EntryDate, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}"  Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" Format="ShortDate" ShowButtonSpinner="False"/>
+
+                <TextBlock Text="Saat" Grid.Row="4" VerticalAlignment="Center"/>
+                <xctk:DateTimeUpDown Value="{Binding Path=StockEntry.EntryTime, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Text="" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" Format="LongTime" TextAlignment="Left"/>
+
+                <Separator Grid.Row="5" Grid.ColumnSpan="5" Background="#FFBFBFBF"/>
+
+                <TextBlock Text="Belge No" Grid.Row="6" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding Path=StockEntry.DocumentNo, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Grid.Row="6" Grid.Column="2" VerticalAlignment="Center"/>
+
+                <TextBlock Text="Açıklama" Grid.Row="7" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding Path=StockEntry.Description, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Grid.Row="7" Grid.Column="2" VerticalAlignment="Center"/>
+
+                <Separator Grid.Row="8" Grid.ColumnSpan="3" Background="#FFBFBFBF"/>
+
+                <TextBlock Text="Giriş(+) Çıkış(-)" Grid.Row="9" VerticalAlignment="Center"/>
+                <xctk:IntegerUpDown Value="{Binding Path=StockEntry.Entry, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Grid.Row="9" Grid.Column="2" VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+        <Grid Grid.Row="1"  Background="#FFDBDBDB">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <pencerebuton:İptalButon Click="İptalButon_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,10,0" />
+            <pencerebuton:TamamButon Click="TamamButon_Click" HorizontalAlignment="Right" Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,0" />
+        </Grid>
+    </Grid>
+</Window>

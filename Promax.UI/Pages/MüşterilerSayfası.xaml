@@ -1,0 +1,224 @@
+﻿<Page x:Class="Promax.UI.MüşterilerSayfası"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      mc:Ignorable="d"     
+      Title="MüşterilerSayfası" x:Name="MusterilerPage" Loaded="MusterilerPage_Loaded">
+    <Grid Background="#FFF0F0F0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" MinWidth="300"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*" MinWidth="300"/>
+        </Grid.ColumnDefinitions>
+        <Grid Background="#FFF0F0F0" Grid.Column="0" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="24"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBox Grid.Row="0" Text="MÜŞTERİLER" Background="#FFCEDEEC" BorderBrush="#FFBCBCBC" FontSize="14" FontWeight="Bold"/>
+            <Grid  Grid.Row="1">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Button Click="CreateNewClient"  Style="{DynamicResource MainTabControlButtonStyle}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image  Source="/Promax.UI;component/Pictures/Icons/plus_button.png" Margin="5" />
+                                <TextBlock Text="Ekle" Padding="5"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+                    <Button Click="EditClient" Style="{DynamicResource MainTabControlButtonStyle}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image  Source="/Promax.UI;component/Pictures/Icons/pencil.png" Margin="5" />
+                                <TextBlock Text="Düzelt" Padding="5"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+                    <Button Click="DeleteClient"  Style="{DynamicResource MainTabControlButtonStyle}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image  Source="/Promax.UI;component/Pictures/Icons/dushbin.png" Margin="5" />
+                                <TextBlock Text="Sil" Padding="5"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+                    <Button Click="RefreshClients" Style="{DynamicResource MainTabControlButtonStyle}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image  Source="/Promax.UI;component/Pictures/Icons/reload.png" Margin="5" />
+                                <TextBlock Text="Yenile" Padding="5"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+
+                </StackPanel>
+            </Grid>
+            <DataGrid Background="White" Grid.Row="2" Margin="0,0,0,0" x:Name="clientDataGrid" SelectedItem="{Binding Path=selectedClient, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick"></EventSetter>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Click="CreateNewClient" Header="Yeni Müşteri">
+                            <MenuItem.Icon>
+                                <Image Source="/Promax.UI;component/Pictures/Icons/plus_button.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Click="EditClient" Header="Düzelt">
+                            <MenuItem.Icon>
+                                <Image Source="/Promax.UI;component/Pictures/Icons/pencil.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Click="DeleteClient" Header="Sil">
+                            <MenuItem.Icon>
+                                <Image Source="/Promax.UI;component/Pictures/Icons/dushbin.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Click="RefreshClients" Header="Yenile">
+                            <MenuItem.Icon>
+                                <Image Source="/Promax.UI;component/Pictures/Icons/reload.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="KOD" Binding="{Binding Path=ClientCode}" IsReadOnly="True"/>
+                    <!--<DataGridCheckBoxColumn Binding="{Binding Path=Gravity}" ElementStyle="{DynamicResource CheckBoxStyle1}"/>-->
+                    <DataGridTemplateColumn CanUserResize="False">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox Click="ClientGravityCheckClicked" IsChecked="{Binding Path = Gravity, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource CheckBoxStyle2}"></CheckBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="MÜŞTERİ ADI" Binding="{Binding Path=ClientName}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="TELEFON" Binding="{Binding Path=Phone}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="TESLİM" Binding="{Binding Path=Delivered}" IsReadOnly="True" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <GridSplitter Name="spliter" Background="#FFC3C3C3" Grid.Column="1" HorizontalAlignment="Stretch"/>
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Background="#FFF0F0F0" Grid.Row="0" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="24"/>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBox Grid.Row="0" Text="ŞANTİYELER" Background="#FFCEDEEC" BorderBrush="#FFBCBCBC" FontSize="14" FontWeight="Bold"/>
+                <Grid  Grid.Row="1">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Button Click="CreateNewSite" Style="{DynamicResource MainTabControlButtonStyle}" >
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image  Source="/Promax.UI;component/Pictures/Icons/plus_button.png" Margin="5" />
+                                    <TextBlock Text="Ekle" Padding="5"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                        <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+                        <Button Click="EditSite" Style="{DynamicResource MainTabControlButtonStyle}">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image  Source="/Promax.UI;component/Pictures/Icons/pencil.png" Margin="5" />
+                                    <TextBlock Text="Düzelt" Padding="5"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                        <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+                        <Button Click="DeleteSite" Style="{DynamicResource MainTabControlButtonStyle}">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image  Source="/Promax.UI;component/Pictures/Icons/dushbin.png" Margin="5" />
+                                    <TextBlock Text="Sil" Padding="5"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+                <DataGrid Background="White" Grid.Row="2" Margin="0,0,0,0" x:Name="siteDataGrid" SelectedItem="{Binding Path=selectedSite, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridRow">
+                            <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick_1"></EventSetter>
+                        </Style>
+                    </DataGrid.Resources>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Click="CreateNewSite" Header="Yeni Şantiye">
+                                <MenuItem.Icon>
+                                    <Image Source="/Promax.UI;component/Pictures/Icons/plus_button.png"></Image>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Click="EditSite" Header="Düzelt">
+                                <MenuItem.Icon>
+                                    <Image Source="/Promax.UI;component/Pictures/Icons/pencil.png"></Image>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <Separator />
+                            <MenuItem Click="DeleteSite" Header="Sil">
+                                <MenuItem.Icon>
+                                    <Image Source="/Promax.UI;component/Pictures/Icons/dushbin.png"></Image>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <Separator />
+                            <MenuItem Click="RefreshClients" Header="Yenile">
+                                <MenuItem.Icon>
+                                    <Image Source="/Promax.UI;component/Pictures/Icons/reload.png"></Image>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="KOD" Binding="{Binding Path=SiteCode}"/>
+                        <DataGridTextColumn Header="ŞANTİYE ADI" Binding="{Binding Path=SiteName}"/>
+                        <DataGridTextColumn Header="TELEFON" Binding="{Binding Path=Phone}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+            <GridSplitter Background="#FFC3C3C3" Grid.Row="1" HorizontalAlignment="Stretch"/>
+            <Grid Background="#FFF0F0F0" Grid.Row="2" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="24"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="35"/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Background="#FFCEDEEC" Grid.Row="0" >
+                    <TextBlock Text="GÖNDERİLEN" Background="{x:Null}" FontSize="14" FontWeight="Bold" Margin="2,2,3,2"/>
+                    <TextBlock x:Name="TarihText" Text="{Binding CurrentDateTime, ElementName=MusterilerPage, StringFormat=dd.MM.yyyy}" FontWeight="Bold" FontSize="14" Background="{x:Null}" Margin="2"/>
+                </StackPanel>
+                <DataGrid Background="White" x:Name="sentDataGrid" Grid.Row="1" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn x:Name="dataGridTextColumn" Header="ŞANTİYE ADI" Binding="{Binding Path=SiteName}"/>
+                        <DataGridTextColumn x:Name="dataGridTextColumn1" Header="REÇETE ADI" Binding="{Binding Path=RecipeName}"/>
+                        <DataGridTextColumn x:Name="dataGridTextColumn2" Header="GÖNDERİLEN" Binding="{Binding Path=Delivered}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Grid Grid.Row="2" Height="35" Background="#FFF0F0F0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="{Binding Width.DisplayValue, ElementName=dataGridTextColumn, Mode=OneWay}" />
+                        <ColumnDefinition Width="{Binding Width.DisplayValue, ElementName=dataGridTextColumn1, Mode=OneWay}" />
+                        <ColumnDefinition Width="{Binding Width.DisplayValue,ElementName=dataGridTextColumn2, Mode=OneWay}" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35"/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Column="2" Margin="3" Background="White"/>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

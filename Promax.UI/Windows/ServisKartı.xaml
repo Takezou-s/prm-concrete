@@ -1,0 +1,61 @@
+﻿<Window x:Class="Promax.UI.Windows.ServisKartı"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:pencerebuton="clr-namespace:Promax.UI.CustomTools.PencereButon"
+        mc:Ignorable="d"
+        Title="Servis Kartı" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Background="#FFF0F0F0" Width="420" Height="300" MaxWidth="560" MaxHeight="350" MinWidth="360" MinHeight="255" BorderBrush="White">
+    <Window.Resources>
+        <Visibility x:Key="KapasiteVisibility">Visible</Visibility>
+    </Window.Resources>
+    <DockPanel Margin="0">
+        <Grid DockPanel.Dock="Top" Margin="24,24,24,16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Kod" VerticalAlignment="Center" Padding="0,0,5,0"/>
+            <TextBox Grid.Row="0" Grid.Column="1" Margin="5,5,0,5" Height="23" Text="{Binding Path=Service.ServiceCode, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}"/>
+
+            <TextBlock Text="Plaka" Grid.Row="1" VerticalAlignment="Center" Padding="0,0,5,0"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Margin="5,5,0,5" Height="23" Text="{Binding Path=Service.LicencePlate, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}"/>
+
+            <TextBlock Text="Sürücü Adı" Grid.Row="3" Padding="0,0,5,0" VerticalAlignment="Center"/>
+            <ComboBox Grid.Row="3" Grid.Column="1" Margin="5,3,0,3" SelectedValuePath="DriverId" SelectedValue="{Binding Path=Service.DriverId, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Path=DriverName}" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <TextBlock Name="Kapasite_" Text="Kapasite" Grid.Row="4" VerticalAlignment="Center" Padding="0,0,5,0" OpacityMask="#FFF0F0F0"/>
+            <xctk:IntegerUpDown IsEnabled="{Binding Path=KapasiteEnabled, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="{Binding Path=Service.Capacity, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Name="Kapasite" Grid.Row="4" Grid.Column="1" Margin="5,5,0,5" OpacityMask="#FFF0F0F0"/>
+        </Grid>
+        <Grid DockPanel.Dock="Bottom" Background="#FFDBDBDB" VerticalAlignment="Bottom" Height="40" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <pencerebuton:İptalButon Click="İptalButon_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,10,0" />
+            <pencerebuton:TamamButon Click="TamamButon_Click" HorizontalAlignment="Right" Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,0" />
+        </Grid>
+    </DockPanel>
+</Window>

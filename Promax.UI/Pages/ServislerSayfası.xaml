@@ -1,0 +1,387 @@
+﻿<Page x:Class="Promax.UI.ServislerSayfası"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Promax.UI"
+      mc:Ignorable="d"
+      Title="ServislerSayfası" Loaded="Page_Loaded">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid Background="#FFF0F0F0" Grid.Column="0" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="24"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBox Grid.Row="0" Text="SÜRÜCÜLER" Background="#FFCEDEEC" BorderBrush="#FFBCBCBC" FontSize="14" FontWeight="Bold"/>
+            <Grid  Grid.Row="1">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Button Click="CreateNewDriver" Style="{DynamicResource MainTabControlButtonStyle}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image  Source="/Promax.UI;component/Pictures/Icons/plus_button.png" Margin="5" />
+                                <TextBlock Text="Ekle" Padding="5"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+                    <Button Click="EditDriver" Style="{DynamicResource MainTabControlButtonStyle}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image  Source="/Promax.UI;component/Pictures/Icons/pencil.png" Margin="5" />
+                                <TextBlock Text="Düzelt" Padding="5"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+                    <Button Click="DeleteDriver" Style="{DynamicResource MainTabControlButtonStyle}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image  Source="/Promax.UI;component/Pictures/Icons/dushbin.png" Margin="5" />
+                                <TextBlock Text="Sil" Padding="5"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+                    <Button Click="RefreshDrivers" Style="{DynamicResource MainTabControlButtonStyle}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image  Source="/Promax.UI;component/Pictures/Icons/reload.png" Margin="5" />
+                                <TextBlock Text="Yenile" Padding="5"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+
+                </StackPanel>
+            </Grid>
+            <DataGrid x:Name="driverDataGrid" Background="White" Grid.Row="2" Margin="0,0,0,0" SelectedItem="{Binding Path=selectedDriver, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="MouseDoubleClick" Handler="DriverDataGrid_MouseDoubleClick"></EventSetter>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Click="CreateNewDriver" Header="Yeni Sürücü">
+                            <MenuItem.Icon>
+                                <Image Source="/Promax.UI;component/Pictures/Icons/plus_button.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Click="EditDriver" Header="Düzelt">
+                            <MenuItem.Icon>
+                                <Image Source="/Promax.UI;component/Pictures/Icons/pencil.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Click="DeleteDriver" Header="Sil">
+                            <MenuItem.Icon>
+                                <Image Source="/Promax.UI;component/Pictures/Icons/dushbin.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Click="RefreshDrivers" Header="Yenile">
+                            <MenuItem.Icon>
+                                <Image Source="/Promax.UI;component/Pictures/Icons/reload.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="KOD" Binding="{Binding Path=DriverCode}" IsReadOnly="True"/>
+                    <DataGridTemplateColumn CanUserResize="False">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox Click="DriverGravityClicked" IsChecked="{Binding Path = Gravity, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource CheckBoxStyle2}"></CheckBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="SÜRÜCÜ ADI" Binding="{Binding Path=DriverName}" IsReadOnly="True" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <Grid Background="#FFF0F0F0" Grid.Column="1" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="24"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBox Grid.Row="0" Text="MİKSERLİ SERVİS" Background="#FFCEDEEC" BorderBrush="#FFBCBCBC" FontSize="14" FontWeight="Bold"/>
+            <Grid  Grid.Row="1">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Button Click="CreateNewMixerService" Style="{DynamicResource MainTabControlButtonStyle}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image  Source="/Promax.UI;component/Pictures/Icons/plus_button.png" Margin="5" />
+                                <TextBlock Text="Ekle" Padding="5"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+                    <Button Click="EditMixerService" Style="{DynamicResource MainTabControlButtonStyle}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image  Source="/Promax.UI;component/Pictures/Icons/pencil.png" Margin="5" />
+                                <TextBlock Text="Düzelt" Padding="5"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+                    <Button Click="DeleteMixerService" Style="{DynamicResource MainTabControlButtonStyle}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/Promax.UI;component/Pictures/Icons/dushbin.png" Margin="5" />
+                                <TextBlock Text="Sil" Padding="5"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+                    <Button Click="RefreshMixerServices" Style="{DynamicResource MainTabControlButtonStyle}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image  Source="/Promax.UI;component/Pictures/Icons/reload.png" Margin="5" />
+                                <TextBlock Text="Yenile" Padding="5"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+
+                </StackPanel>
+            </Grid>
+            <DataGrid x:Name="mixerServiceDataGrid" Background="White" Grid.Row="2" Margin="0,0,0,0" SelectedItem="{Binding Path=selectedMixerService, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="MouseDoubleClick" Handler="MixerServiceDataGrid_MouseDoubleClick"></EventSetter>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Click="CreateNewMixerService" Header="Yeni Servis">
+                            <MenuItem.Icon>
+                                <Image Source="/Promax.UI;component/Pictures/Icons/plus_button.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Click="EditMixerService" Header="Düzelt">
+                            <MenuItem.Icon>
+                                <Image Source="/Promax.UI;component/Pictures/Icons/pencil.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Click="DeleteMixerService" Header="Sil">
+                            <MenuItem.Icon>
+                                <Image Source="/Promax.UI;component/Pictures/Icons/dushbin.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Click="RefreshMixerServices" Header="Yenile">
+                            <MenuItem.Icon>
+                                <Image Source="/Promax.UI;component/Pictures/Icons/reload.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="KOD" Binding="{Binding Path=ServiceCode}" IsReadOnly="True"/>
+                    <DataGridTemplateColumn CanUserResize="False">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox Click="MixerServiceGravityClicked" IsChecked="{Binding Path = Gravity, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource CheckBoxStyle2}"></CheckBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="PLAKA" Binding="{Binding Path=LicencePlate}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="SÜRÜCÜ ADI" Binding="{Binding Path=Driver.DriverName}" IsReadOnly="True" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <Grid Background="#FFF0F0F0" Grid.Column="2" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="24"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBox Grid.Row="0" Text="POMPALI SEVİS" Background="#FFCEDEEC" BorderBrush="#FFBCBCBC" FontSize="14" FontWeight="Bold"/>
+            <Grid  Grid.Row="1">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Button Click="CreateNewPumpService" Style="{DynamicResource MainTabControlButtonStyle}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image  Source="/Promax.UI;component/Pictures/Icons/plus_button.png" Margin="5" />
+                                <TextBlock Text="Ekle" Padding="5"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+                    <Button Click="EditPumpService" Style="{DynamicResource MainTabControlButtonStyle}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image  Source="/Promax.UI;component/Pictures/Icons/pencil.png" Margin="5" />
+                                <TextBlock Text="Düzelt" Padding="5"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+                    <Button Click="DeletePumpService" Style="{DynamicResource MainTabControlButtonStyle}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image  Source="/Promax.UI;component/Pictures/Icons/dushbin.png" Margin="5" />
+                                <TextBlock Text="Sil" Padding="5"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+                    <Button Click="RefreshPumpServices" Style="{DynamicResource MainTabControlButtonStyle}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image  Source="/Promax.UI;component/Pictures/Icons/reload.png" Margin="5" />
+                                <TextBlock Text="Yenile" Padding="5"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+
+                </StackPanel>
+            </Grid>
+            <DataGrid x:Name="pumpServiceDataGrid" Background="White" Grid.Row="2" Margin="0,0,0,0" SelectedItem="{Binding Path=selectedPumpService, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="MouseDoubleClick" Handler="PumpServiceDataGrid_MouseDoubleClick"></EventSetter>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Click="CreateNewPumpService" Header="Yeni Servis">
+                            <MenuItem.Icon>
+                                <Image Source="/Promax.UI;component/Pictures/Icons/plus_button.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Click="EditPumpService" Header="Düzelt">
+                            <MenuItem.Icon>
+                                <Image Source="/Promax.UI;component/Pictures/Icons/pencil.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Click="DeletePumpService" Header="Sil">
+                            <MenuItem.Icon>
+                                <Image Source="/Promax.UI;component/Pictures/Icons/dushbin.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Click="RefreshPumpServices" Header="Yenile">
+                            <MenuItem.Icon>
+                                <Image Source="/Promax.UI;component/Pictures/Icons/reload.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="KOD" Binding="{Binding Path=ServiceCode}" IsReadOnly="True"/>
+                    <DataGridTemplateColumn CanUserResize="False">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox Click="PumpServiceGravityClicked" IsChecked="{Binding Path = Gravity, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource CheckBoxStyle2}"></CheckBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="PLAKA" Binding="{Binding Path=LicencePlate}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="SÜRÜCÜ ADI" Binding="{Binding Path=Driver.DriverName}" IsReadOnly="True" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <Grid Background="#FFF0F0F0" Grid.Column="3" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="24"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBox Grid.Row="0" Text="SANTRAL SEVİS" Background="#FFCEDEEC" BorderBrush="#FFBCBCBC" FontSize="14" FontWeight="Bold"/>
+            <Grid  Grid.Row="1">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Button Click="CreateNewCentralService" Style="{DynamicResource MainTabControlButtonStyle}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image  Source="/Promax.UI;component/Pictures/Icons/plus_button.png" Margin="5" />
+                                <TextBlock Text="Ekle" Padding="5"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+                    <Button Click="EditCentralService" Style="{DynamicResource MainTabControlButtonStyle}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image  Source="/Promax.UI;component/Pictures/Icons/pencil.png" Margin="5" />
+                                <TextBlock Text="Düzelt" Padding="5"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+                    <Button Click="DeleteCentralService" Style="{DynamicResource MainTabControlButtonStyle}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image  Source="/Promax.UI;component/Pictures/Icons/dushbin.png" Margin="5" />
+                                <TextBlock Text="Sil"  Padding="5"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+                    <Button Click="RefreshCentralServices" Style="{DynamicResource MainTabControlButtonStyle}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image  Source="/Promax.UI;component/Pictures/Icons/reload.png" Margin="5" />
+                                <TextBlock Text="Yenile"  Padding="5"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+
+                </StackPanel>
+            </Grid>
+            <DataGrid x:Name="centralServiceDataGrid" Background="White" Grid.Row="2" Margin="0,0,0,0" SelectedItem="{Binding Path=selectedCentralService, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="MouseDoubleClick" Handler="CentralServiceDataGrid_MouseDoubleClick"></EventSetter>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Click="CreateNewCentralService" Header="Yeni Servis">
+                            <MenuItem.Icon>
+                                <Image Source="/Promax.UI;component/Pictures/Icons/plus_button.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Click="EditCentralService" Header="Düzelt">
+                            <MenuItem.Icon>
+                                <Image Source="/Promax.UI;component/Pictures/Icons/pencil.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Click="DeleteCentralService" Header="Sil">
+                            <MenuItem.Icon>
+                                <Image Source="/Promax.UI;component/Pictures/Icons/dushbin.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Click="RefreshCentralServices" Header="Yenile">
+                            <MenuItem.Icon>
+                                <Image Source="/Promax.UI;component/Pictures/Icons/reload.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="KOD" Binding="{Binding Path=ServiceCode}" IsReadOnly="True"/>
+                    <DataGridTemplateColumn CanUserResize="False">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox Click="CentralServiceGravityClicked" IsChecked="{Binding Path = Gravity, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource CheckBoxStyle2}"></CheckBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="SERVİS ADI" Binding="{Binding Path=ServiceName}" IsReadOnly="True" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</Page>

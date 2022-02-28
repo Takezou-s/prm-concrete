@@ -1,0 +1,128 @@
+﻿<Window x:Class="Promax.UI.Windows.KullanıcıPaneliKartı"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pencerebuton="clr-namespace:Promax.UI.CustomTools.PencereButon"
+        mc:Ignorable="d"
+        Title="KullanıcıPaneli" Height="480" Width="510" MaxHeight="550" MaxWidth="680" MinHeight="450" MinWidth="480" Background="#FFF0F0F0">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Grid  Grid.Row="0" Background="#FFF0F0F0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <Button Style="{DynamicResource MainTabControlButtonStyle}">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Image  Source="/Promax.UI;component/Pictures/Icons/plus_button.png" Margin="5" />
+                            <TextBlock Text="Ekle" Padding="0,6"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+                <Button Style="{DynamicResource MainTabControlButtonStyle}">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Image  Source="/Promax.UI;component/Pictures/Icons/pencil.png" Margin="5" />
+                            <TextBlock Text="Düzelt" Padding="0,6"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+                <Button Style="{DynamicResource MainTabControlButtonStyle}">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Image  Source="/Promax.UI;component/Pictures/Icons/dushbin.png" Margin="5" />
+                            <TextBlock Text="Sil" Padding="0,6"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+                <Button Style="{DynamicResource MainTabControlButtonStyle}">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Image  Source="/Promax.UI;component/Pictures/Icons/diskette.png" Margin="5" />
+                            <TextBlock Text="Uygula" Padding="0,6"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <Border Style="{StaticResource MainTabControlBorderStyle}"/>
+                <Button Style="{DynamicResource MainTabControlButtonStyle}">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Image  Source="/Promax.UI;component/Pictures/Icons/x-button.png" Margin="5" />
+                            <TextBlock Text="İptal" Padding="0,6"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="1" Background="#FFF0F0F0" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Border Grid.Column="2" Padding="10" BorderBrush="#FFBFBFBF" BorderThickness="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="115"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Kullanıc Adı" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+                    <TextBox VerticalAlignment="Center" Grid.Row="0" Grid.Column="2"/>
+                    <TextBlock Text="Şifre" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
+                    <TextBox VerticalAlignment="Center" Grid.Row="1" Grid.Column="2"/>
+                    <TextBlock Text="Adı_Soyadı" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
+                    <TextBox VerticalAlignment="Center" Grid.Row="2" Grid.Column="2"/>
+                    <Separator Grid.Row="3" Grid.ColumnSpan="3"/>
+                    <TextBlock Text="Siparişler" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"/>
+                    <TextBox VerticalAlignment="Center" Grid.Row="4" Grid.Column="2"/>
+                    <TextBlock Text="Üretimler" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"/>
+                    <TextBox VerticalAlignment="Center" Grid.Row="5" Grid.Column="2"/>
+                    <TextBlock Text="Müşteriler" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center"/>
+                    <TextBox VerticalAlignment="Center" Grid.Row="6" Grid.Column="2"/>
+                    <TextBlock Text="Reçeteler" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center"/>
+                    <TextBox VerticalAlignment="Center" Grid.Row="7" Grid.Column="2"/>
+                    <TextBlock Text="Stoklar" Grid.Row="8" Grid.Column="0" VerticalAlignment="Center"/>
+                    <TextBox VerticalAlignment="Center" Grid.Row="8" Grid.Column="2"/>
+                    <TextBlock Text="Servisler" Grid.Row="9" Grid.Column="0" VerticalAlignment="Center"/>
+                    <TextBox VerticalAlignment="Center" Grid.Row="9" Grid.Column="2"/>
+                </Grid>
+            </Border>
+            <DataGrid>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ADI SOYADI"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <Grid Grid.Row="2" Background="#FFDBDBDB">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <pencerebuton:İptalButon HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,10,0" />
+            <pencerebuton:TamamButon HorizontalAlignment="Right" Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,0" />
+        </Grid>
+    </Grid>
+</Window>

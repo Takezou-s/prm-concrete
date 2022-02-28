@@ -1,0 +1,66 @@
+﻿<Window x:Class="Promax.UI.Windows.SürücüKartı"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:pencerebuton="clr-namespace:Promax.UI.CustomTools.PencereButon"
+        mc:Ignorable="d"
+         Title="Sürücü Kartı" Background="#FFF0F0F0" WindowStartupLocation="CenterScreen" MinWidth="360" Width="400" MaxWidth="560" MinHeight="370" Height="400" MaxHeight="500">
+    <DockPanel Margin="0">
+        <Grid DockPanel.Dock="Top" Margin="24,24,24,16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Kod" Grid.Row="0" Padding="0,0,5,0" VerticalAlignment="Center"/>
+            <xctk:IntegerUpDown Value="{Binding Path=Driver.DriverCode, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Grid.Row="0" Grid.Column="1" Margin="5,3,0,3" Minimum="0" ShowButtonSpinner="False"/>
+            <TextBlock Text="Sürücü Adı" Grid.Row="1" VerticalAlignment="Center" Padding="0,0,5,0"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Margin="5,5,0,5" Text="{Binding Path=Driver.DriverName, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}"/>
+
+            <Border Grid.Row="3" Grid.ColumnSpan="2" Background="#FFBFBFBF" Height="1" Margin="0,5"/>
+            <TextBlock Text="KimlikNo" Grid.Row="2" Padding="0,0,5,0" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Margin="5,5,0,5" Text="{Binding Path=Driver.Identity, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}"/>
+            <TextBlock Text="Kan Grubu" Grid.Row="4" Padding="0,0,5,0" VerticalAlignment="Center"/>
+            <ComboBox Grid.Row="4" Grid.Column="1" Margin="5,3,0,3" SelectedValuePath="Content" SelectedValue="{Binding Path=Driver.BloodGroup, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}">
+                <ComboBoxItem Content="A  RH (+)"/>
+                <ComboBoxItem Content="B  RH (+)"/>
+                <ComboBoxItem Content="AB RH (+)"/>
+                <ComboBoxItem Content="0  RH (+)"/>
+                <ComboBoxItem Content="A  RH (-)"/>
+                <ComboBoxItem Content="B  RH (-)"/>
+                <ComboBoxItem Content="AB RH (-)"/>
+                <ComboBoxItem Content="0  RH (-)"/>
+            </ComboBox>
+            <TextBlock Text="İlçe" Grid.Row="7" Padding="0,0,5,0" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="7" Grid.Column="1" Margin="5,5,0,5" Text="{Binding Path=Driver.State, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}"/>
+            <TextBlock Text="Adres" Grid.Row="6" Padding="0,0,5,0" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="6" Grid.Column="1" Margin="5,3,0,3" Text="{Binding Path=Driver.Address, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}"/>
+            <Border Grid.Row="5" Grid.ColumnSpan="2" Background="#FFBFBFBF" Height="1" Margin="0,5"/>
+            <TextBlock Text="İl" Grid.Row="8" VerticalAlignment="Center" Padding="0,0,5,0"/>
+            <TextBox Grid.Row="8" Grid.Column="1" Margin="5,5,0,5" Text="{Binding Path=Driver.City, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}"/>
+            <TextBlock Text="Telefon" Grid.Row="9" VerticalAlignment="Center" Margin="0" Padding="0,0,5,0"/>
+            <TextBox Grid.Row="9" Grid.Column="1" Margin="5,5,0,5" Text="{Binding Path=Driver.Phone, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}"/>
+        </Grid>
+        <Grid DockPanel.Dock="Bottom" Background="#FFDBDBDB" VerticalAlignment="Bottom" Height="40" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <pencerebuton:İptalButon Click="İptalButon_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,10,0" />
+            <pencerebuton:TamamButon Click="TamamButon_Click" HorizontalAlignment="Right" Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,0" />
+        </Grid>
+    </DockPanel>
+</Window>

@@ -1,0 +1,63 @@
+﻿<Window x:Class="Promax.UI.Windows.ŞantiyeKartı"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:pencerebuton="clr-namespace:Promax.UI.CustomTools.PencereButon"
+        mc:Ignorable="d"
+         Title="Şantiye Kartı" Width="376" Background="#FFF0F0F0" Height="376" MinWidth="376" MinHeight="376" MaxWidth="576" MaxHeight="376" WindowStartupLocation="CenterScreen">
+    <DockPanel Margin="0">
+        <Grid DockPanel.Dock="Top" Margin="24,24,24,16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Label Content="Kod" Grid.Row="0" Padding="0,0,5,0" VerticalAlignment="Center"/>
+            <xctk:IntegerUpDown Grid.Row="0" Grid.Column="1" Margin="5,3,0,3" Minimum="0" ShowButtonSpinner="False" Value="{Binding Path=Site.SiteCode, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}"/>
+
+            <Label Content="Şantiye Adı" Grid.Row="1" VerticalAlignment="Center" Padding="0,0,5,0"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Margin="5,5,0,5" Text="{Binding Path=Site.SiteName, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}"/>
+
+            <Border Grid.Row="2" Grid.ColumnSpan="5" Background="#FFBFBFBF" Height="1" Margin="0,5"/>
+            <Label Content="Adres" Grid.Row="3" Padding="0,0,5,0" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="3" Grid.Column="1" Margin="5,5,0,5" Text="{Binding Path=Site.Address, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}"/>
+
+            <Label Content="İlçe" Grid.Row="4" Padding="0,0,5,0" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="4" Grid.Column="1" Margin="5,5,0,5" Text="{Binding Path=Site.State, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}"/>
+
+            <Label Content="İl" Grid.Row="5" Padding="0,0,5,0" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="5" Grid.Column="1" Margin="5,5,0,5" Text="{Binding Path=Site.City, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}"/>
+
+            <Label Content="Mesafe" Grid.Row="6" Padding="0,0,5,0" VerticalAlignment="Center"/>
+            <xctk:IntegerUpDown Grid.Row="6" Grid.Column="1" Margin="5,3,0,3" Minimum="0" ShowButtonSpinner="False" Value="{Binding Path=Site.Distance, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}"/>
+
+            <Border Grid.Row="7" Grid.ColumnSpan="5" Background="#FFBFBFBF" Height="1" Margin="0,5"/>
+            <Label Content="Yetkili" Grid.Row="8" VerticalAlignment="Center" Padding="0,0,5,0"/>
+            <TextBox Grid.Row="8" Grid.Column="1" Margin="5,5,0,5" Text="{Binding Path=Site.Contact, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}"/>
+
+            <Label Content="Telefon" Grid.Row="9" VerticalAlignment="Center" Margin="0" Padding="0,0,5,0"/>
+            <TextBox Grid.Row="9" Grid.Column="1" Margin="5,5,0,5" Text="{Binding Path=Site.Phone, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}"/>
+        </Grid>
+        <Grid DockPanel.Dock="Bottom" Background="#FFDBDBDB" VerticalAlignment="Bottom" Height="40" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <pencerebuton:İptalButon HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,10,0" Click="İptalButon_Click" />
+            <pencerebuton:TamamButon HorizontalAlignment="Right" Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,0" Click="TamamButon_Click"/>
+        </Grid>
+    </DockPanel>
+</Window>

@@ -116,5 +116,26 @@ namespace Promax.Core
                 communicator.Read(var);
             }
         }
+        /// <summary>
+        /// Değeri scale değerine göre shorta çevirir.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="scale"></param>
+        /// <returns></returns>
+        public static short Scalify(this double value, int scale)
+        {
+            return Convert.ToInt16(Math.Pow(10, scale) * value);
+        }
+        /// <summary>
+        /// Değeri scale değerine göre böler.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="scale"></param>
+        /// <returns></returns>
+        public static double Descalify(this double value, int scale)
+        {
+            var a = Math.Pow(10, scale);
+            return value / a;
+        }
     }
 }

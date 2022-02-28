@@ -1,0 +1,166 @@
+﻿<UserControl x:Class="Promax.UI.CustomTools.ScadaKontrolButon.SürgüButon"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d"  >
+    <Grid Background="#FFE6E6E6">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Button  Name="IncreaseButton" Width="16" Height="16" Margin="5" Click="IncreaseButton_Click" Background="#FFCCCCCC">
+            <Image Source="/Promax.UI;component/Pictures/Icons/plus.png" />
+        </Button>
+
+        <Slider Grid.Row ="1" Maximum="100" TickPlacement="BottomRight" TickFrequency="5"  Name="slValue"  Orientation="Vertical" HorizontalAlignment="Center" Margin="8,0,0,0" Width="20" Foreground="Black" Background="{x:Null}" BorderBrush="{x:Null}" SmallChange="1" >
+            <Slider.Template>
+                <ControlTemplate TargetType="{x:Type Slider}">
+                    <Border x:Name="border" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True" Background="{x:Null}" BorderBrush="Red">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition MinWidth="{TemplateBinding MinWidth}" Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TickBar x:Name="TopTick" Grid.Column="0" Fill="{TemplateBinding Foreground}" Margin="0,0,2,0" Placement="Left" Visibility="Collapsed" Width="4"/>
+                            <TickBar x:Name="BottomTick" Grid.Column="2" Fill="{TemplateBinding Foreground}" Margin="2,0,0,0" Placement="Right" Visibility="Collapsed" Width="4"/>
+                            <Border x:Name="TrackBackground" BorderBrush="{x:Null}" BorderThickness="1" Background="#FFE7EAEA" Grid.Column="1" HorizontalAlignment="Center" Margin="0,5" Width="10">
+                                <Canvas Margin="-1,-6">
+                                    <Rectangle x:Name="PART_SelectionRange" Fill="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" Visibility="Hidden"/>
+                                </Canvas>
+                            </Border>
+                            <Track x:Name="PART_Track" Grid.Column="1" OpacityMask="#FF0C0202">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Command="Slider.DecreaseLarge">
+                                        <RepeatButton.Style>
+                                            <Style TargetType="{x:Type RepeatButton}">
+                                                <Setter Property="OverridesDefaultStyle" Value="True"/>
+                                                <Setter Property="Background" Value="Transparent"/>
+                                                <Setter Property="Focusable" Value="False"/>
+                                                <Setter Property="IsTabStop" Value="False"/>
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="{x:Type RepeatButton}">
+                                                            <Rectangle Fill="{TemplateBinding Background}" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"/>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </RepeatButton.Style>
+                                    </RepeatButton>
+                                </Track.DecreaseRepeatButton>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Command="Slider.IncreaseLarge">
+                                        <RepeatButton.Style>
+                                            <Style TargetType="{x:Type RepeatButton}">
+                                                <Setter Property="OverridesDefaultStyle" Value="True"/>
+                                                <Setter Property="Background" Value="Transparent"/>
+                                                <Setter Property="Focusable" Value="False"/>
+                                                <Setter Property="IsTabStop" Value="False"/>
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="{x:Type RepeatButton}">
+                                                            <Rectangle Fill="{TemplateBinding Background}" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"/>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </RepeatButton.Style>
+                                    </RepeatButton>
+                                </Track.IncreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb x:Name="Thumb" Focusable="False" Height="11" OverridesDefaultStyle="True" VerticalAlignment="Top" Width="18" Background="Black"/>
+                                </Track.Thumb>
+                            </Track>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="TickPlacement" Value="TopLeft">
+                            <Setter Property="Visibility" TargetName="TopTick" Value="Visible"/>
+                            <Setter Property="Template" TargetName="Thumb">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Thumb}">
+                                        <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
+                                            <Path x:Name="grip" Data="M6,11C6,11 0,5.5 0,5.5 0,5.5 6,0 6,0 6,0 18,0 18,0 18,0 18,11 18,11 18,11 6,11 6,11z" Fill="Black" Stretch="Fill" Stroke="#FFACACAC"/>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Fill" TargetName="grip" Value="#FFDCECFC"/>
+                                                <Setter Property="Stroke" TargetName="grip" Value="#FF7EB4EA"/>
+                                            </Trigger>
+                                            <Trigger Property="IsDragging" Value="True">
+                                                <Setter Property="Fill" TargetName="grip" Value="#FFDAECFC"/>
+                                                <Setter Property="Stroke" TargetName="grip" Value="#FF569DE5"/>
+                                            </Trigger>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter Property="Fill" TargetName="grip" Value="#FFF0F0F0"/>
+                                                <Setter Property="Stroke" TargetName="grip" Value="#FFD9D9D9"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Margin" TargetName="TrackBackground" Value="2,5,0,5"/>
+                        </Trigger>
+                        <Trigger Property="TickPlacement" Value="BottomRight">
+                            <Setter Property="Visibility" TargetName="BottomTick" Value="Visible"/>
+                            <Setter Property="Template" TargetName="Thumb">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Thumb}">
+                                        <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
+                                            <Path x:Name="grip" Data="M12,11C12,11 18,5.5 18,5.5 18,5.5 12,0 12,0 12,0 0,0 0,0 0,0 0,11 0,11 0,11 12,11 12,11z" Fill="#FFCCCCCC" Stretch="Fill" Stroke="#FFCCCCCC"/>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Fill" TargetName="grip" Value="#FFDCECFC"/>
+                                                <Setter Property="Stroke" TargetName="grip" Value="#FF7EB4EA"/>
+                                            </Trigger>
+                                            <Trigger Property="IsDragging" Value="True">
+                                                <Setter Property="Fill" TargetName="grip" Value="#FFDAECFC"/>
+                                                <Setter Property="Stroke" TargetName="grip" Value="#FF569DE5"/>
+                                            </Trigger>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter Property="Fill" TargetName="grip" Value="#FFF0F0F0"/>
+                                                <Setter Property="Stroke" TargetName="grip" Value="#FFD9D9D9"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Margin" TargetName="TrackBackground" Value="0,5,2,5"/>
+                        </Trigger>
+                        <Trigger Property="TickPlacement" Value="Both">
+                            <Setter Property="Visibility" TargetName="TopTick" Value="Visible"/>
+                            <Setter Property="Visibility" TargetName="BottomTick" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsSelectionRangeEnabled" Value="True">
+                            <Setter Property="Visibility" TargetName="PART_SelectionRange" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter Property="Foreground" TargetName="Thumb" Value="Blue"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Slider.Template>
+        </Slider>
+
+
+        <Button Name="DecreaseButton" Width="16" Height="16" Margin="5" Grid.Row="2" Click="DecreaseButton_Click">
+            <Image Source="/Promax.UI;component/Pictures/Icons/remove.png"/>
+        </Button>
+        <TextBox Text="{Binding ElementName=slValue, Path=Value, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" TextAlignment="Right" Width="40" />
+
+    </Grid>
+    <!--<DockPanel VerticalAlignment="Center" Margin="10">
+        <TextBox Text="{Binding ElementName=slValue, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
+        <Slider Maximum="100" TickPlacement="BottomRight" TickFrequency="5" IsSnapToTickEnabled="True" Name="slValue" Orientation="Vertical" Height="113"/>
+    </DockPanel>-->
+</UserControl>
