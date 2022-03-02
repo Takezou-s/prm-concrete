@@ -1,21 +1,7 @@
-﻿using Promax.Business.Abstract;
-using Promax.Business.Mappers;
+﻿using Promax.Business;
 using Promax.Core;
-using Promax.DataAccess.Concrete.EntityFramework;
 using Promax.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Promax.UI.Windows
 {
@@ -41,8 +27,8 @@ namespace Promax.UI.Windows
         private bool Editing { get; set; }
         private Client oldClient;
         public Client Client { get; set; }
-        public IComplexClientManager ClientManager { get => Infrastructure.Main.GetClientManager(); }
-        public IBeeMapper Mapper { get => Infrastructure.Main.GetMapper(); }
+        public IClientManager ClientManager { get => Infrastructure.Main.ClientManager; }
+        public IBeeMapper Mapper { get => Infrastructure.Main.Mapper; }
 
         private MüşteriKartı()
         {
@@ -55,7 +41,7 @@ namespace Promax.UI.Windows
             {
                 if (Editing)
                 {
-                    ClientManager.Update(Client, oldClient);
+                    ClientManager.Update(Client);
                 }
                 else
                 {

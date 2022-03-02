@@ -87,6 +87,7 @@
     <Compile Include="Abstract\IRetentiveStockRepository.cs" />
     <Compile Include="Abstract\IRetentiveUserRepository.cs" />
     <Compile Include="Abstract\ISentViewReader.cs" />
+    <Compile Include="Abstract\IStockMovementViewReader.cs" />
     <Compile Include="Abstract\IViewReader.cs" />
     <Compile Include="Concrete\ComplexNonRetentiveEntityRepository.cs" />
     <Compile Include="Concrete\ComplexRetentiveEntityRepository.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Concrete\RetentiveStockRepository.cs" />
     <Compile Include="Concrete\RetentiveUserRepository.cs" />
     <Compile Include="Concrete\SentViewReader.cs" />
+    <Compile Include="Concrete\StockMovementViewReader.cs" />
     <Compile Include="DatabaseTableInfo.cs" />
     <Compile Include="ExpertContext.cs" />
     <Compile Include="ExtensionMethods.cs" />

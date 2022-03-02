@@ -1,30 +1,15 @@
-﻿using FirebirdSql.Data.FirebirdClient;
-using Promax.Business.Abstract;
-using Promax.Business.Mappers;
+﻿using Extensions;
+using Promax.Business;
 using Promax.Core;
 using Promax.DataAccess;
-using Promax.DataAccess.Abstract;
-using Promax.DataAccess.Concrete.EntityFramework;
 using Promax.Entities;
 using Promax.UI.Windows;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Promax.UI
 {
@@ -117,13 +102,13 @@ DependencyProperty.Register(nameof(Tümü), typeof(bool), typeof(StoklarSayfası
             }
         }
 
-        public IComplexStockManager StockManager { get => Infrastructure.Main.GetStockManager(); }
-        public IComplexStockEntryDalManager StockEntryManager { get => Infrastructure.Main.GetStockEntryManager(); }
-        public IComplexSiloManager SiloManager { get => Infrastructure.Main.GetSiloManager(); }
-        public IBeeMapper Mapper { get => Infrastructure.Main.GetMapper(); }
-        public IStockMovementViewReader BatchedStockMovementViewReader { get => Infrastructure.Main.GetBatchedStockViewReader(); }
-        public IStockMovementViewReader StockEntryViewReader { get => Infrastructure.Main.GetStockEntryViewReader(); }
-        public IStockMovementViewReader ConsumedStockMovementViewReader { get => Infrastructure.Main.GetConsumedStockViewReader(); }
+        public IStockManager StockManager { get => Infrastructure.Main.StockManager; }
+        public IStockEntryManager StockEntryManager { get => Infrastructure.Main.StockEntryManager; }
+        public ISiloManager SiloManager { get => Infrastructure.Main.SiloManager; }
+        public IBeeMapper Mapper { get => Infrastructure.Main.Mapper; }
+        public IStockMovementViewReader BatchedStockMovementViewReader { get => Infrastructure.Main.BatchedStockViewReader; }
+        public IStockMovementViewReader StockEntryViewReader { get => Infrastructure.Main.StockEntryViewReader; }
+        public IStockMovementViewReader ConsumedStockMovementViewReader { get => Infrastructure.Main.ConsumedStockViewReader; }
         public object selectedStock
         {
             get => _selectedStock; set

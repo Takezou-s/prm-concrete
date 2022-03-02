@@ -1,21 +1,14 @@
-﻿using Promax.Business;
-using Promax.Business.Abstract;
+﻿using Extensions;
+using Promax.Business;
 using Promax.Core;
 using Promax.Entities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Promax.UI.Windows
 {
@@ -42,7 +35,7 @@ namespace Promax.UI.Windows
         public static readonly DependencyProperty RecipesProperty = DependencyProperty.Register(
             nameof(Recipes), typeof(ObservableCollection<Recipe>), typeof(GörevKartı));
         public static readonly DependencyProperty ServiceCategoriesProperty = DependencyProperty.Register(
-            nameof(ServiceCategories), typeof(ObservableCollection<ServiceCategoryDTO>), typeof(GörevKartı));
+            nameof(ServiceCategories), typeof(ObservableCollection<ServiceCategory>), typeof(GörevKartı));
         public static readonly DependencyProperty CentralServicesProperty = DependencyProperty.Register(
             nameof(CentralServices), typeof(ObservableCollection<Service>), typeof(GörevKartı));
         public static readonly DependencyProperty MixerServicesProperty = DependencyProperty.Register(
@@ -50,7 +43,7 @@ namespace Promax.UI.Windows
         public static readonly DependencyProperty PumpServicesProperty = DependencyProperty.Register(
             nameof(PumpServices), typeof(ObservableCollection<Service>), typeof(GörevKartı));
         public static readonly DependencyProperty DriversProperty = DependencyProperty.Register(
-            nameof(Drivers), typeof(ObservableCollection<DriverDTO>), typeof(GörevKartı));
+            nameof(Drivers), typeof(ObservableCollection<Driver>), typeof(GörevKartı));
         public static readonly DependencyProperty RecipeNameProperty = DependencyProperty.Register(
             nameof(RecipeName), typeof(string), typeof(GörevKartı));
         public static readonly DependencyProperty ErrorDictionaryProperty = DependencyProperty.Register(
@@ -95,9 +88,9 @@ namespace Promax.UI.Windows
                 OnPropertyChanged(new DependencyPropertyChangedEventArgs(RecipesProperty, oldValue, newValue));
             }
         }
-        public ObservableCollection<ServiceCategoryDTO> ServiceCategories
+        public ObservableCollection<ServiceCategory> ServiceCategories
         {
-            get => (ObservableCollection<ServiceCategoryDTO>)GetValue(ServiceCategoriesProperty); set
+            get => (ObservableCollection<ServiceCategory>)GetValue(ServiceCategoriesProperty); set
             {
                 var oldValue = ServiceCategories;
                 var newValue = value;
@@ -135,9 +128,9 @@ namespace Promax.UI.Windows
                 OnPropertyChanged(new DependencyPropertyChangedEventArgs(PumpServicesProperty, oldValue, newValue));
             }
         }
-        public ObservableCollection<DriverDTO> Drivers
+        public ObservableCollection<Driver> Drivers
         {
-            get => (ObservableCollection<DriverDTO>)GetValue(DriversProperty); set
+            get => (ObservableCollection<Driver>)GetValue(DriversProperty); set
             {
                 var oldValue = Drivers;
                 var newValue = value;
@@ -147,14 +140,14 @@ namespace Promax.UI.Windows
         }
         #endregion
         #region Managers
-        private IComplexClientManager ClientManager { get => Infrastructure.Main.GetClientManager(); }
-        private IComplexRecipeManager RecipeManager { get => Infrastructure.Main.GetRecipeManager(); }
-        private IComplexServiceCategoryManager ServiceCategoryManager { get => Infrastructure.Main.GetServiceCategoryManager(); }
-        private IComplexServiceManager ServiceManager { get => Infrastructure.Main.GetServiceManager(); }
-        private IComplexDriverManager DriverManager { get => Infrastructure.Main.GetDriverManager(); }
-        private IComplexMixerManager MixerManager { get => Infrastructure.Main.GetMixerManager(); }
-        private IComplexProductManager ProductManager { get => Infrastructure.Main.GetProductManager(); }
-        private IBeeMapper Mapper { get => Infrastructure.Main.GetMapper(); }
+        private IClientManager ClientManager { get => Infrastructure.Main.ClientManager; }
+        private IRecipeManager RecipeManager { get => Infrastructure.Main.RecipeManager; }
+        private IServiceCategoryManager ServiceCategoryManager { get => Infrastructure.Main.ServiceCategoryManager; }
+        private IServiceManager ServiceManager { get => Infrastructure.Main.ServiceManager; }
+        private IDriverManager DriverManager { get => Infrastructure.Main.DriverManager; }
+        private IMixerManager MixerManager { get => Infrastructure.Main.MixerManager; }
+        private IProductManager ProductManager { get => Infrastructure.Main.ProductManager; }
+        private IBeeMapper Mapper { get => Infrastructure.Main.Mapper; }
         #endregion
         public static GörevKartı CreateNew(Order order)
         {
@@ -272,7 +265,7 @@ namespace Promax.UI.Windows
         private Mixer Mixer1 { get; set; }
         private Product oldProduct;
         private Service _selectedMixerService;
-        private IBeeValidator<Product> Validator { get { return Infrastructure.Main.GetProductValidator(); } }
+        private IBeeValidator<Product> Validator { get { return Infrastructure.Main.ProductValidator; } }
         public Product Product { get; set; }
         private bool Editing { get; set; }
         private void RecipeComboboxItemHighligted(object sender, MouseEventArgs e)
@@ -312,11 +305,11 @@ namespace Promax.UI.Windows
             Gate1Selected = true;
             Clients = new ObservableCollection<Client>(ClientManager.GetList(x => !x.IsHidden.GetBool()));
             Recipes = new ObservableCollection<Recipe>(RecipeManager.GetList(x => !x.IsHidden.GetBool()));
-            ServiceCategories = new ObservableCollection<ServiceCategoryDTO>(ServiceCategoryManager.GetList());
+            ServiceCategories = new ObservableCollection<ServiceCategory>(ServiceCategoryManager.GetList());
             CentralServices = new ObservableCollection<Service>(ServiceManager.GetList(x => !x.IsHidden.GetBool() && x.ServiceCatNum == 3));
             MixerServices = new ObservableCollection<Service>(ServiceManager.GetList(x => !x.IsHidden.GetBool() && x.ServiceCatNum == 1));
             PumpServices = new ObservableCollection<Service>(ServiceManager.GetList(x => !x.IsHidden.GetBool() && x.ServiceCatNum == 2));
-            Drivers = new ObservableCollection<DriverDTO>(DriverManager.GetList(x => !x.IsHidden.GetBool()));
+            Drivers = new ObservableCollection<Driver>(DriverManager.GetList(x => !x.IsHidden.GetBool()));
             Mixer1 = MixerManager.Get(x => x.MixerId == 1);
             Product.Capacity = Mixer1.Capacity;
             ShowRecipe(Product.Recipe);

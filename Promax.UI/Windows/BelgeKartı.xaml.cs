@@ -1,23 +1,12 @@
-﻿using Promax.Business.Abstract;
-using Promax.Business.Mappers;
+﻿using Promax.Business;
 using Promax.Core;
 using Promax.Entities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 
 namespace Promax.UI.Windows
 {
@@ -53,10 +42,10 @@ namespace Promax.UI.Windows
         private StockEntry oldStockEntry;
         private bool Editing { get; set; }
         public object PropertyChanged { get; private set; }
-        public IBeeMapper Mapper { get => Infrastructure.Main.GetMapper(); }
-        public IComplexStockManager StockManager { get => Infrastructure.Main.GetStockManager(); }
-        public IComplexSiloManager SiloManager { get => Infrastructure.Main.GetSiloManager(); }
-        public IComplexStockEntryDalManager StockEntryManager { get => Infrastructure.Main.GetStockEntryManager(); }
+        public IBeeMapper Mapper { get => Infrastructure.Main.Mapper; }
+        public IStockManager StockManager { get => Infrastructure.Main.StockManager; }
+        public ISiloManager SiloManager { get => Infrastructure.Main.SiloManager; }
+        public IStockEntryManager StockEntryManager { get => Infrastructure.Main.StockEntryManager; }
         public StockEntry StockEntry { get; set; }
         public ObservableCollection<Stock> Stocks
         {

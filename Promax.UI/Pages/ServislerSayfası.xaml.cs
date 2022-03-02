@@ -1,23 +1,13 @@
-﻿using Promax.Business.Abstract;
-using Promax.Business.Mappers;
+﻿using Extensions;
+using Promax.Business;
 using Promax.Core;
 using Promax.Entities;
 using Promax.UI.Windows;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Promax.UI
 {
@@ -36,13 +26,13 @@ namespace Promax.UI
         public object selectedPumpService { get; set; }
         public object selectedCentralService { get; set; }
 
-        public DriverDTO SelectedDriver { get => selectedDriver as DriverDTO; }
+        public Driver SelectedDriver { get => selectedDriver as Driver; }
         public Service SelectedMixerService { get => selectedDriver as Service; }
         public Service SelectedPumpService { get => selectedPumpService as Service; }
         public Service SelectedCentralService { get => selectedCentralService as Service; }
-        public IComplexDriverManager DriverManager { get => Infrastructure.Main.GetDriverManager(); }
-        public IComplexServiceManager ServiceManager { get => Infrastructure.Main.GetServiceManager(); }
-        public IBeeMapper Mapper { get => Infrastructure.Main.GetMapper(); }
+        public IDriverManager DriverManager { get => Infrastructure.Main.DriverManager; }
+        public IServiceManager ServiceManager { get => Infrastructure.Main.ServiceManager; }
+        public IBeeMapper Mapper { get => Infrastructure.Main.Mapper; }
         private void CreateNewDriver(object sender, RoutedEventArgs e)
         {
             var a = SürücüKartı.CreateNew();
@@ -65,12 +55,12 @@ namespace Promax.UI
                 return;
             DeleteDriver(SelectedDriver);
         }
-        private void DeleteDriver(DriverDTO driver)
+        private void DeleteDriver(Driver driver)
         {
-            var driverDto = new DriverDTO();
-            Mapper.Map<DriverDTO, DriverDTO>(driver, driverDto);
+            var driverDto = new Driver();
+            Mapper.Map<Driver, Driver>(driver, driverDto);
             driverDto.IsHidden = "true";
-            DriverManager.Update(driverDto, driver);
+            DriverManager.Update(driverDto);
             ListDrivers();
             ListAllServices();
         }
@@ -109,7 +99,7 @@ namespace Promax.UI
         {
             var serviceDto = new Service();
             Mapper.Map<Service, Service>(service, serviceDto);
-            ServiceManager.Update(serviceDto.DoReturn(x => x.IsHidden = "true"), service);
+            ServiceManager.Update(serviceDto.DoReturn(x => x.IsHidden = "true"));
             ListMixerServices();
         }
         private void RefreshMixerServices(object sender, RoutedEventArgs e)
@@ -145,7 +135,7 @@ namespace Promax.UI
         {
             var serviceDto = new Service();
             Mapper.Map<Service, Service>(service, serviceDto);
-            ServiceManager.Update(serviceDto.DoReturn(x => x.IsHidden = "true"), service);
+            ServiceManager.Update(serviceDto.DoReturn(x => x.IsHidden = "true"));
             ListPumpServices();
         }
         private void RefreshPumpServices(object sender, RoutedEventArgs e)
@@ -183,7 +173,7 @@ namespace Promax.UI
         {
             var serviceDto = new Service();
             Mapper.Map<Service, Service>(service, serviceDto);
-            ServiceManager.Update(serviceDto.DoReturn(x => x.IsHidden = "true"), service);
+            ServiceManager.Update(serviceDto.DoReturn(x => x.IsHidden = "true"));
             ListCentralServices();
         }
         private void RefreshCentralServices(object sender, RoutedEventArgs e)
@@ -198,23 +188,23 @@ namespace Promax.UI
 
         private void DriverGravityClicked(object sender, RoutedEventArgs e)
         {
-            DriverDTO driver = driverDataGrid.CurrentItem as DriverDTO;
-            driver.Do(x => DriverManager.Update(driver, driver));
+            Driver driver = driverDataGrid.CurrentItem as Driver;
+            driver.Do(x => DriverManager.Update(driver));
         }
         private void MixerServiceGravityClicked(object sender, RoutedEventArgs e)
         {
             Service service = mixerServiceDataGrid.CurrentItem as Service;
-            service.Do(x => ServiceManager.Update(service, service));
+            service.Do(x => ServiceManager.Update(service));
         }
         private void PumpServiceGravityClicked(object sender, RoutedEventArgs e)
         {
             Service service = pumpServiceDataGrid.CurrentItem as Service;
-            service.Do(x => ServiceManager.Update(service, service));
+            service.Do(x => ServiceManager.Update(service));
         }
         private void CentralServiceGravityClicked(object sender, RoutedEventArgs e)
         {
             Service service = centralServiceDataGrid.CurrentItem as Service;
-            service.Do(x => ServiceManager.Update(service, service));
+            service.Do(x => ServiceManager.Update(service));
         }
 
         //private void Servis_Click(object sender, RoutedEventArgs e)
@@ -239,7 +229,7 @@ namespace Promax.UI
 
         private void ListDrivers()
         {
-            ObservableCollection<DriverDTO> drivers = new ObservableCollection<DriverDTO>(DriverManager.GetList(x => x.IsHidden == "false"));
+            ObservableCollection<Driver> drivers = new ObservableCollection<Driver>(DriverManager.GetList(x => x.IsHidden == "false"));
             driverDataGrid.ItemsSource = drivers;
         }
         private void ListMixerServices()

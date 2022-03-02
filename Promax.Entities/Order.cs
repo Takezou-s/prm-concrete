@@ -14,7 +14,7 @@ namespace Promax.Entities
         private Client _client;
         private Site _site;
         private Recipe _recipe;
-        private ServiceCategoryDTO _serviceCategory;
+        private ServiceCategory _serviceCategory;
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)
@@ -340,7 +340,7 @@ namespace Promax.Entities
                 }
             }
         }
-        public ServiceCategoryDTO ServiceCategory
+        public ServiceCategory ServiceCategory
         {
             get => _serviceCategory; set
             {

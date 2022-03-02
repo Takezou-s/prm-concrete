@@ -1,20 +1,14 @@
-﻿using Promax.Business.Abstract;
+﻿using Extensions;
+using Promax.Business;
 using Promax.Core;
 using Promax.Entities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Promax.UI
 {
@@ -30,7 +24,7 @@ namespace Promax.UI
         public static readonly DependencyProperty RecipesProperty =
        DependencyProperty.Register(nameof(Recipes), typeof(ObservableCollection<Recipe>), typeof(SiparişKartı));
         public static readonly DependencyProperty ServiceCategoriesProperty =
-       DependencyProperty.Register(nameof(ServiceCategories), typeof(ObservableCollection<ServiceCategoryDTO>), typeof(SiparişKartı));
+       DependencyProperty.Register(nameof(ServiceCategories), typeof(ObservableCollection<ServiceCategory>), typeof(SiparişKartı));
         public static SiparişKartı CreateNew()
         {
             return new SiparişKartı()
@@ -85,9 +79,9 @@ namespace Promax.UI
                 OnPropertyChanged(new DependencyPropertyChangedEventArgs(RecipesProperty, oldValue, newValue));
             }
         }
-        public ObservableCollection<ServiceCategoryDTO> ServiceCategories
+        public ObservableCollection<ServiceCategory> ServiceCategories
         {
-            get => (ObservableCollection<ServiceCategoryDTO>)GetValue(ServiceCategoriesProperty); set
+            get => (ObservableCollection<ServiceCategory>)GetValue(ServiceCategoriesProperty); set
             {
                 var oldValue = ServiceCategories;
                 var newValue = value;
@@ -98,12 +92,12 @@ namespace Promax.UI
 
         private Order oldOrder;
         private bool Editing { get; set; }
-        public IBeeMapper Mapper { get => Infrastructure.Main.GetMapper(); }
-        public IComplexOrderManager OrderManager { get => Infrastructure.Main.GetOrderManager(); }
-        public IComplexClientManager ClientManager { get => Infrastructure.Main.GetClientManager(); }
-        public IComplexSiteManager SiteManager { get => Infrastructure.Main.GetSiteManager(); }
-        public IComplexRecipeManager RecipeManager { get => Infrastructure.Main.GetRecipeManager(); }
-        public IComplexServiceCategoryManager ServiceCategoryManager { get => Infrastructure.Main.GetServiceCategoryManager(); }
+        public IBeeMapper Mapper { get => Infrastructure.Main.Mapper; }
+        public IOrderManager OrderManager { get => Infrastructure.Main.OrderManager; }
+        public IClientManager ClientManager { get => Infrastructure.Main.ClientManager; }
+        public ISiteManager SiteManager { get => Infrastructure.Main.SiteManager; }
+        public IRecipeManager RecipeManager { get => Infrastructure.Main.RecipeManager; }
+        public IServiceCategoryManager ServiceCategoryManager { get => Infrastructure.Main.ServiceCategoryManager; }
         public Order Order { get; set; }
         public Client Client { get; set; }
 
@@ -113,7 +107,7 @@ namespace Promax.UI
             {
                 if (Editing)
                 {
-                    OrderManager.Update(Order, oldOrder);
+                    OrderManager.Update(Order);
                 }
                 else
                 {
@@ -132,7 +126,7 @@ namespace Promax.UI
         {
             Clients = new ObservableCollection<Client>(ClientManager.GetList(x => !x.IsHidden.GetBool()));
             Recipes = new ObservableCollection<Recipe>(RecipeManager.GetList(x => !x.IsHidden.GetBool()));
-            ServiceCategories = new ObservableCollection<ServiceCategoryDTO>(ServiceCategoryManager.GetList());
+            ServiceCategories = new ObservableCollection<ServiceCategory>(ServiceCategoryManager.GetList());
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

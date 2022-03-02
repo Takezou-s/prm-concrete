@@ -15,7 +15,7 @@ namespace Promax.Entities
         private Site _site;
         private Order _order;
         private Recipe _recipe;
-        private ServiceCategoryDTO _serviceCategory;
+        private ServiceCategory _serviceCategory;
         private Service _service;
         private Driver _driver;
         private User _user;
@@ -980,7 +980,7 @@ namespace Promax.Entities
                 }
             }
         }
-        public ServiceCategoryDTO ServiceCategory
+        public ServiceCategory ServiceCategory
         {
             get => _serviceCategory; set
             {

@@ -1,20 +1,7 @@
-﻿using Promax.Business.Abstract;
-using Promax.Business.Mappers;
+﻿using Promax.Business;
 using Promax.Core;
 using Promax.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Promax.UI.Windows
 {
@@ -45,8 +32,8 @@ namespace Promax.UI.Windows
 
         private Site oldSite;
 
-        public IComplexSiteManager SiteManager { get => Infrastructure.Main.GetSiteManager(); }
-        public IBeeMapper Mapper { get => Infrastructure.Main.GetMapper(); }
+        public ISiteManager SiteManager { get => Infrastructure.Main.SiteManager; }
+        public IBeeMapper Mapper { get => Infrastructure.Main.Mapper; }
         private ŞantiyeKartı()
         {
             InitializeComponent();
@@ -58,7 +45,7 @@ namespace Promax.UI.Windows
             {
                 if (Editing)
                 {
-                    SiteManager.Update(Site, oldSite);
+                    SiteManager.Update(Site);
                 }
                 else
                 {

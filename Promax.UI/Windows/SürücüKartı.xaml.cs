@@ -1,20 +1,7 @@
-﻿using Promax.Business.Abstract;
-using Promax.Business.Mappers;
+﻿using Promax.Business;
 using Promax.Core;
 using Promax.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Promax.UI.Windows
 {
@@ -25,24 +12,24 @@ namespace Promax.UI.Windows
     {
         public static SürücüKartı CreateNew()
         {
-            return new SürücüKartı() { Driver = new DriverDTO() };
+            return new SürücüKartı() { Driver = new Driver() };
         }
-        public static SürücüKartı Edit(DriverDTO driver)
+        public static SürücüKartı Edit(Driver driver)
         {
             var a = new SürücüKartı();
-            a.Driver = a.Mapper.Map<DriverDTO>(a.Mapper.Map<DriverDTO2>(driver));
+            a.Driver = a.Mapper.Map<Driver>(a.Mapper.Map<DriverDTO>(driver));
             a.oldDriver = driver;
             a.Editing = true;
             return a;
         }
         private bool Editing { get; set; }
 
-        public DriverDTO Driver { get; set; }
+        public Driver Driver { get; set; }
 
-        private DriverDTO oldDriver;
+        private Driver oldDriver;
 
-        public IComplexDriverManager DriverManager { get => Infrastructure.Main.GetDriverManager(); }
-        public IBeeMapper Mapper { get => Infrastructure.Main.GetMapper(); }
+        public IDriverManager DriverManager { get => Infrastructure.Main.DriverManager; }
+        public IBeeMapper Mapper { get => Infrastructure.Main.Mapper; }
         private SürücüKartı()
         {
             InitializeComponent();
@@ -54,7 +41,7 @@ namespace Promax.UI.Windows
             {
                 if (Editing)
                 {
-                    DriverManager.Update(Driver, oldDriver);
+                    DriverManager.Update(Driver);
                 }
                 else
                 {

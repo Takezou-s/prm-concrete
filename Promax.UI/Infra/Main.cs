@@ -149,9 +149,13 @@ namespace Promax.UI
         public IOrderManager OrderManager { get; private set; }
         public IUserManager UserManager { get; private set; }
         public IServiceCategoryManager ServiceCategoryManager { get; private set; }
-        public ISentViewReader SentViewReader { get; private set; }
         public INormViewManager NormViewManager { get; private set; }
+        public ISentViewReader SentViewReader { get; private set; }
+        public IStockMovementViewReader StockEntryViewReader { get; private set; }
+        public IStockMovementViewReader BatchedStockViewReader { get; private set; }
+        public IStockMovementViewReader ConsumedStockViewReader { get; private set; }
         #endregion
+        public IBeeValidator<Product> ProductValidator { get; private set; }
         public void Init()
         {
             _binding = new MyBinding();
@@ -276,12 +280,18 @@ namespace Promax.UI
             var ServiceCategoryRetentiveRepo = new RetentiveServiceCategoryRepository(ServiceCategoryRepo, Mapper);
             ServiceCategoryManager = new ServiceCategoryManager(ServiceCategoryRetentiveRepo);
             #endregion
-            SentViewReader = new SentViewReader("VIEW_RTM_SEND");
             #region NormViewManager
             var NormViewRepo = new EntityRepository<NormViewDTO, ExpertContext>();
             var NormViewNonRetentiveRepo = new NonRetentiveNormViewRepository(NormViewRepo, Mapper);
             NormViewManager = new NormViewManager(NormViewNonRetentiveRepo);
             #endregion
+
+            SentViewReader = new SentViewReader("VIEW_RTM_SEND");
+            StockEntryViewReader = new StockMovementViewReader("VIEW_INV_ENTRY");
+            BatchedStockViewReader = new StockMovementViewReader("VIEW_INV_ENTRY");
+            ConsumedStockViewReader = new StockMovementViewReader("VIEW_INV_ENTRY");
+
+            ProductValidator = new FluentProductValidator();
         }
     }
 }

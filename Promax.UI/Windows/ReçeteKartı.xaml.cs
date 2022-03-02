@@ -1,20 +1,7 @@
-﻿using Promax.Business.Abstract;
-using Promax.Business.Mappers;
+﻿using Promax.Business;
 using Promax.Core;
 using Promax.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Promax.UI.Windows
 {
@@ -39,8 +26,8 @@ namespace Promax.UI.Windows
         private Recipe oldRecipe;
         private bool Editing { get; set; }
         public Recipe Recipe { get; set; }
-        public IComplexRecipeManager RecipeManager { get => Infrastructure.Main.GetRecipeManager(); }
-        public IBeeMapper Mapper { get => Infrastructure.Main.GetMapper(); }
+        public IRecipeManager RecipeManager { get => Infrastructure.Main.RecipeManager; }
+        public IBeeMapper Mapper { get => Infrastructure.Main.Mapper; }
         private ReçeteKartı()
         {
             InitializeComponent();
@@ -52,7 +39,7 @@ namespace Promax.UI.Windows
             {
                 if (Editing)
                 {
-                    RecipeManager.Update(Recipe, oldRecipe);
+                    RecipeManager.Update(Recipe);
                 }
                 else
                 {

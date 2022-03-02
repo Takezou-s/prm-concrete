@@ -1,4 +1,5 @@
-﻿using Promax.Core;
+﻿using Extensions;
+using Promax.Core;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

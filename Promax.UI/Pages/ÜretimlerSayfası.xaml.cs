@@ -1,5 +1,5 @@
-﻿using Promax.Business.Abstract;
-using Promax.Core;
+﻿using Extensions;
+using Promax.Business;
 using Promax.Entities;
 using Promax.UI.Windows;
 using System;
@@ -7,17 +7,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Dynamic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Promax.UI
 {
@@ -268,17 +261,17 @@ DependencyProperty.Register(nameof(Tümü), typeof(bool), typeof(ÜretimlerSayfa
             if (e.Key == Key.Enter)
                 ListProducts();
         }
-        IComplexProductDalManager ProductManager { get => Infrastructure.Main.GetProductDalManager(); }
-        IComplexClientManager ClientManager { get => Infrastructure.Main.GetClientManager(); }
-        IComplexSiteManager SiteManager { get => Infrastructure.Main.GetSiteManager(); }
-        IComplexOrderManager OrderManager { get => Infrastructure.Main.GetOrderManager(); }
-        IComplexRecipeManager RecipeManager { get => Infrastructure.Main.GetRecipeManager(); }
-        IComplexServiceCategoryManager ServiceCategoryManager { get => Infrastructure.Main.GetServiceCategoryManager(); }
-        IComplexServiceManager ServiceManager { get => Infrastructure.Main.GetServiceManager(); }
-        IComplexDriverManager DriverManager { get => Infrastructure.Main.GetDriverManager(); }
-        IComplexUserManager UserManager { get => Infrastructure.Main.GetUserManager(); }
-        IComplexBatchedStockDalManager BatchedStockManager { get => Infrastructure.Main.GetBatchedStockManager(); }
-        IComplexStockManager StockManager { get => Infrastructure.Main.GetStockManager(); }
+        IProductManager ProductManager { get => Infrastructure.Main.ProductManager; }
+        IClientManager ClientManager { get => Infrastructure.Main.ClientManager; }
+        ISiteManager SiteManager { get => Infrastructure.Main.SiteManager; }
+        IOrderManager OrderManager { get => Infrastructure.Main.OrderManager; }
+        IRecipeManager RecipeManager { get => Infrastructure.Main.RecipeManager; }
+        IServiceCategoryManager ServiceCategoryManager { get => Infrastructure.Main.ServiceCategoryManager; }
+        IServiceManager ServiceManager { get => Infrastructure.Main.ServiceManager; }
+        IDriverManager DriverManager { get => Infrastructure.Main.DriverManager; }
+        IUserManager UserManager { get => Infrastructure.Main.UserManager; }
+        IBatchedStockManager BatchedStockManager { get => Infrastructure.Main.BatchedStockManager; }
+        IStockManager StockManager { get => Infrastructure.Main.StockManager; }
         private void RefreshProducts()
         {
             var list = ProductManager.GetList(x => x.ProductDate >= FirstDate && x.ProductDate <= LastDate);

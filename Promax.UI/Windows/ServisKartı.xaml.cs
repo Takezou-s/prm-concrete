@@ -1,20 +1,7 @@
-﻿using Promax.Business.Abstract;
-using Promax.Business.Mappers;
+﻿using Promax.Business;
 using Promax.Core;
 using Promax.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Promax.UI.Windows
 {
@@ -61,8 +48,8 @@ namespace Promax.UI.Windows
 
         private Service oldService;
 
-        public IComplexServiceManager ServiceManager { get => Infrastructure.Main.GetServiceManager(); }
-        public IBeeMapper Mapper { get => Infrastructure.Main.GetMapper(); }
+        public IServiceManager ServiceManager { get => Infrastructure.Main.ServiceManager; }
+        public IBeeMapper Mapper { get => Infrastructure.Main.Mapper; }
         private ServisKartı()
         {
             InitializeComponent();
@@ -79,7 +66,7 @@ namespace Promax.UI.Windows
             {
                 if (Editing)
                 {
-                    ServiceManager.Update(Service, oldService);
+                    ServiceManager.Update(Service);
                 }
                 else
                 {
