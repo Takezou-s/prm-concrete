@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Promax.UI.Controllers.Converters
+namespace Promax.UI
 {
     class StockTypeToComboboxItemConverter : IValueConverter
     {

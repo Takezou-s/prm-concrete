@@ -1,23 +1,12 @@
-﻿using Promax.Business.Abstract;
-using Promax.Business.Mappers;
+﻿using Promax.Business;
 using Promax.Core;
 using Promax.Entities;
 using Promax.UI.Windows;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Promax.UI
 {
@@ -33,11 +22,11 @@ namespace Promax.UI
         public static readonly DependencyProperty SelectedRecipeProperty =
     DependencyProperty.Register(nameof(SelectedRecipe), typeof(Recipe), typeof(ReçetelerSayfası));
         private object _selectedRecipe;
-        public IComplexRecipeManager ComplexRecipeManager { get => Infrastructure.Main.GetRecipeManager(); }
-        public IComplexRecipeContentManager ComplexRecipeContentManager { get => Infrastructure.Main.GetRecipeContentManager(); }
-        public IComplexStockManager StockManager { get => Infrastructure.Main.GetStockManager(); }
-        public INormViewManager NormViewManager { get => Infrastructure.Main.GetNormViewManager(); }
-        public IBeeMapper Mapper { get => Infrastructure.Main.GetMapper(); }
+        public IRecipeManager ComplexRecipeManager { get => Infrastructure.Main.RecipeManager; }
+        public IRecipeContentManager ComplexRecipeContentManager { get => Infrastructure.Main.RecipeContentManager; }
+        public IStockManager StockManager { get => Infrastructure.Main.StockManager; }
+        public INormViewManager NormViewManager { get => Infrastructure.Main.NormViewManager; }
+        public IBeeMapper Mapper { get => Infrastructure.Main.Mapper; }
         private List<Stock> _stocks;
 
         public object selectedRecipe
@@ -112,7 +101,7 @@ namespace Promax.UI
             RecipeContent recipeContent = sender as RecipeContent;
             if (recipeContent != null)
             {
-                ComplexRecipeContentManager.Update(recipeContent, recipeContent);
+                ComplexRecipeContentManager.Update(recipeContent);
                 RecipeSelected();
             }
         }
@@ -142,7 +131,7 @@ namespace Promax.UI
             var recipeDto = new Recipe();
             Mapper.Map<Recipe, Recipe>(recipe, recipeDto);
             recipeDto.IsHidden = "true";
-            ComplexRecipeManager.Update(recipeDto, recipe);
+            ComplexRecipeManager.Update(recipeDto);
             ListRecipes();
         }
         private void RefreshRecipes(object sender, RoutedEventArgs e)
@@ -202,7 +191,7 @@ namespace Promax.UI
             Recipe recipe = recipeDataGrid.CurrentItem as Recipe;
             if (recipe != null)
             {
-                ComplexRecipeManager.Update(recipe, recipe);
+                ComplexRecipeManager.Update(recipe);
             }
         }
 

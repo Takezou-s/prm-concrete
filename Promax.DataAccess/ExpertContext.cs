@@ -11,6 +11,7 @@ namespace Promax.DataAccess
     public class ExpertContext : DbContext
     {
         public DbSet<ProductWayBillViewDTO> WayBills { get; set; }
+        public DbSet<NormViewDTO> NormViews { get; set; }
         public DbSet<ClientDTO> Clients { get; set; }
         public DbSet<DriverDTO> Drivers { get; set; }
         public DbQuery<BatchedStockDTO> InvBatcheds { get; set; }
@@ -80,6 +81,18 @@ namespace Promax.DataAccess
             wayBill.Property(x => x.ServiceCategoryName).HasColumnNameExt<ProductWayBillViewDTO>(nameof(ProductWayBillViewDTO.ServiceCategoryName));
             wayBill.Property(x => x.UserName).HasColumnNameExt<ProductWayBillViewDTO>(nameof(ProductWayBillViewDTO.UserName));
             wayBill.Property(x => x.AdditiveName).HasColumnNameExt<ProductWayBillViewDTO>(nameof(ProductWayBillViewDTO.AdditiveName));
+            #region NormView
+            var normView = modelBuilder.Entity<NormViewDTO>();
+            normView.ToTableExt<NormViewDTO>();
+            normView.HasKey(x => x.RecipeId);
+            normView.Property(x => x.RecipeId).HasColumnNameExt<NormViewDTO>(nameof(NormViewDTO.RecipeId));
+            normView.Property(x => x.TotalAggregate).HasColumnNameExt<NormViewDTO>(nameof(NormViewDTO.TotalAggregate));
+            normView.Property(x => x.TotalCement).HasColumnNameExt<NormViewDTO>(nameof(NormViewDTO.TotalCement));
+            normView.Property(x => x.TotalWater).HasColumnNameExt<NormViewDTO>(nameof(NormViewDTO.TotalWater));
+            normView.Property(x => x.TotalAdditive).HasColumnNameExt<NormViewDTO>(nameof(NormViewDTO.TotalAdditive));
+            normView.Property(x => x.TotalMaterial).HasColumnNameExt<NormViewDTO>(nameof(NormViewDTO.TotalMaterial));
+            normView.Property(x => x.CementRate).HasColumnNameExt<NormViewDTO>(nameof(NormViewDTO.CementRate));
+            #endregion
             #region Client
             var client = modelBuilder.Entity<ClientDTO>();
             client.ToTableExt<ClientDTO>();

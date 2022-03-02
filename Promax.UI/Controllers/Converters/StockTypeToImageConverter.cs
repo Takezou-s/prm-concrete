@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 
-namespace Promax.UI.Controllers.Converters
+namespace Promax.UI
 {
     class StockTypeToImageConverter : IValueConverter
     {

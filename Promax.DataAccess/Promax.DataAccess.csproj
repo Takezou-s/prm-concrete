@@ -86,11 +86,15 @@
     <Compile Include="Abstract\IRetentiveSiteRepository.cs" />
     <Compile Include="Abstract\IRetentiveStockRepository.cs" />
     <Compile Include="Abstract\IRetentiveUserRepository.cs" />
+    <Compile Include="Abstract\ISentViewReader.cs" />
+    <Compile Include="Abstract\IViewReader.cs" />
     <Compile Include="Concrete\ComplexNonRetentiveEntityRepository.cs" />
     <Compile Include="Concrete\ComplexRetentiveEntityRepository.cs" />
     <Compile Include="Concrete\EntityRepository.cs" />
+    <Compile Include="Concrete\FirebirdViewReaderBase.cs" />
     <Compile Include="Concrete\NonRetentiveBatchedStockRepository.cs" />
     <Compile Include="Concrete\NonRetentiveConsumedStockRepository.cs" />
+    <Compile Include="Concrete\NonRetentiveNormViewRepository.cs" />
     <Compile Include="Concrete\NonRetentiveProductRepository.cs" />
     <Compile Include="Concrete\NonRetentiveStockEntryRepository.cs" />
     <Compile Include="Concrete\RetentiveClientRepository.cs" />
@@ -104,6 +108,7 @@
     <Compile Include="Concrete\RetentiveSiteRepository.cs" />
     <Compile Include="Concrete\RetentiveStockRepository.cs" />
     <Compile Include="Concrete\RetentiveUserRepository.cs" />
+    <Compile Include="Concrete\SentViewReader.cs" />
     <Compile Include="DatabaseTableInfo.cs" />
     <Compile Include="ExpertContext.cs" />
     <Compile Include="ExtensionMethods.cs" />
@@ -112,6 +117,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Extensions\Extensions.csproj">
+      <Project>{8540A8EE-59CE-4035-99F9-7DDC6584BC3F}</Project>
+      <Name>Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Promax.Core\Promax.Core.csproj">
       <Project>{6054CD87-4FD7-487E-8329-91BC74E3D526}</Project>
       <Name>Promax.Core</Name>

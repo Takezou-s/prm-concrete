@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Promax.UI.Controllers.Converters
+namespace Promax.UI
 {
-    class BoolToBrushConverter : IValueConverter
+    public class BoolToBrushConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

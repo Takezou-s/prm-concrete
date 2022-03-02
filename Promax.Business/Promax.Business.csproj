@@ -86,6 +86,7 @@
     <Compile Include="Controllers\Abstract\IConsumedStockManager.cs" />
     <Compile Include="Controllers\Abstract\IDriverManager.cs" />
     <Compile Include="Controllers\Abstract\IManager.cs" />
+    <Compile Include="Controllers\Abstract\INormViewManager.cs" />
     <Compile Include="Controllers\Abstract\IOrderManager.cs" />
     <Compile Include="Controllers\Abstract\IProductManager.cs" />
     <Compile Include="Controllers\Abstract\IRecipeContentManager.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Controllers\Concrete\DriverManager.cs" />
     <Compile Include="Controllers\Concrete\Manager.cs" />
     <Compile Include="Controllers\Concrete\NonRetentiveManager.cs" />
+    <Compile Include="Controllers\Concrete\NormViewManager.cs" />
     <Compile Include="Controllers\Concrete\OrderManager.cs" />
     <Compile Include="Controllers\Concrete\ProductManager.cs" />
     <Compile Include="Controllers\Concrete\RecipeContentManager.cs" />

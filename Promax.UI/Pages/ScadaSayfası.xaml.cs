@@ -1,28 +1,17 @@
-﻿using Promax.Business.Abstract;
+﻿using Extensions;
+using Promax.Business;
 using Promax.Core;
 using Promax.Entities;
-using Promax.Process;
-using Promax.UI.Controllers;
-using Promax.UI.OldAnimations;
 using Promax.UI.Windows;
 using RemoteVariableHandler.Core;
-using RemoteVariableHandler.Modbus;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Utility;
+using Utility.Binding;
 
 namespace Promax.UI
 {
@@ -187,16 +176,15 @@ DependencyProperty.Register(nameof(Tümü), typeof(bool), typeof(ScadaSayfası))
             ListOrders();
         }
         #endregion
-        private IComplexOrderManager OrderManager { get => Infrastructure.Main.GetOrderManager(); }
-        private IComplexProductManager ProductManager { get => Infrastructure.Main.GetProductManager(); }
-        private IComplexStockManager StockManager { get => Infrastructure.Main.GetStockManager(); }
+        private IOrderManager OrderManager { get => Infrastructure.Main.OrderManager; }
+        private IProductManager ProductManager { get => Infrastructure.Main.ProductManager; }
+        private IStockManager StockManager { get => Infrastructure.Main.StockManager; }
         private DateTime _firstDateBuffer;
         private DateTime _lastDateBuffer;
         public object selectedOrder { get; set; }
         public Order SelectedOrder { get => selectedOrder as Order; }
         public object selectedProduct { get; set; }
         public Product SelectedProduct { get => selectedProduct as Product; }
-        public PLCGeneral PlcGeneral { get => Infrastructure.Main.PlcGeneral; }
         public bool Connected
         {
             get => (bool)GetValue(ConnectedProperty); set
@@ -352,75 +340,28 @@ DependencyProperty.Register(nameof(Tümü), typeof(bool), typeof(ScadaSayfası))
         {
             ListOrders();
             ListProductions();
-            BindVariablesOnce.Perform(() =>
-            {
-                Infrastructure.Main.PlantInitialized += (o, args) => BindVariables();
-                Infrastructure.Main.ProductionDoneEvent += (o, args) => { RefreshOrders(); ListProductions(); };
-                BindVariables();
-
-            });
             batchInfoGrid.ItemsSource = new ObservableCollection<Stock>(StockManager.GetList().OrderBy(x => x.StockType));
-        }
-
-        private void BindVariables()
-        {
-            _bindings.ClearBindings();
-            PropertyInfo[] properties = this.GetType().GetProperties();
-            PropertyInfo[] plcGeneralProperties = typeof(PLCGeneral).GetProperties();
-            PlcGeneral.Do(x =>
-            {
-                foreach (var property in properties)
-                {
-                    foreach (var plcGeneralProperty in plcGeneralProperties)
-                    {
-                        if (property.Name.IsEqual(plcGeneralProperty.Name))
-                        {
-                            _bindings.CreateBinding().Source(x).SourceProperty(property.Name).Target(this).TargetProperty(property.Name).Mode(MyBindingMode.OneWay);
-                        }
-                    }
-                }
-            });
-            Infrastructure.Main.BindAnimations(VariableOwnerContainer.VariableOwners.ToArray());
-            Infrastructure.Main.VariableBindings.InitialMapping();
-            VariableOwnerContainer.VariableOwners.FirstOrDefault(x => x.VariableOwnerName == "Mixer1").Do(x => (x as MikserAnimation).Do(y => y.BoşaltımButton.Click += (o, e) =>
-            {
-                Infrastructure.Main.RetentiveParameters.GetVariable("Mixer1", "BoşaltımOnayıVer").Do(var => var.Write(var.Communicator));
-            }));
-            _bindings.InitialMapping();
         }
 
         private void StartProduction(object sender, RoutedEventArgs e)
         {
-            SelectedProduct.Do(x => Infrastructure.Main.StartProduction(x));
+            
         }
 
         private void DolumButton_Click(object sender, RoutedEventArgs e)
         {
-            PlcGeneral.Do(x => x.ToggleDolum());
+            
         }
 
         private void BosaltimButton_Click(object sender, RoutedEventArgs e)
         {
-            PlcGeneral.Do(x => x.ToggleBoşaltım());
+            
         }
 
         private void KarisimButton_Click(object sender, RoutedEventArgs e)
         {
-            PlcGeneral.Do(x => x.ToggleKarışım());
+            
         }
-
-        private void BitGönder_Click(object sender, RoutedEventArgs e)
-        {
-            ModbusVariableBuilder builder = new ModbusVariableBuilder();
-            IRemoteVariable<bool> var = builder.Reset().SetRegister(ushort.Parse(BitAdres.Text)).SetWriteValue<bool>(bool.Parse(BitDeğer.Text)).GetVariableAsGeneric<bool>();
-            Infrastructure.Main.VariableCommunicator.Write(var);
-        }
-
-        private void WordGönder_Click(object sender, RoutedEventArgs e)
-        {
-            ModbusVariableBuilder builder = new ModbusVariableBuilder();
-            IRemoteVariable<short> var = builder.Reset().SetRegister(ushort.Parse(WordAdres.Text)).SetWriteValue<short>(short.Parse(WordDeğer.Text)).GetVariableAsGeneric<short>();
-            Infrastructure.Main.VariableCommunicator.Write(var);
-        }
+        
     }
 }

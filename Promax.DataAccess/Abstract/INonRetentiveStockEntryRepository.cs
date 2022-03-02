@@ -6,4 +6,8 @@ namespace Promax.DataAccess
     {
 
     }
+    public interface INonRetentiveNormViewRepository : IComplexNonRetentiveEntityRepository<NormViewDTO, NormViewDTO>
+    {
+
+    }
 }

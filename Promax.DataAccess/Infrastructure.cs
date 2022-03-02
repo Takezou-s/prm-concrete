@@ -53,6 +53,14 @@ namespace Promax.DataAccess
                 nameof(ProductWayBillViewDTO.ServiceCategoryName).ToColumnInfo("SERVIS_ADI"),
                 nameof(ProductWayBillViewDTO.UserName).ToColumnInfo("OPERATOR_ADI"),
                 nameof(ProductWayBillViewDTO.AdditiveName).ToColumnInfo("KATKI_ADI")));
+            DatabaseTableInfos.Add(typeof(NormViewDTO), new DatabaseTableInfo("VIEW_REC_NORMS",
+                nameof(NormViewDTO.RecipeId).ToColumnInfo("RECIPE_ID"),
+                nameof(NormViewDTO.TotalAggregate).ToColumnInfo("TOTAL_AGGREGATE"),
+                nameof(NormViewDTO.TotalCement).ToColumnInfo("TOTAL_CEMENT"),
+                nameof(NormViewDTO.TotalWater).ToColumnInfo("TOTAL_WATER"),
+                nameof(NormViewDTO.TotalAdditive).ToColumnInfo("TOTAL_ADDITIVE"),
+                nameof(NormViewDTO.TotalMaterial).ToColumnInfo("TOTAL_MATERIAL"),
+                nameof(NormViewDTO.CementRate).ToColumnInfo("CEM_RATE")));
             DatabaseTableInfos.Add(typeof(ClientDTO), new DatabaseTableInfo("CRM_CLIENTS",
                 nameof(ClientDTO.ClientId).ToColumnInfo("CLIENT_ID"),
                 nameof(ClientDTO.ClientCode).ToColumnInfo("CLIENT_CODE"),

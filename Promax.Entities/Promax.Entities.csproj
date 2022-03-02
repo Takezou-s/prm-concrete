@@ -75,6 +75,8 @@
     <Compile Include="Stock.cs" />
     <Compile Include="StockEntry.cs" />
     <Compile Include="User.cs" />
+    <Compile Include="View\NormViewDTO.cs" />
+    <Compile Include="View\SentViewDTO.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Extensions\Extensions.csproj">

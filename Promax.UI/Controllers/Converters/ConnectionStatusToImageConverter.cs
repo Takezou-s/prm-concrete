@@ -3,9 +3,9 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 
-namespace Promax.UI.Controllers.Converters
+namespace Promax.UI
 {
-    class ConnectionStatusToImageConverter : IValueConverter
+    public class ConnectionStatusToImageConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

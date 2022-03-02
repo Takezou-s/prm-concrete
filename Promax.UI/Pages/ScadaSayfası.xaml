@@ -5,14 +5,14 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
       xmlns:local="clr-namespace:Promax.UI"
-      xmlns:Converters="clr-namespace:Promax.UI.Controllers.Converters"
-    xmlns:oldanimations="clr-namespace:Promax.UI.OldAnimations" x:Class="Promax.UI.ScadaSayfası"
+      x:Class="Promax.UI.ScadaSayfası"
       mc:Ignorable="d"
       Title="ScadaSayfası" Loaded="Page_Loaded" d:DesignHeight="1080" d:DesignWidth="1920">
     <Page.Resources>
-        <Converters:BoolToBrushConverter x:Key="BoolToBrushConverter"/>
+        <local:BoolToBrushConverter x:Key="BoolToBrushConverter"/>
         <local:ConnectionStatusToImageConverter x:Key="ConnectionStatusToImageConverter"/>
-        <oldanimations:VariableOwnerContainer x:Key="VariableOwnerContainer1"/>
+        <!--<local:BoolToBrushConverter x:Key="BoolToBrushConverter"/>
+        <local:ConnectionStatusToImageConverter x:Key="ConnectionStatusToImageConverter"/>-->
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -316,79 +316,6 @@
                     </ScrollViewer>
                 </Grid>
                 <Grid Grid.Row="1" Background="#FFF0F0F0">
-                    <Grid x:Name="OldAnimationsGrid">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Grid x:Name="ÜstSatır">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Grid Visibility="Collapsed">
-                                <StackPanel>
-                                    <TextBox x:Name="BitAdres"  Margin="5"/>
-                                    <TextBox x:Name="BitDeğer"  Margin="5"/>
-                                    <Button x:Name="BitGönder" Click="BitGönder_Click"  Margin="5" Height="40"/>
-                                    <TextBox x:Name="WordAdres"  Margin="5"/>
-                                    <TextBox x:Name="WordDeğer"  Margin="5"/>
-                                    <Button x:Name="WordGönder"  Click="WordGönder_Click"  Margin="5" Height="40"/>
-                                </StackPanel>
-                            </Grid>
-                            <Grid x:Name="SuGrid">
-                                <oldanimations:SuBunkeriAnimation VariableOwnerName="Weg5" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" FontSize="20" Margin="357,0,-357,0"/>
-                                <oldanimations:SuSilo VariableOwnerName="WTR51" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="0,10,0,-10"/>
-                                <oldanimations:SuSilo VariableOwnerName="WTR52" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="0,122,0,-122"/>
-                                <oldanimations:SuSilo VariableOwnerName="WTR53" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="0,231,0,-231"/>
-                                <oldanimations:SuSilo VariableOwnerName="WTR54" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="0,344,0,-344"/>
-                            </Grid>
-                            <Grid x:Name="KatkıGrid" Grid.Column="1">
-                                <oldanimations:KatkıBunkeriAnimation VariableOwnerName="Weg7" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" FontSize="20"/>
-                                <oldanimations:KatkıSilo VariableOwnerName="ADV71" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="125,-13,-125,13"/>
-                                <oldanimations:KatkıSilo VariableOwnerName="ADV72" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="192,-13,-192,13"/>
-                                <oldanimations:KatkıSilo VariableOwnerName="ADV73" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="261,-13,-261,13"/>
-                                <oldanimations:KatkıSilo VariableOwnerName="ADV74" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="328,-13,-328,13"/>
-                            </Grid>
-                            <Grid x:Name="ÇimentoGrid" Grid.Column="2">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <oldanimations:ÇimentoBunkeriAnimation VariableOwnerName="Weg3" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" FontSize="20"/>
-                                <oldanimations:ÇimentoSilo Grid.Column="1" VariableOwnerName="CEM31" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}"/>
-                                <oldanimations:ÇimentoSilo Grid.Column="2" VariableOwnerName="CEM32" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}"/>
-                                <oldanimations:ÇimentoSilo Grid.Column="3" VariableOwnerName="CEM33" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}"/>
-                                <oldanimations:ÇimentoSilo Grid.Column="4" VariableOwnerName="CEM34" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}"/>
-                            </Grid>
-                        </Grid>
-                        <Grid x:Name="AltSatır" Grid.Row="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Grid x:Name="AgregaGrid">
-                                <oldanimations:AgregaSilo VariableOwnerName="AGG11" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="0,10,0,-10" />
-                                <oldanimations:AgregaSilo VariableOwnerName="AGG12" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="116,10,-116,-10" />
-                                <oldanimations:AgregaSilo VariableOwnerName="AGG13" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="239,10,-239,-10" />
-                                <oldanimations:AgregaSilo VariableOwnerName="AGG14" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="361,10,-361,-10" />
-                                <oldanimations:AgregaSilo  VariableOwnerName="AGG15" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="0,215,0,-215" />
-                                <oldanimations:AgregaSilo  VariableOwnerName="AGG16" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="116,215,-116,-215" />
-                                <oldanimations:AgregaSilo  VariableOwnerName="AGG17" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="239,215,-239,-215" />
-                                <oldanimations:AgregaSilo  VariableOwnerName="AGG18" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="361,215,287,150" />
-                                <oldanimations:TartıBandıAnimation VariableOwnerName="Weg1" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" FontSize="20" Margin="0,225,0,-225" />
-                                <oldanimations:TartıBandıAnimation VariableOwnerName="Transfer1" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" FontSize="20" Margin="408,225,-408,-225"/>
-                                <oldanimations:AggBunkerAnimation VariableOwnerName="AggBunker1" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" FontSize="20" Foreground="Black" Margin="580,34,-580,-34" />
-                            </Grid>
-                            <Grid x:Name="MikserGrid" Grid.Column="1" Width="Auto">
-                                <oldanimations:MikserAnimation VariableOwnerName="Mixer1" VariableOwnerContainer="{StaticResource VariableOwnerContainer1}" Margin="242,100,-242,-100" />
-                            </Grid>
-                        </Grid>
-                    </Grid>
                 </Grid>
             </Grid>
         </Grid>

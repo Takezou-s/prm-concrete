@@ -1,25 +1,15 @@
-﻿using Promax.Business.Abstract;
-using Promax.Business.Mappers;
+﻿using Promax.Business;
 using Promax.Core;
-using Promax.DataAccess.Abstract;
+using Promax.DataAccess;
 using Promax.Entities;
 using Promax.UI.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace Promax.UI
@@ -29,10 +19,10 @@ namespace Promax.UI
     /// </summary>
     public partial class MüşterilerSayfası : Page, INotifyPropertyChanged
     {
-        public IComplexClientManager ComplexClientManager { get => Infrastructure.Main.GetClientManager(); }
-        public IComplexSiteManager ComplexSiteManager { get => Infrastructure.Main.GetSiteManager(); }
-        public ISentViewReader SentViewReader { get => Infrastructure.Main.GetSentViewReader(); }
-        public IBeeMapper Mapper { get => Infrastructure.Main.GetMapper(); }
+        public IClientManager ComplexClientManager { get => Infrastructure.Main.ClientManager; }
+        public ISiteManager ComplexSiteManager { get => Infrastructure.Main.SiteManager; }
+        public ISentViewReader SentViewReader { get => Infrastructure.Main.SentViewReader; }
+        public IBeeMapper Mapper { get => Infrastructure.Main.Mapper; }
 
         public object selectedClient
         {
@@ -94,6 +84,7 @@ namespace Promax.UI
                 return;
             MüşteriKartı müşteriKartı = MüşteriKartı.Edit(SelectedClient);
             müşteriKartı.ShowDialog();
+            ListClients();
         }
 
         private void CreateNewSite(object sender, RoutedEventArgs e)
@@ -165,7 +156,7 @@ namespace Promax.UI
             var clientDto = new Client();
             Mapper.Map<Client, Client>(client, clientDto);
             clientDto.IsHidden = "true";
-            ComplexClientManager.Update(clientDto, client);
+            ComplexClientManager.Update(clientDto);
             ListClients();
         }
 
@@ -174,7 +165,7 @@ namespace Promax.UI
             Client client = clientDataGrid.CurrentItem as Client;
             if (client != null)
             {
-                ComplexClientManager.Update(client, client);
+                ComplexClientManager.Update(client);
             }
         }
 
@@ -193,7 +184,7 @@ namespace Promax.UI
             var siteDto = new Site();
             Mapper.Map<Site, Site>(site, siteDto);
             siteDto.IsHidden = "true";
-            ComplexSiteManager.Update(siteDto, site);
+            ComplexSiteManager.Update(siteDto);
             //SiteManager.Update(siteDto);
             //InitClient(SelectedClient);
             ClientSelected();

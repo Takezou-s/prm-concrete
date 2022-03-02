@@ -9,7 +9,6 @@
     x:Class="Promax.UI.App"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <math:MathConverter x:Key="math" />
         <local:StockTypeToImageConverter x:Key="StockTypeToImageConverter"/>
         <local:OrderStatusToImageConverter x:Key="OrderStatusToImageConverter"/>
         <local:OrderStatusToTextConverter x:Key="OrderStatusToTextConverter"/>
