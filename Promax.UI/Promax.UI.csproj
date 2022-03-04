@@ -137,6 +137,9 @@
     <Compile Include="Windows\ServisKartı.xaml.cs">
       <DependentUpon>ServisKartı.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\SiparişKartı.xaml.cs">
       <DependentUpon>SiparişKartı.xaml</DependentUpon>
     </Compile>
@@ -596,6 +599,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\ServisKartı.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
