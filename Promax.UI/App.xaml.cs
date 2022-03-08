@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Promax.Core;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,7 +14,7 @@ namespace Promax.UI
     /// </summary>
     public partial class App : Application
     {
-        private static IBeeLogger _logger { get => Infrastructure.Main.GetLogger(); }
+        private static IBeeLogger _logger { get => Infrastructure.Main.Logger; }
 
         protected override void OnStartup(StartupEventArgs e)
         {
