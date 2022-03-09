@@ -156,6 +156,11 @@ namespace Promax.UI
         public IStockMovementViewReader ConsumedStockViewReader { get; private set; }
         #endregion
         public IBeeValidator<Product> ProductValidator { get; private set; }
+
+
+        public Settings Settings { get; private set; }
+        public RetainVariableController RetainVariableController { get; private set; }
+        public Serializer Serializer { get; private set; }
         public void Init()
         {
             _binding = new MyBinding();
@@ -292,6 +297,10 @@ namespace Promax.UI
             ConsumedStockViewReader = new StockMovementViewReader("VIEW_INV_ENTRY");
 
             ProductValidator = new FluentProductValidator();
+
+            Settings = new Settings();
+            Serializer = new Serializer("saves\\Settings.json");
+            RetainVariableController = new RetainVariableController(Serializer, Settings);
         }
     }
 }

@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Promax.UI.Windows"
+        xmlns:local="clr-namespace:Promax.UI.Windows" xmlns:pencerebuton="clr-namespace:Promax.UI.CustomTools.PencereButon"
         mc:Ignorable="d"
-        Title="Ayarlar" Height="450" Width="800">
+        Title="Ayarlar" Height="450" Width="800" Loaded="Window_Loaded">
     <Window.Resources>
         <LinearGradientBrush x:Key="TabItem.Static.Background" EndPoint="0,1" StartPoint="0,0">
             <GradientStop Color="#F0F0F0" Offset="0.0"/>
@@ -19,7 +19,6 @@
         <SolidColorBrush x:Key="TabItem.Selected.Border" Color="#BFBFBF"/>
         <SolidColorBrush x:Key="TabItem.Selected.Background" Color="#F0F0F0"/>
         <Style x:Key="TabItemStyle1" TargetType="{x:Type TabItem}">
-            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="Background" Value="{StaticResource TabItem.Static.Background}"/>
             <Setter Property="BorderBrush" Value="{StaticResource TabItem.Static.Border}"/>
@@ -215,11 +214,19 @@
                 </TabItem.Header>
                 <StackPanel x:Name="stackPanel">
                     <TextBlock Margin="5" Text="IP Adresi"/>
-                    <TextBox Margin="5" MaxWidth="75" HorizontalAlignment="Left" Width="{Binding ActualWidth, ElementName=stackPanel, Mode=OneWay}"/>
+                    <TextBox Text="{Binding Path=Settings.Ip, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Margin="5" MaxWidth="75" HorizontalAlignment="Left" Width="{Binding ActualWidth, ElementName=stackPanel, Mode=OneWay}"/>
                     <TextBlock Margin="5" Text="Timeout"/>
-                    <TextBox Margin="5" MaxWidth="75" HorizontalAlignment="Left" Width="{Binding ActualWidth, ElementName=stackPanel, Mode=OneWay}"/>
+                    <TextBox Text="{Binding Path=Settings.Timeout, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Margin="5" MaxWidth="75" HorizontalAlignment="Left" Width="{Binding ActualWidth, ElementName=stackPanel, Mode=OneWay}"/>
                 </StackPanel>
             </TabItem>
         </TabControl>
+        <Grid Grid.Row="1" Background="#FFDBDBDB">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <pencerebuton:İptalButon HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" Click="İptalClicked"/>
+            <pencerebuton:TamamButon HorizontalAlignment="Right" Grid.Column="1" VerticalAlignment="Center" Margin="0,0,5,0" Click="TamamClicked"/>
+        </Grid>
     </Grid>
 </Window>

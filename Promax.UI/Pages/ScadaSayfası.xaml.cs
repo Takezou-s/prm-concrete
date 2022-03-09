@@ -288,16 +288,16 @@ DependencyProperty.Register(nameof(Tümü), typeof(bool), typeof(ScadaSayfası))
         {
             if (SelectedOrder == null)
                 return;
-            var a = GörevKartı.CreateNew(SelectedOrder);
-            a.ShowDialog();
+            //var a = GörevKartı.CreateNew(SelectedOrder);
+            //a.ShowDialog();
             ListProductions();
         }
         private void EditProduction(object sender, RoutedEventArgs e)
         {
             if (SelectedProduct == null)
                 return;
-            var a = GörevKartı.Edit(SelectedProduct);
-            a.ShowDialog();
+            //var a = GörevKartı.Edit(SelectedProduct);
+            //a.ShowDialog();
             ListProductions();
         }
         private void DeleteProduction(object sender, RoutedEventArgs e)

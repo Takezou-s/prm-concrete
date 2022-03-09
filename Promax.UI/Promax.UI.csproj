@@ -110,9 +110,6 @@
     <Compile Include="Windows\FirmaKartı.xaml.cs">
       <DependentUpon>FirmaKartı.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\GörevKartı.xaml.cs">
-      <DependentUpon>GörevKartı.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\KalibrasyonKartı.xaml.cs">
       <DependentUpon>KalibrasyonKartı.xaml</DependentUpon>
     </Compile>
@@ -124,9 +121,6 @@
     </Compile>
     <Compile Include="Windows\MüşteriKartı.xaml.cs">
       <DependentUpon>MüşteriKartı.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\ParametrelerKartı.xaml.cs">
-      <DependentUpon>ParametrelerKartı.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\Reklam.xaml.cs">
       <DependentUpon>Reklam.xaml</DependentUpon>
@@ -534,10 +528,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\RaporlarSayfası.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Pages\ReçetelerSayfası.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -566,10 +556,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\GörevKartı.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Windows\KalibrasyonKartı.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -583,10 +569,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\MüşteriKartı.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\ParametrelerKartı.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -634,9 +616,6 @@
   <ItemGroup>
     <Compile Include="Pages\MüşterilerSayfası.xaml.cs">
       <DependentUpon>MüşterilerSayfası.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\RaporlarSayfası.xaml.cs">
-      <DependentUpon>RaporlarSayfası.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ReçetelerSayfası.xaml.cs">
       <DependentUpon>ReçetelerSayfası.xaml</DependentUpon>

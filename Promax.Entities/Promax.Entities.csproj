@@ -70,6 +70,7 @@
     <Compile Include="RecipeContent.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="ServiceCategory.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Silo.cs" />
     <Compile Include="Site.cs" />
     <Compile Include="Stock.cs" />
