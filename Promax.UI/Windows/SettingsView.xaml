@@ -213,11 +213,11 @@
                 <TabItem.Header>
                     <TextBlock Text="PLC"/>
                 </TabItem.Header>
-                <StackPanel>
+                <StackPanel x:Name="stackPanel">
                     <TextBlock Margin="5" Text="IP Adresi"/>
-                    <TextBox Margin="5" MaxWidth="75" HorizontalAlignment="Left"/>
+                    <TextBox Margin="5" MaxWidth="75" HorizontalAlignment="Left" Width="{Binding ActualWidth, ElementName=stackPanel, Mode=OneWay}"/>
                     <TextBlock Margin="5" Text="Timeout"/>
-                    <TextBox Margin="5"/>
+                    <TextBox Margin="5" MaxWidth="75" HorizontalAlignment="Left" Width="{Binding ActualWidth, ElementName=stackPanel, Mode=OneWay}"/>
                 </StackPanel>
             </TabItem>
         </TabControl>
