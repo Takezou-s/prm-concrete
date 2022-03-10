@@ -161,12 +161,28 @@ namespace Promax.UI
         public Settings Settings { get; private set; }
         public RetainVariableController RetainVariableController { get; private set; }
         public Serializer Serializer { get; private set; }
+
+        public EasyModbusCommunicator VariableCommunicator { get; private set; }
+        public VariableScope VariableScope { get; private set; }
+        public RetentiveParameterScope RetentiveParameters { get; private set; }
+        public RecipeScope RecipeScope { get; private set; }
+        public CommandScope CommandScope { get; private set; }
+
+        public ObjectContainer ObjectContainer { get { return (ObjectContainer)App.Current.Resources["ObjectContainer1"]; } }
+        public AnimationObjectContainer AnimationObjectContainer { get; private set; } = new AnimationObjectContainer();
+        public VariableOwnerContainer VariableOwnerContainer { get; private set; } = new VariableOwnerContainer();
+        public ParameterOwnerContainer ParameterOwnerContainer { get; private set; } = new ParameterOwnerContainer();
+        public CommanderContainer CommanderContainer { get; private set; } = new CommanderContainer();
+        public EntitiesWithStringKeyContainer EntityContainer { get; private set; } = new EntitiesWithStringKeyContainer();
+
+        public MyParameterDomain ParameterDomain { get; private set; }
+        public VariableController VariableController { get; private set; }
         public void Init()
         {
             _binding = new MyBinding();
             Mapper = new MyMapper();
             Logger = new NLogger();
-
+            
             #region ClientManager
             var clientRepo = new EntityRepository<ClientDTO, ExpertContext>();
             var clientRetentiveRepo = new RetentiveClientRepository(clientRepo, Mapper);
@@ -301,6 +317,35 @@ namespace Promax.UI
             Settings = new Settings();
             Serializer = new Serializer("saves\\Settings.json");
             RetainVariableController = new RetainVariableController(Serializer, Settings);
+
+            VariableCommunicator = new EasyModbusCommunicator(this);
+            VariableScope = new VariableScope(VariableCommunicator);
+            VariableCommunicator.SetVariables(VariableScope);
+            RemoteVariableExceptionHandler = new RemoteVariableExceptionHandler(VariableCommunicator);
+
+            RecipeScope = new RecipeScope(VariableCommunicator);
+
+            RetentiveParameters = new RetentiveParameterScope(VariableCommunicator);
+
+            CommandScope = new CommandScope(VariableCommunicator, CommanderContainer);
+
+
+            ParameterDomain = new MyParameterDomain(RetentiveParameters, ParameterOwnerContainer);
+            ParameterDomain.ParameterOwnerContext.ParameterOwners.ForEach(x => FillContainers(x));
+
+            VariableController = new VariableController(VariableCommunicator, VariableScope, VariableOwnerContainer, RemoteVariableExceptionHandler, BackgroundProcessor.GetProcessor());
+            VariableController.Ip = Settings.Ip;
+            VariableController.Timeout = Settings.Timeout;
+            _binding.CreateBinding().Source(Settings).SourceProperty(nameof(Settings.Ip)).Target(VariableController).TargetProperty(nameof(VariableController.Ip)).Mode(MyBindingMode.OneWay);
+            _binding.CreateBinding().Source(Settings).SourceProperty(nameof(Settings.Timeout)).Target(VariableController).TargetProperty(nameof(VariableController.Timeout)).Mode(MyBindingMode.OneWay);
+
+        }
+        public void FillContainers(object item)
+        {
+            item.DoIf(x => x is ICommander, x => CommanderContainer.Register(x as ICommander));
+            item.DoIf(x => x is IVariableOwner, x => VariableOwnerContainer.Register(x as IVariableOwner));
+            item.DoIf(x => x is IParameterOwner, x => ParameterOwnerContainer.Register(x as IParameterOwner));
+            item.DoIf(x => x is IAnimationObject, x => AnimationObjectContainer.Register(x as IAnimationObject));
         }
     }
 }

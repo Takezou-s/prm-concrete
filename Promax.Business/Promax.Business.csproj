@@ -120,6 +120,7 @@
     <Compile Include="Controllers\Concrete\StockManager.cs" />
     <Compile Include="Controllers\Concrete\UserManager.cs" />
     <Compile Include="AnimationControllers\IDesignModeController.cs" />
+    <Compile Include="Converters\MultiplyConverter.cs" />
     <Compile Include="Loggers\NLogger.cs" />
     <Compile Include="Mappers\MappingProfile.cs" />
     <Compile Include="Mappers\MyMapper.cs" />
@@ -128,6 +129,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecipeHandlers\RecipeController.cs" />
     <Compile Include="Validators\FluentProductValidator.cs" />
+    <Compile Include="Variables\CommandVariables\CommandScope.cs" />
+    <Compile Include="Variables\CommandVariables\CommandScope.Variables.cs" />
+    <Compile Include="Variables\ParameterVariables\RetentiveParameterScope.cs" />
+    <Compile Include="Variables\ParameterVariables\RetentiveParameterScope.Variables.cs" />
+    <Compile Include="Variables\ReadVariables\VariableScope.cs" />
+    <Compile Include="Variables\ReadVariables\VariableScope.Variables.cs" />
+    <Compile Include="Variables\RecipeVariables\RecipeScope.cs" />
+    <Compile Include="Variables\RecipeVariables\RecipeScope.Variables.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EasyModbus\EasyModbus.csproj">

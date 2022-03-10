@@ -107,6 +107,9 @@
     <Compile Include="Windows\BelgeKartı.xaml.cs">
       <DependentUpon>BelgeKartı.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ConsoleView.xaml.cs">
+      <DependentUpon>ConsoleView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\FirmaKartı.xaml.cs">
       <DependentUpon>FirmaKartı.xaml</DependentUpon>
     </Compile>
@@ -549,6 +552,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\BelgeKartı.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ConsoleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
