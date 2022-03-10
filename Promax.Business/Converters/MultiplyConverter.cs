@@ -20,7 +20,7 @@ namespace Promax.Business
             _converter = new FuncConverter(x =>
             {
                 short value = 0;
-                double result = ((double)x) * Number;
+                double result = (System.Convert.ToDouble(x)) * Number;
                 value = System.Convert.ToInt16(result);
                 return value;
             }, x =>

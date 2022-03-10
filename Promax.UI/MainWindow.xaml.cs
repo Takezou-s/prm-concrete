@@ -1,4 +1,5 @@
 ﻿using Extensions;
+using Promax.UI.Windows;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -66,6 +67,7 @@ namespace Promax.UI
             //{
             //    App.Current.Shutdown();
             //}
+            new ConsoleView().Show();
             RunWorkerOnce.Perform(() =>
             {
                 worker = new BackgroundWorker();
