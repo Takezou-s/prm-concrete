@@ -22,7 +22,7 @@ namespace Promax.Business
                 short value = 0;
                 double result = (System.Convert.ToDouble(x)) * Number;
                 value = System.Convert.ToInt16(result);
-                return value;
+                return result;
             }, x =>
             {
                 double value = 0;

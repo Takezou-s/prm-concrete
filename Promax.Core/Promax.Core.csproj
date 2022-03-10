@@ -99,14 +99,6 @@
     <Compile Include="ProductionStatus.cs" />
     <Compile Include="ProductionVariableAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RemoteVariable\IRemoteValueWithConverterGeneric.cs" />
-    <Compile Include="RemoteVariable\IRemoteValueWithConverter.cs" />
-    <Compile Include="RemoteVariable\IRemoteVariableWithConverter.cs" />
-    <Compile Include="RemoteVariable\IRemoteVariableWithConverterGeneric.cs" />
-    <Compile Include="RemoteVariable\RemoteValueWithConverter.cs" />
-    <Compile Include="RemoteVariable\RemoteValueWithConverterGeneric.cs" />
-    <Compile Include="RemoteVariable\RemoteVariableWithConverterGeneric.cs" />
-    <Compile Include="RemoteVariable\RemoteVariableWithConverter.cs" />
     <Compile Include="RetainVariables\IRetainable.cs" />
     <Compile Include="RetainVariables\RetainableContainer.cs" />
     <Compile Include="RetainVariables\RetainableContainerSerializer.cs" />
