@@ -37,6 +37,12 @@ namespace Promax.Business
             result = GetVariablePropertyInfo(objectName, propertyName)?.GetValue(this) as IRemoteValue;
             return result;
         }
+        public T GetAs<T>(string objectName, string propertyName) where T : class
+        {
+            T result = default(T);
+            result = result = GetVariablePropertyInfo(objectName, propertyName)?.GetValue(this) as T;
+            return result;
+        }
         public IRemoteVariable GetVariable(string objectName, string propertyName)
         {
             IRemoteVariable result = null;

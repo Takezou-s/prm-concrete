@@ -47,6 +47,17 @@ namespace Promax.Business
             {
                 foreach (var parameter in parameterOwner.Parameters)
                 {
+                    _parameterScope.GetAs<IConvertibleRemoteVariable>(parameterOwner.Name, parameter.Code).Do(x =>
+                    {
+                        BoundVariables.DoIf(y => !y.ContainsKey(parameter), y => BoundVariables.Add(parameter, x.RemoteVariable));
+                        _binding.CreateBinding().Source(parameter).SourceProperty(nameof(IParameter<Type>.Value)).
+                        Target(x).TargetProperty(nameof(IConvertibleRemoteVariable.ConvertedWriteValue)).
+                        Mode(MyBindingMode.TwoWay).WhenSourcePropertyChanged(() =>
+                        {
+                            AutoWriteVariable(x.RemoteVariable);
+                        });
+                    });
+
                     _parameterScope.GetVariable(parameterOwner.Name, parameter.Code).Do(x =>
                     {
                         BoundVariables.DoIf(y => !y.ContainsKey(parameter), y => BoundVariables.Add(parameter, x));

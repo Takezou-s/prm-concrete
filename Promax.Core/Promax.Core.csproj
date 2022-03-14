@@ -64,6 +64,12 @@
     <Compile Include="ClientType.cs" />
     <Compile Include="CommanderContainer.cs" />
     <Compile Include="Container.cs" />
+    <Compile Include="ConvertedRemoteVariable\ConvertibleRemoteValue.cs" />
+    <Compile Include="ConvertedRemoteVariable\ConvertibleRemoteVariable.cs" />
+    <Compile Include="ConvertedRemoteVariable\IConvertibleRemoteValue.cs" />
+    <Compile Include="ConvertedRemoteVariable\IConvertibleRemoteValueGeneric.cs" />
+    <Compile Include="ConvertedRemoteVariable\IConvertibleRemoteVariable.cs" />
+    <Compile Include="ConvertedRemoteVariable\IConvertibleRemoteVariableGeneric.cs" />
     <Compile Include="ConverterContainer.cs" />
     <Compile Include="EntitiesWithStringKeyContainer.cs" />
     <Compile Include="ExtensionMethods.cs" />

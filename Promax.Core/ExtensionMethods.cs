@@ -23,6 +23,16 @@ namespace Promax.Core
             {
                 object obj = owner;
                 Vars.Add(owner.VariableOwnerName + "_" + propertyName);
+
+                variableScope.GetAs<IConvertibleRemoteValue>(owner.VariableOwnerName, propertyName).Do(x =>
+                {
+                    var bindingHandler = binding.CreateBinding().Source(obj).SourceProperty(propertyName).
+                    Target(x).TargetProperty(nameof(IConvertibleRemoteValue.ConvertedReadValue)).
+                    Mode(MyBindingMode.OneWayToSource).Convert(owner.GetConverterForVariable(propertyName));
+                    bindingHandler.InitialMapping();
+                    result = bindingHandler;
+                });
+
                 variableScope.GetValue(owner.VariableOwnerName, propertyName).Do(x =>
                 {
                     var bindingHandler = binding.CreateBinding().Source(obj).SourceProperty(propertyName).
@@ -40,6 +50,16 @@ namespace Promax.Core
                     foreach (var directedProperty in property.Value)
                     {
                         Vars.Add(owner.VariableOwnerName + "_" + property.Key);
+
+                        variableScope.GetAs<IConvertibleRemoteValue>(owner.VariableOwnerName, property.Key).Do(x =>
+                        {
+                            var bindingHandler = binding.CreateBinding().Source(obj).SourceProperty(directedProperty).
+                            Target(x).TargetProperty(nameof(IConvertibleRemoteValue.ConvertedReadValue)).
+                            Mode(MyBindingMode.OneWayToSource).Convert(owner.GetConverterForVariable(directedProperty));
+                            bindingHandler.InitialMapping();
+                            result = bindingHandler;
+                        });
+
                         variableScope.GetValue(owner.VariableOwnerName, property.Key).Do(x =>
                         {
                             var bindingHandler = binding.CreateBinding().Source(obj).SourceProperty(directedProperty).
@@ -102,6 +122,10 @@ namespace Promax.Core
                 communicator.Write(var);
             }
         }
+        public static void Write(this IConvertibleRemoteVariable var, IVariableCommunicator communicator)
+        {
+            var.Do(x => x.RemoteVariable.Do(y => y.Write(communicator)));
+        }
         public static void Write(this IRemoteVariable var)
         {
             if (var != null && var.Communicator != null)
@@ -109,12 +133,20 @@ namespace Promax.Core
                 var.Communicator.Write(var);
             }
         }
+        public static void Write(this IConvertibleRemoteVariable var)
+        {
+            var.Do(x => x.RemoteVariable.Do(y => y.Communicator.Write(y)));
+        }
         public static void Read(this IRemoteVariable var, IVariableCommunicator communicator)
         {
             if (var != null && communicator != null)
             {
                 communicator.Read(var);
             }
+        }
+        public static void Read(this IConvertibleRemoteVariable var, IVariableCommunicator communicator)
+        {
+            var.Do(x => x.RemoteVariable.Do(y => communicator.Read(y)));
         }
         /// <summary>
         /// Değeri scale değerine göre shorta çevirir.
