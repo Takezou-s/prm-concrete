@@ -702,6 +702,10 @@
       <Project>{E4C930A6-8778-4E89-832D-238591AC886F}</Project>
       <Name>Utility</Name>
     </ProjectReference>
+    <ProjectReference Include="..\VirtualPLC\VirtualPLC.csproj">
+      <Project>{CB57AACC-D12A-4785-A5B5-2CC11A3D55C9}</Project>
+      <Name>VirtualPLC</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\greenloader.png" />
