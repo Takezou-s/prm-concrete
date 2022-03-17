@@ -44,6 +44,7 @@ namespace Promax.UI
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Load();
+            new VirtualController();
         }
         private void Load()
         {

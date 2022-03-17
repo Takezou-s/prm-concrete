@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace VirtualPLC
 {
-    public class VirtualPLCObject : INotifyPropertyChanged
+    public class VirtualPLCObject : IVirtualPLCPropertyOwner
     {
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
@@ -33,16 +33,21 @@ namespace VirtualPLC
             VirtualPLCProperties.ForEach(x => x.RestoreValue());
         }
     }
+    public interface IVirtualPLCPropertyOwner : INotifyPropertyChanged
+    {
+        List<VirtualPLCProperty> VirtualPLCProperties { get; }
+        void OnPropertyChanged(string propertyName);
+    }
     public class VirtualPLCProperty
     {
         private object _value;
 
-        public static VirtualPLCProperty Register(string name, Type propertyType, VirtualPLCObject owner, bool input, bool retain)
+        public static VirtualPLCProperty Register(string name, Type propertyType, IVirtualPLCPropertyOwner owner, bool input, bool retain)
         {
             return Register(name, propertyType, owner, input, retain, null);
         }
 
-        public static VirtualPLCProperty Register(string name, Type propertyType, VirtualPLCObject owner, bool input, bool retain, object defaultValue)
+        public static VirtualPLCProperty Register(string name, Type propertyType, IVirtualPLCPropertyOwner owner, bool input, bool retain, object defaultValue)
         {
             var result = new VirtualPLCProperty();
             result.Name = name;
@@ -101,7 +106,7 @@ namespace VirtualPLC
 
         public string Name { get; private set; }
         public Type PropertyType { get; private set; }
-        public VirtualPLCObject Owner { get; private set; }
+        public IVirtualPLCPropertyOwner Owner { get; private set; }
         public bool Input { get; set; }
         public bool Retain { get; set; }
 
@@ -130,25 +135,86 @@ namespace VirtualPLC
             Owner?.OnPropertyChanged(Name);
         }
     }
-    public class VirtualController
+    public class VirtualPLCObject1 : VirtualPLCObject
     {
+        public VirtualPLCProperty Property1Property { get; set; }
+        public VirtualPLCProperty Property2Property { get; set; }
+        public VirtualPLCObject1(VirtualController controller) : base(controller)
+        {
+            Property1Property = VirtualPLCProperty.Register("Property1", typeof(bool), this, false, true);
+            Property2Property = VirtualPLCProperty.Register("Property2", typeof(bool), this, false, true);
+        }
+    }
+    public class VirtualPLCObject2 : VirtualPLCObject
+    {
+        public VirtualPLCProperty Property1Property { get; set; }
+        public VirtualPLCProperty Property2Property { get; set; }
+        public VirtualPLCObject1 VirtualPLCObject1 { get; set; }
+        public VirtualPLCObject2(VirtualController controller) : base(controller)
+        {
+            VirtualPLCObject1 = new VirtualPLCObject1(controller);
+            Property1Property = VirtualPLCProperty.Register("Property1", typeof(bool), this, false, true);
+            Property2Property = VirtualPLCProperty.Register("Property2", typeof(bool), this, false, true);
+        }
+    }
+    public class VirtualController : IVirtualPLCPropertyOwner
+    {
+        public VirtualPLCProperty Property1Property { get; set; }
+        public VirtualPLCObject1 Obj1 { get; set; }
+        public VirtualPLCObject1 Obj2 { get; set; }
+        public VirtualPLCObject2 Obj3 { get; set; }
+        public VirtualPLCObject2 Obj4 { get; set; }
+
+
+
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
+
+        public List<VirtualPLCProperty> VirtualPLCProperties { get; } = new List<VirtualPLCProperty>();
         protected BackgroundWorker _worker;
+        protected List<string> RetainPaths = new List<string>();
 
         public List<VirtualPLCObject> VirtualPLCObjects { get; } = new List<VirtualPLCObject>();
 
-        public VirtualController()
+        public VirtualController() : this(true)
         {
+            
+        }
+
+        public VirtualController(bool init)
+        {
+            Init();
+        }
+
+        public void Init()
+        {
+            InitImp();
+            FindRetainVariables();
             _worker = new BackgroundWorker();
             _worker.DoWork += Run;
             _worker.RunWorkerCompleted += RunCompleted;
             _worker.RunWorkerAsync();
         }
 
+        protected virtual void InitImp()
+        {
+            Obj1 = new VirtualPLCObject1(this);
+            Obj2 = new VirtualPLCObject1(this);
+            Obj3 = new VirtualPLCObject2(this);
+            Obj4 = new VirtualPLCObject2(this);
+            Property1Property = VirtualPLCProperty.Register("Property1", typeof(bool), this, false, true);
+        }
+
         private void Run(object sender, DoWorkEventArgs e)
         {
             RestoreInputs();
             Process();
-
+            SaveRetains();
         }
 
         private void RunCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -161,7 +227,46 @@ namespace VirtualPLC
             VirtualPLCObjects.ForEach(x => x.RestoreInputs());
         }
 
+        private void FindRetainVariables()
+        {
+            ListObjectsProperties(this, string.Empty);
+        }
+        private void ListObjectsProperties(object obj, string parentPath)
+        {
+            if(obj != null && !(obj is VirtualPLCProperty))
+            {
+                var properties = obj.GetType().GetProperties();
+                foreach (var property in properties)
+                {
+                    var propValue = property.GetValue(obj);
+                    if (propValue != null)
+                    {
+                        if (!(propValue is VirtualController))
+                        {
+                            if (propValue is VirtualPLCProperty && (propValue as VirtualPLCProperty).Retain)
+                            {
+                                string path = !string.IsNullOrEmpty(parentPath) && !string.IsNullOrWhiteSpace(parentPath) ? parentPath.Trim() + "." : string.Empty;
+                                path += property.Name;
+                                RetainPaths.Add(path);
+                            }
+                            else if (propValue is IVirtualPLCPropertyOwner)
+                            {
+                                string path = !string.IsNullOrEmpty(parentPath) && !string.IsNullOrWhiteSpace(parentPath) ? parentPath.Trim() + "." : string.Empty;
+                                path += property.Name;
+                                ListObjectsProperties(propValue, path);
+                            } 
+                        }
+                    }
+                }
+            }
+        }
+
         protected virtual void Process()
+        {
+
+        }
+
+        protected virtual void SaveRetains()
         {
 
         }
