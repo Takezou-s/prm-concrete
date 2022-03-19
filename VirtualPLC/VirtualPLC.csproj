@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,6 +52,13 @@
       <Project>{8540A8EE-59CE-4035-99F9-7DDC6584BC3F}</Project>
       <Name>Extensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Utility.Binding\Utility.Binding.csproj">
+      <Project>{D2513BF6-73B6-48FB-8B9F-C2154EF284C2}</Project>
+      <Name>Utility.Binding</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
