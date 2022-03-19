@@ -44,8 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IVirtualPLCPropertyOwner.cs" />
+    <Compile Include="RetainSerializationData.cs" />
+    <Compile Include="VirtualController.cs" />
     <Compile Include="VirtualPLCObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VirtualPLCProperty.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Extensions\Extensions.csproj">
