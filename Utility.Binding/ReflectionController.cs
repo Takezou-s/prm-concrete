@@ -140,7 +140,7 @@ namespace Utility.Binding
                 else
                 {
                     Type type = Instance.GetType();
-                    PropertyInfo prp = type.GetProperty(PropertyName);
+                    PropertyInfo prp = type.GetProperty(PropertyName, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
                     FieldInfo prp1 = type.GetField(PropertyName, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
                     if (prp != null)
                         Value = prp.GetValue(Instance);

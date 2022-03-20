@@ -686,6 +686,10 @@
       <Project>{02A2D5D2-4B39-4040-9738-94E11CA24806}</Project>
       <Name>Promax.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Promax.Process\Promax.Process.csproj">
+      <Project>{481060DF-5793-4308-A822-8B796E478C16}</Project>
+      <Name>Promax.Process</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RemoteVariableHandler.Core\RemoteVariableHandler.Core.csproj">
       <Project>{A39A21E8-CA19-4F56-9CCA-A09D847511A5}</Project>
       <Name>RemoteVariableHandler.Core</Name>

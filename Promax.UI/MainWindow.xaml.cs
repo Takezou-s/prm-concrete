@@ -1,4 +1,5 @@
 ﻿using Extensions;
+using Promax.Process;
 using Promax.UI.Windows;
 using System;
 using System.Collections.Generic;
@@ -44,7 +45,7 @@ namespace Promax.UI
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Load();
-            new VirtualController();
+            new ConcreteController("deneme.txt");
         }
         private void Load()
         {

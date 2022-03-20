@@ -1,5 +1,6 @@
 ﻿using Extensions;
 using System;
+using System.Reflection;
 
 namespace VirtualPLC
 {
@@ -8,12 +9,12 @@ namespace VirtualPLC
         private object _value;
         private bool _changed;
 
-        public static VirtualPLCProperty Register(string name, Type propertyType, IVirtualPLCPropertyOwner owner, bool input, bool retain)
+        public static VirtualPLCProperty Register(string name, Type propertyType, IVirtualPLCPropertyOwner owner, bool input, bool retain, bool output)
         {
-            return Register(name, propertyType, owner, input, retain, null);
+            return Register(name, propertyType, owner, input, retain, output, null);
         }
 
-        public static VirtualPLCProperty Register(string name, Type propertyType, IVirtualPLCPropertyOwner owner, bool input, bool retain, object defaultValue)
+        public static VirtualPLCProperty Register(string name, Type propertyType, IVirtualPLCPropertyOwner owner, bool input, bool retain, bool output, object defaultValue)
         {
             var result = new VirtualPLCProperty();
             result.Name = name;
@@ -31,11 +32,11 @@ namespace VirtualPLC
         private static object GetDefaultOfType(Type propertyType)
         {
             object result = null;
-            var methodInfo = typeof(VirtualPLCProperty).GetMethod("GetDefault");
+            var methodInfo = typeof(VirtualPLCProperty).GetMethod("GetDefault", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
             if (methodInfo != null)
             {
-                methodInfo.MakeGenericMethod(propertyType);
-                result = methodInfo.Invoke(null, null);
+                var genericMethodInfo = methodInfo.MakeGenericMethod(propertyType);
+                result = genericMethodInfo.Invoke(null, null);
             }
             return result;
         }
@@ -61,7 +62,7 @@ namespace VirtualPLC
                 bool changed = false;
                 if (!_value.IsEqual(value))
                     changed = true;
-                _value = value;
+                _value = Convert.ChangeType(value, PropertyType);
                 if (changed)
                 {
                     if (!Output)

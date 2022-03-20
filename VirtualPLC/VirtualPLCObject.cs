@@ -35,5 +35,15 @@ namespace VirtualPLC
         {
             VirtualPLCProperties.ForEach(x => x.SetOutputValue());
         }
+
+        protected object GetValue(VirtualPLCProperty property)
+        {
+            return property.GetValue();
+        }
+
+        protected void SetValue(VirtualPLCProperty property, object value)
+        {
+            property.SetValue(value);
+        }
     }
 }

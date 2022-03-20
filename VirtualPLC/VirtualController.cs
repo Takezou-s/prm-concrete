@@ -130,7 +130,7 @@ namespace VirtualPLC
             {
                 try
                 {
-                    var value = ReflectionController.GetPropertyValue(this, item);
+                    var value = ReflectionController.GetPropertyValue(this, item+".Value");
                     var data = new RetainSerializationData() { Path = item, Value = value };
                     datas.Add(JsonConvert.SerializeObject(data, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All }));
                 }
@@ -152,7 +152,7 @@ namespace VirtualPLC
                     try
                     {
                         var data = JsonConvert.DeserializeObject<RetainSerializationData>(item, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All });
-                        ReflectionController.SetPropertyValue(this, data.Path, data.Value);
+                        ReflectionController.SetPropertyValue(this, data.Path+".Value", data.Value);
                     }
                     catch
                     {
