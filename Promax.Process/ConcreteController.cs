@@ -154,22 +154,4 @@ namespace Promax.Process
             Karıştırıldı = Mikser.Karıştırıldı;
         }
     }
-    public interface IMalzemeAl
-    {
-        void MalzemeAl();
-        bool MalzemeAlındı { get; }
-        void ResetMalzemeAl();
-    }
-    public interface IMalzemeBoşalt
-    {
-        void MalzemeBoşalt();
-        bool MalzemeBoşaltıldı { get; }
-        void ResetMalzemeBoşalt();
-    }
-    public interface IKarıştır
-    {
-        void Karıştır();
-        bool Karıştırıldı { get; }
-        void ResetKarıştır();
-    }
 }

@@ -42,6 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConcreteController.cs" />
+    <Compile Include="IKarıştır.cs" />
+    <Compile Include="IMalzemeAl.cs" />
+    <Compile Include="IMalzemeBoşalt.cs" />
+    <Compile Include="KantarController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
