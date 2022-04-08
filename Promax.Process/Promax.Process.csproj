@@ -49,6 +49,22 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Extensions\Extensions.csproj">
+      <Project>{8540A8EE-59CE-4035-99F9-7DDC6584BC3F}</Project>
+      <Name>Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Promax.Core\Promax.Core.csproj">
+      <Project>{6054CD87-4FD7-487E-8329-91BC74E3D526}</Project>
+      <Name>Promax.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RemoteVariableHandler.Core\RemoteVariableHandler.Core.csproj">
+      <Project>{A39A21E8-CA19-4F56-9CCA-A09D847511A5}</Project>
+      <Name>RemoteVariableHandler.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utility.Binding\Utility.Binding.csproj">
+      <Project>{D2513BF6-73B6-48FB-8B9F-C2154EF284C2}</Project>
+      <Name>Utility.Binding</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VirtualPLC\VirtualPLC.csproj">
       <Project>{CB57AACC-D12A-4785-A5B5-2CC11A3D55C9}</Project>
       <Name>VirtualPLC</Name>

@@ -63,6 +63,7 @@
     <Compile Include="AnimationSerializer.cs" />
     <Compile Include="ClientType.cs" />
     <Compile Include="CommanderContainer.cs" />
+    <Compile Include="CommandNames.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="ConvertedRemoteVariable\ConvertibleRemoteValue.cs" />
     <Compile Include="ConvertedRemoteVariable\ConvertibleRemoteVariable.cs" />

@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace Promax.Core
 {
-    public class Parameter<T> : IParameter<T>, INotifyPropertyChanged
+    public class Parameter<T> : IParameter<T>
     {
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;

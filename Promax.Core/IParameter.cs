@@ -1,6 +1,8 @@
-﻿namespace Promax.Core
+﻿using System.ComponentModel;
+
+namespace Promax.Core
 {
-    public interface IParameter
+    public interface IParameter : INotifyPropertyChanged
     {
         string Name { get; set; }
         string Code { get; set; }
