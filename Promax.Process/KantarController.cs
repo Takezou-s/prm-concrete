@@ -192,7 +192,8 @@ namespace Promax.Process
 
         public void MalzemeBoşalt()
         {
-
+            if (MalzemeBoşaltıldı)
+                return;
         }
         
         public void ResetMalzemeBoşalt()
