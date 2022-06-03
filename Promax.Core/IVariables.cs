@@ -11,5 +11,6 @@ namespace Promax.Core
         IRemoteVariable GetVariable(string objectName, string propertyName);
         IRemoteVariable GetVariable(string objectName, string propertyName, Type attribute);
         PropertyInfo GetVariablePropertyInfo(string objectName, string propertyName);
+        void Write(string objectName, string propertyName, object value);
     }
 }

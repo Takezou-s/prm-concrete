@@ -42,5 +42,7 @@ namespace Promax.Entities
                 value.Do(o => StockId = o.StockId, () => StockId = -1);
             }
         }
+        public double Desired { get; set; }
+        public double Batched { get; set; }
     }
 }

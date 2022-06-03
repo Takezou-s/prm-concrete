@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Utility.Binding;
 
 namespace Promax.Business
 {
@@ -15,13 +16,32 @@ namespace Promax.Business
         protected IVariableCommunicator Communicator { get; set; }
         public abstract string ScopeName { get; set; }
         public virtual List<IRemoteVariable> RemoteVariables { get; private set; } = new List<IRemoteVariable>();
+        public virtual List<IConvertibleRemoteVariable> ConvertibleRemoteVariables { get; private set; } = new List<IConvertibleRemoteVariable>();
         protected VariablesBase(IVariableCommunicator communicator)
         {
             Communicator = communicator;
             InitVariables();
             Properties.AddRange(this.GetType().GetProperties());
-            Properties.ForEach(propertyInfo => propertyInfo.TryCatch(propertyInfo1 => propertyInfo1.GetValue(this).DoReturn(propertyValue => Objects.Add(propertyValue)).DoIf(propertyValue => propertyValue is IRemoteVariable,
-                propertyValue => (propertyValue as IRemoteVariable).DoReturn(remoteVariable => remoteVariable.VariableName = ScopeName + "." + propertyInfo.Name).Do(remoteVariable => RemoteVariables.Add(remoteVariable))), null));
+            Properties.ForEach(propertyInfo =>
+            propertyInfo.TryCatch
+            (propertyInfo1 => propertyInfo1.GetValue(this).DoReturn(
+                propertyValue => Objects.Add(propertyValue)).DoIfReturn(
+                propertyValue => propertyValue is IRemoteVariable,
+                propertyValue => (propertyValue as IRemoteVariable).DoReturn(remoteVariable => remoteVariable.VariableName = ScopeName + "." + propertyInfo.Name).Do(remoteVariable => RemoteVariables.Add(remoteVariable))).
+                DoIf(propVal => propVal is IConvertibleRemoteVariable, obj =>
+                {
+                    if (obj != null && obj is IConvertibleRemoteVariable)
+                    {
+                        var remoteVariable = (obj as IConvertibleRemoteVariable).RemoteVariable;
+                        if (remoteVariable != null)
+                        {
+                            remoteVariable.VariableName = ScopeName + "." + propertyInfo.Name + "_InnerVariable";
+                            RemoteVariables.Add(remoteVariable);
+                        }
+                    }
+                }), null
+            ));
+
             RemoteVariables.ForEach(x => x.Do(y => y.Communicator = Communicator));
         }
         public virtual bool IsObjectIncluded(object obj)
@@ -63,6 +83,19 @@ namespace Promax.Business
             PropertyInfo result = null;
             result = Properties.FirstOrDefault(x => x.Name == objectName + "_" + propertyName);
             return result;
+        }
+
+        public void Write(string objectName, string propertyName, object value)
+        {
+            GetAs<IConvertibleRemoteVariable>(objectName, propertyName).Do(x =>
+            {
+                ReflectionController.SetPropertyValue(x, nameof(x.ConvertedWriteValue), value);
+                x.Write();
+            }, () => GetVariable(objectName, propertyName).Do(x=>
+            {
+                ReflectionController.SetPropertyValue(x, nameof(x.WriteValue), value);
+                x.Write();
+            }));
         }
     }
 }

@@ -47,15 +47,24 @@
     <Compile Include="IMalzemeBoşalt.cs" />
     <Compile Include="KantarController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SiloController.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Extensions\Extensions.csproj">
       <Project>{8540A8EE-59CE-4035-99F9-7DDC6584BC3F}</Project>
       <Name>Extensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Promax.Business\Promax.Business.csproj">
+      <Project>{C8BDD0F4-DAF5-4607-9E3A-04891975AAEE}</Project>
+      <Name>Promax.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Promax.Core\Promax.Core.csproj">
       <Project>{6054CD87-4FD7-487E-8329-91BC74E3D526}</Project>
       <Name>Promax.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Promax.Entities\Promax.Entities.csproj">
+      <Project>{02A2D5D2-4B39-4040-9738-94E11CA24806}</Project>
+      <Name>Promax.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\RemoteVariableHandler.Core\RemoteVariableHandler.Core.csproj">
       <Project>{A39A21E8-CA19-4F56-9CCA-A09D847511A5}</Project>

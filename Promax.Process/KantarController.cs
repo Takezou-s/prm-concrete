@@ -1,8 +1,6 @@
-﻿using Extensions;
-using Promax.Core;
+﻿using Promax.Core;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +13,7 @@ namespace Promax.Process
     {
         public VirtualPLCProperty MalzemeAlındıProperty { get; private set; }
         public VirtualPLCProperty MalzemeBoşaltıldıProperty { get; private set; }
+        public VirtualPLCProperty MalzemeBoşaltılıyorProperty { get; private set; }
         public VirtualPLCProperty MalzemeBoşaltSenaryoProperty { get; private set; }
         public VirtualPLCProperty EjectedInfoProperty { get; private set; }
         public VirtualPLCProperty İstenenPeriyotProperty { get; private set; }
@@ -30,6 +29,7 @@ namespace Promax.Process
         public List<IMalzemeBoşalt> Silolar { get; set; } = new List<IMalzemeBoşalt>();
         public bool MalzemeAlındı { get => (bool)GetValue(MalzemeAlındıProperty); private set => SetValue(MalzemeAlındıProperty, value); }
         public bool MalzemeBoşaltıldı { get => (bool)GetValue(MalzemeBoşaltıldıProperty); private set => SetValue(MalzemeBoşaltıldıProperty, value); }
+        public bool MalzemeBoşaltılıyor { get => (bool)GetValue(MalzemeBoşaltılıyorProperty); private set => SetValue(MalzemeBoşaltılıyorProperty, value); }
         public bool EjectedInfo { get => (bool)GetValue(EjectedInfoProperty); set => SetValue(EjectedInfoProperty, value); }
         public int İstenenPeriyot { get => (int)GetValue(İstenenPeriyotProperty); set => SetValue(İstenenPeriyotProperty, value); }
         public int MalzemeAlTamamlananPeriyot { get => (int)GetValue(MalzemeAlTamamlananPeriyotProperty); set => SetValue(MalzemeAlTamamlananPeriyotProperty, value); }
@@ -44,6 +44,7 @@ namespace Promax.Process
             CommanderName = commanderName;
             MalzemeAlındıProperty = VirtualPLCProperty.Register(nameof(MalzemeAlındı), typeof(bool), this, false, true, false);
             MalzemeBoşaltıldıProperty = VirtualPLCProperty.Register(nameof(MalzemeBoşaltıldı), typeof(bool), this, false, true, false);
+            MalzemeBoşaltılıyorProperty = VirtualPLCProperty.Register(nameof(MalzemeBoşaltılıyor), typeof(bool), this, false, true, false);
             MalzemeBoşaltSenaryoProperty = VirtualPLCProperty.Register(nameof(MalzemeBoşaltSenaryo), typeof(int), this, false, true, false);
             EjectedInfoProperty = VirtualPLCProperty.Register(nameof(EjectedInfo), typeof(bool), this, true, true, false);
             İstenenPeriyotProperty = VirtualPLCProperty.Register(nameof(İstenenPeriyot), typeof(int), this, false, true, false);
@@ -160,59 +161,5 @@ namespace Promax.Process
             _commander.RegisterCommand(CommandNames.EjectedInfoResponse);
         }
         #endregion
-    }
-    public class SiloController : VirtualPLCObject
-    {
-        public VirtualPLCProperty MalzemeBoşaltıldıProperty { get; private set; }
-        public VirtualPLCProperty MalzemeBoşaltılıyorProperty { get; private set; }
-
-        public ParameterOwnerBase ParameterOwner { get; private set; }
-        public IVariables ParameterScope { get; private set; }
-        public IVariables RecipeScope { get; private set; }
-
-        public bool MalzemeBoşaltıldı { get => (bool)GetValue(MalzemeBoşaltıldıProperty); private set => SetValue(MalzemeBoşaltıldıProperty, value); }
-        public bool MalzemeBoşaltılıyor { get => (bool)GetValue(MalzemeBoşaltılıyorProperty); private set => SetValue(MalzemeBoşaltılıyorProperty, value); }
-
-        public SiloController(VirtualController controller, ParameterOwnerBase parameterOwner, IVariables parameterScope, IVariables recipeScope) : base(controller)
-        {
-            ParameterOwner = parameterOwner;
-            ParameterScope = parameterScope;
-            RecipeScope = recipeScope;
-            MalzemeBoşaltıldıProperty = VirtualPLCProperty.Register(nameof(MalzemeBoşaltıldı), typeof(bool), this, false, true, false);
-            MalzemeBoşaltılıyorProperty = VirtualPLCProperty.Register(nameof(MalzemeBoşaltılıyor), typeof(bool), this, false, true, false);
-            ParameterOwner.Parameters.ForEach(x => x.PropertyChanged += ParameterPropertyChanged);
-        }
-
-        private void ParameterPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (!e.PropertyName.IsEqual(nameof(IParameter.Value)) || !MalzemeBoşaltılıyor)
-                return;
-            WriteParameter(sender as IParameter);
-        }
-
-        public void MalzemeBoşalt()
-        {
-            if (MalzemeBoşaltıldı)
-                return;
-        }
-        
-        public void ResetMalzemeBoşalt()
-        {
-
-        }
-
-        private void WriteParameters()
-        {
-            ParameterOwner.Parameters.ForEach(x => WriteParameter(x));
-        }
-
-        private void WriteParameter(IParameter parameter)
-        {
-            ParameterScope.GetVariable(parameter.Name, parameter.Code).Do(x =>
-             {
-                 ReflectionController.SetPropertyValue(x, nameof(x.WriteValue), parameter.Value);
-                 x.Write();
-             });
-        }
     }
 }

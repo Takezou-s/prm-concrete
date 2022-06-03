@@ -12,8 +12,9 @@ namespace Promax.Entities
 {
     public class Stock : INotifyPropertyChanged
     {
+        private Dictionary<int, BindingHandler> _bindingHandlers = new Dictionary<int, BindingHandler>();
         private MyList<Silo> _siloList = new MyList<Silo>(nameof(Silo.SiloId));
-
+        private MyBinding _binding = new MyBinding();
         public IEnumerable<Silo> Silos => _siloList;
 
         #region INotifyPropertyChanged
@@ -30,6 +31,8 @@ namespace Promax.Entities
         private int _stockCatNum;
         private double _temp;
         private double _balance;
+        private double _desired;
+        private double _batched;
         #endregion
         #region PropertiesByAutoPropCreator
         public int StockId
@@ -141,6 +144,42 @@ namespace Promax.Entities
             }
         }
         #endregion
+        public double Desired
+        {
+            get
+            {
+                return _desired;
+            }
+            set
+            {
+                bool changed = false;
+                if (!_desired.IsEqual(value))
+                    changed = true;
+                _desired = value;
+                if (changed)
+                {
+                    OnPropertyChanged(nameof(Desired));
+                }
+            }
+        }
+        public double Batched
+        {
+            get
+            {
+                return _batched;
+            }
+            set
+            {
+                bool changed = false;
+                if (!_batched.IsEqual(value))
+                    changed = true;
+                _batched = value;
+                if (changed)
+                {
+                    OnPropertyChanged(nameof(Batched));
+                }
+            }
+        }
 
         public StockType StockType
         {
@@ -164,8 +203,32 @@ namespace Promax.Entities
             {
                 _siloList.Add(silo);
                 silo.Stock = this;
+                RemoveSiloBindingHandler(silo);
+                AddSiloBindingHandler(silo);
                 OnPropertyChanged(nameof(Silos));
             }
+        }
+        private void AddSiloBindingHandler(Silo silo)
+        {
+            var bindingHandler = _binding.CreateBinding().Source(silo).SourceProperty(nameof(Silo.Batched)).Behaviour(MyBindingBehaviour.Invoke).WhenSourcePropertyChanged(() => SiloBatchedChanged());
+            _bindingHandlers.Add(silo.SiloId, bindingHandler);
+        }
+        private void RemoveSiloBindingHandler(Silo silo)
+        {
+            if (_bindingHandlers.ContainsKey(silo.SiloId))
+            {
+                _bindingHandlers[silo.SiloId].Do(x => x.DoReturn(y => _binding.RemoveBinding(y)).Deactivate());
+                _bindingHandlers.Remove(silo.SiloId);
+            }
+        }
+        private void ClearSiloBindingHandlers()
+        {
+            foreach (var item in _bindingHandlers)
+            {
+                _binding.RemoveBinding(item.Value);
+                item.Value.Deactivate();
+            }
+            _bindingHandlers.Clear();
         }
         public void RemoveSilo(Silo silo)
         {
@@ -173,14 +236,25 @@ namespace Promax.Entities
             {
                 _siloList.Remove(silo);
                 silo.Do(x => x.Stock = null);
+                RemoveSiloBindingHandler(silo);
                 OnPropertyChanged(nameof(Silos));
             }
         }
         public void ClearSilos()
         {
             _siloList.Clear();
+            ClearSiloBindingHandlers();
             OnPropertyChanged(nameof(Silos));
         }
         #endregion
+        private void SiloBatchedChanged()
+        {
+            double value = 0;
+            foreach (var item in _siloList)
+            {
+                value += item.Batched;
+            }
+            Batched = value;
+        }
     }
 }
