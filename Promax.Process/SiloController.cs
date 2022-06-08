@@ -10,33 +10,69 @@ using VirtualPLC;
 
 namespace Promax.Process
 {
+    /// <summary>
+    /// Siloların çalışmasını kontrol eder.
+    /// </summary>
     public class SiloController : VirtualPLCObject, IMalzemeBoşalt, IVariableOwner, ICommander
     {
+        #region VirutalPLCProperty'ler
         public VirtualPLCProperty MalzemeBoşaltıldıProperty { get; private set; }
-        public VirtualPLCProperty MalzemeBoşaltılıyorProperty { get; private set; }
         public VirtualPLCProperty MalzemeBoşaltSenaryoProperty { get; private set; }
         public VirtualPLCProperty EjectedInfoProperty { get; private set; }
         public VirtualPLCProperty SaveBatchedProperty { get; private set; }
-        public VirtualPLCProperty DesiredProperty { get; private set; }
-
+        public VirtualPLCProperty İstenenProperty { get; private set; }
+        #endregion
+        #region Senaryo adımlarını belirten değişkenler.
         private readonly int _boşaltKomutuSenaryo = 0;
         private readonly int _boşaltıldıİzleSenaryo = 1;
         private readonly int _boşaltıldıResetleSenaryo = 2;
         private readonly int _boşaltıldıResetKontrolSenaryo = 3;
         private readonly int _batchKaydedildiİzleSenaryo = 4;
+        #endregion
+        /// <summary>
+        /// Malzeme boşaltım senaryosunun adımını tutan değişken.
+        /// </summary>
         private int MalzemeBoşaltSenaryo { get => (int)GetValue(MalzemeBoşaltSenaryoProperty); set => SetValue(MalzemeBoşaltSenaryoProperty, value); }
-
+        /// <summary>
+        /// Gönderilecek parametrelerin bulunduğu ParameterOwner.
+        /// </summary>
         public ParameterOwnerBase ParameterOwner { get; private set; }
+        /// <summary>
+        /// Parametre değişkenlerinin bulunduğu IVariables objesi.
+        /// </summary>
         public IVariables ParameterScope { get; private set; }
+        /// <summary>
+        /// Reçete değişkenlerinin bulunduğu IVariables objesi.
+        /// </summary>
         public IVariables RecipeScope { get; private set; }
+        /// <summary>
+        /// Reçete değişkenlerine erişirken kullanılacak isim.
+        /// </summary>
         public string NameInRecipeScope { get; set; }
+        /// <summary>
+        /// Parametre değişkenlerine erişirken kullanılacak isim.
+        /// </summary>
         public string NameInParameterScope { get; set; }
-
+        /// <summary>
+        /// Malzeme boşaltımının tamamlandığını belirtir.
+        /// </summary>
         public bool MalzemeBoşaltıldı { get => (bool)GetValue(MalzemeBoşaltıldıProperty); private set => SetValue(MalzemeBoşaltıldıProperty, value); }
-        public bool MalzemeBoşaltılıyor { get => (bool)GetValue(MalzemeBoşaltılıyorProperty); private set => SetValue(MalzemeBoşaltılıyorProperty, value); }
+        /// <summary>
+        /// Malzeme boşaltımının yapılıyor olduğunu belirtir.
+        /// </summary>
+        public bool MalzemeBoşaltılıyor { get => MalzemeBoşaltSenaryo == _boşaltıldıİzleSenaryo; }
+        /// <summary>
+        /// Dışarıdan gelen "Boşaltıldı" bilgisi. Boşalt komutu verildikten sonra bu bilgi takip edilir.
+        /// </summary>
         public bool EjectedInfo { get => (bool)GetValue(EjectedInfoProperty); set => SetValue(EjectedInfoProperty, value); }
+        /// <summary>
+        /// Boşaltım işlemi bittikten sonra batch'in kaydedilmesi gerektiğini belirten değişken.
+        /// </summary>
         public bool SaveBatched { get => (bool)GetValue(SaveBatchedProperty); set => SetValue(SaveBatchedProperty, value); }
-        public double Desired { get => (double)GetValue(DesiredProperty); set => SetValue(DesiredProperty, value); }
+        /// <summary>
+        /// Boşaltılması gereken miktar.
+        /// </summary>
+        public double İstenen { get => (double)GetValue(İstenenProperty); set => SetValue(İstenenProperty, value); }
 
         public SiloController(VirtualController controller, ParameterOwnerBase parameterOwner, string nameInRecipeScope, string nameInParameterScope, string variableOwnerName, string commanderName, IVariables parameterScope, IVariables recipeScope) : base(controller)
         {
@@ -47,43 +83,63 @@ namespace Promax.Process
             NameInParameterScope = nameInParameterScope;
             VariableOwnerName = variableOwnerName;
             CommanderName = commanderName;
-            MalzemeBoşaltıldıProperty = VirtualPLCProperty.Register(nameof(MalzemeBoşaltıldı), typeof(bool), this, false, true, false);
-            MalzemeBoşaltılıyorProperty = VirtualPLCProperty.Register(nameof(MalzemeBoşaltılıyor), typeof(bool), this, false, true, false);
-            MalzemeBoşaltSenaryoProperty = VirtualPLCProperty.Register(nameof(MalzemeBoşaltSenaryo), typeof(int), this, false, true, false);
-            EjectedInfoProperty = VirtualPLCProperty.Register(nameof(EjectedInfo), typeof(bool), this, true, true, false);
-            SaveBatchedProperty = VirtualPLCProperty.Register(nameof(SaveBatched), typeof(bool), this, true, true, false);
-            DesiredProperty = VirtualPLCProperty.Register(nameof(Desired), typeof(double), this, false, true, false);
+            var builder = new VirtualPLCPropertyBuilder(this);
+            MalzemeBoşaltıldıProperty = builder.Reset().Name(nameof(MalzemeBoşaltıldı)).Type(typeof(bool)).Retain(true).Get();
+            MalzemeBoşaltSenaryoProperty = builder.Reset().Name(nameof(MalzemeBoşaltSenaryo)).Type(typeof(int)).Retain(true).Get();
+            EjectedInfoProperty = builder.Reset().Name(nameof(EjectedInfo)).Type(typeof(bool)).Input(true).Retain(true).Get();
+            SaveBatchedProperty = builder.Reset().Name(nameof(SaveBatched)).Type(typeof(bool)).Input(true).Retain(true).Get();
+            İstenenProperty = builder.Reset().Name(nameof(İstenen)).Type(typeof(double)).Retain(true).Output(true).Get();
             ParameterOwner.Parameters.ForEach(x => x.PropertyChanged += ParameterPropertyChanged);
         }
-
+        /// <summary>
+        /// Parametre değeri değişmesi durumunda, malzeme boşaltımı yapılıyorsa değer PLC'ye yazılır.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ParameterPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (!e.PropertyName.IsEqual(nameof(IParameter.Value)) || !MalzemeBoşaltılıyor)
                 return;
             WriteParameter(sender as IParameter);
         }
-
+        /// <summary>
+        /// Malzeme boşaltım işlemiyle ilgilenen method. Malzeme boşaltımı tamamlanmışsa işlem yapmaz.
+        /// </summary>
         public void MalzemeBoşalt()
         {
+            //Boşaltıldı ise geri dön.
             if (MalzemeBoşaltıldı)
                 return;
             if (MalzemeBoşaltSenaryo == _boşaltKomutuSenaryo)
             {
-                if (Desired <= 0)
+                //İstenen miktar <= 0 ise boşaltıldı setlenir ve geri döner.
+                if (İstenen <= 0)
                 {
                     MalzemeBoşaltıldı = true;
                     return;
                 }
-                RecipeScope.Write(NameInRecipeScope, "İstenen", Desired);
+                //İstenen değer yazılır.
+                RecipeScope.Write(NameInRecipeScope, "İstenen", İstenen);
+                //Parametreler yazılır.
                 WriteParameters();
+                //Boşalt komutu verilir.
                 InvokeCommand(CommandNames.EjectCommand);
+                //Bir sonraki senaryo adımına geçilir.
                 MalzemeBoşaltSenaryo = _boşaltıldıİzleSenaryo;
             }
+            //Boşaltıldı bilgisi geliyor ise bir sonraki adıma geçilir.
             else if (MalzemeBoşaltSenaryo == _boşaltıldıİzleSenaryo)
             {
                 if (EjectedInfo)
                     MalzemeBoşaltSenaryo = _boşaltıldıResetleSenaryo;
             }
+            //Boşaltıldı bilgisi resetlenir.
+            else if (MalzemeBoşaltSenaryo == _boşaltıldıResetleSenaryo)
+            {
+                InvokeCommand(CommandNames.EjectedInfoResponse);
+                MalzemeBoşaltSenaryo = _boşaltıldıResetKontrolSenaryo;
+            }
+            //Boşaltıldı bilgisi resetlendiyse batch kaydet setlenir.
             else if (MalzemeBoşaltSenaryo == _boşaltıldıResetKontrolSenaryo)
             {
                 if (!EjectedInfo)
@@ -92,28 +148,32 @@ namespace Promax.Process
                     MalzemeBoşaltSenaryo = _batchKaydedildiİzleSenaryo;
                 }
             }
+            //Save batched dışarıda işlenip, resetlendiyse malzeme boşaltıldı setlenir.
             else if (MalzemeBoşaltSenaryo == _batchKaydedildiİzleSenaryo)
             {
                 if (!SaveBatched)
-                {
                     MalzemeBoşaltıldı = true;
-                    MalzemeBoşaltSenaryo = _batchKaydedildiİzleSenaryo;
-                }
             }
-            MalzemeBoşaltılıyor = MalzemeBoşaltSenaryo == _boşaltıldıİzleSenaryo;
         }
-
+        /// <summary>
+        /// Tekrar malzeme boşaltmaya hazır hale gelir. Periyot resetlenmez!
+        /// </summary>
         public void ResetMalzemeBoşalt()
         {
             MalzemeBoşaltSenaryo = 0;
             MalzemeBoşaltıldı = false;
         }
-
+        /// <summary>
+        /// Parametreleri yazar.
+        /// </summary>
         private void WriteParameters()
         {
             ParameterOwner.Parameters.ForEach(x => WriteParameter(x));
         }
-
+        /// <summary>
+        /// Parametreyi yazar.
+        /// </summary>
+        /// <param name="parameter"></param>
         private void WriteParameter(IParameter parameter)
         {
             ParameterScope.Write(NameInParameterScope, parameter.Code, parameter.Value);

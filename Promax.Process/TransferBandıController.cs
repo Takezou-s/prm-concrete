@@ -7,39 +7,62 @@ namespace Promax.Process
 {
     public class TransferBandıController : VirtualPLCObject, IMalzemeBoşalt, IVariableOwner, ICommander
     {
+        #region VirtualPLCProperty'ler
         public VirtualPLCProperty MalzemeBoşaltıldıProperty { get; private set; }
         public VirtualPLCProperty MalzemeBoşaltSenaryoProperty { get; private set; }
         public VirtualPLCProperty EjectedInfoProperty { get; private set; }
-
+        #endregion
+        #region Senaryo adımları
         private readonly int _runKomutuSenaryo = 0;
         private readonly int _kantarBoşaltSenaryo = 1;
         private readonly int _boşaltıldıİzleSenaryo = 2;
         private readonly int _boşaltıldıResetKontrolSenaryo = 3;
+        #endregion
+        /// <summary>
+        /// Malzeme boşaltım senaryosunun adımını tutan değişken.
+        /// </summary>
         private int MalzemeBoşaltSenaryo { get => (int)GetValue(MalzemeBoşaltSenaryoProperty); set => SetValue(MalzemeBoşaltSenaryoProperty, value); }
-
+        /// <summary>
+        /// Malzeme boşaltımının tamamlandığını belirtir.
+        /// </summary>
         public bool MalzemeBoşaltıldı { get => (bool)GetValue(MalzemeBoşaltıldıProperty); private set => SetValue(MalzemeBoşaltıldıProperty, value); }
+        /// <summary>
+        /// Malzeme boşaltımının yapılıyor olduğunu belirtir.
+        /// </summary>
         public bool MalzemeBoşaltılıyor { get => MalzemeBoşaltSenaryo == _boşaltıldıİzleSenaryo || MalzemeBoşaltSenaryo == _kantarBoşaltSenaryo; }
+        /// <summary>
+        /// Dışarıdan gelen "Boşaltıldı" bilgisi. Boşalt komutu verildikten sonra bu bilgi takip edilir.
+        /// </summary>
         public bool EjectedInfo { get => (bool)GetValue(EjectedInfoProperty); set => SetValue(EjectedInfoProperty, value); }
+        /// <summary>
+        /// Kendisini besleyen kantar.
+        /// </summary>
         public IMalzemeBoşalt Kantar { get; set; }
 
         public TransferBandıController(VirtualController controller, string variableOwnerName, string commanderName) : base(controller)
         {
             VariableOwnerName = variableOwnerName;
             CommanderName = commanderName;
-            MalzemeBoşaltıldıProperty = VirtualPLCProperty.Register(nameof(MalzemeBoşaltıldı), typeof(bool), this, false, true, false);
-            MalzemeBoşaltSenaryoProperty = VirtualPLCProperty.Register(nameof(MalzemeBoşaltSenaryo), typeof(int), this, false, true, false);
-            EjectedInfoProperty = VirtualPLCProperty.Register(nameof(EjectedInfo), typeof(bool), this, true, true, false);
+            var builder = new VirtualPLCPropertyBuilder(this);
+            MalzemeBoşaltıldıProperty = builder.Reset().Name(nameof(MalzemeBoşaltıldı)).Type(typeof(bool)).Retain(true).Get();
+            MalzemeBoşaltSenaryoProperty = builder.Reset().Name(nameof(MalzemeBoşaltSenaryo)).Type(typeof(int)).Retain(true).Get();
+            EjectedInfoProperty = builder.Reset().Name(nameof(EjectedInfo)).Type(typeof(bool)).Input(true).Retain(true).Get();
         }
-
+        /// <summary>
+        /// Malzeme boşaltım işlemiyle ilgilenen method. Periyot tamamlandıysa, malzeme boşaltımı tamamlanmışsa işlem yapmaz.
+        /// </summary>
         public void MalzemeBoşalt()
         {
+            //Boşaltıldı ise geri dön.
             if (MalzemeBoşaltıldı)
                 return;
+            //Run komutu verilir.
             if (MalzemeBoşaltSenaryo == _runKomutuSenaryo)
             {
                 InvokeCommand(CommandNames.RunCommand);
                 MalzemeBoşaltSenaryo = _kantarBoşaltSenaryo;
             }
+            //Kantar malzeme boşaltımı tamamlamadıysa boşalt methodu çağırılır. İşlem tamamlandığında Stop komutu verilir.
             else if (MalzemeBoşaltSenaryo == _kantarBoşaltSenaryo)
             {
                 if (!Kantar.MalzemeBoşaltıldı)
@@ -50,6 +73,7 @@ namespace Promax.Process
                     MalzemeBoşaltSenaryo = _boşaltıldıİzleSenaryo;
                 }
             }
+            //Harici boşaltıldı bilgisi True ise cevap komutu verilir.
             else if (MalzemeBoşaltSenaryo == _boşaltıldıİzleSenaryo)
             {
                 if (EjectedInfo)
@@ -58,6 +82,7 @@ namespace Promax.Process
                     MalzemeBoşaltSenaryo = _boşaltıldıResetKontrolSenaryo;
                 }
             }
+            //Harici boşaltıldı bilgisi resetlenmişse MalzemeBoşaltıldı setlenir.
             else if (MalzemeBoşaltSenaryo == _boşaltıldıResetKontrolSenaryo)
             {
                 if (!EjectedInfo)
@@ -66,7 +91,9 @@ namespace Promax.Process
                 }
             }
         }
-
+        /// <summary>
+        /// Tekrar malzeme boşaltmaya hazır hale gelir.
+        /// </summary>
         public void ResetMalzemeBoşalt()
         {
             MalzemeBoşaltSenaryo = 0;

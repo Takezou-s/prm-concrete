@@ -387,6 +387,9 @@ namespace Promax.Entities
                 }
             }
         }
+        /// <summary>
+        /// Toplam miktar.
+        /// </summary>
         public double Target
         {
             get
@@ -405,6 +408,9 @@ namespace Promax.Entities
                 }
             }
         }
+        /// <summary>
+        /// Hazır miktar.
+        /// </summary>
         public double Addon
         {
             get
@@ -423,6 +429,9 @@ namespace Promax.Entities
                 }
             }
         }
+        /// <summary>
+        /// Üretilecek miktar.
+        /// </summary>
         public double RealTarget
         {
             get
@@ -876,7 +885,13 @@ namespace Promax.Entities
             }
         }
         #endregion
+        /// <summary>
+        /// Üretim durumu
+        /// </summary>
         public ProductionStatus PosStatus { get => (ProductionStatus)Pos; set => Pos = (int)value; }
+        /// <summary>
+        /// Belge no üret.
+        /// </summary>
         public string IsBill
         {
             get => _isBill; set

@@ -73,55 +73,55 @@ namespace Promax.Process
 
         protected override void InitImp()
         {
-            ÜretimVariables = new ÜretimVariables(this);
+            //ÜretimVariables = new ÜretimVariables(this);
         }
 
         protected override void Process()
         {
-            Thread.Sleep(2500);
-            ÜretimVariables.Periyot++; 
+            //Thread.Sleep(2500);
+            //ÜretimVariables.Periyot++; 
             //if (Periyot >= İstenenPeriyot)
             //    -Bitti -
-            //MalzemeAl();
-            //if (TümMalzemelerAlındı)
-            //{
-            //    if (!BoşaltımBaşlatıldı)
-            //    {
-            //        Boşalt = true;
-            //        BoşaltımBaşlatıldı = true;
-            //    }
-            //}
-            //if (Boşalt)
-            //{
-            //    if (!TümMalzemelerBoşaltıldı)
-            //    {
-            //        MalzemeBoşalt();
-            //    }
-            //    else
-            //    {
-            //        if (!KarıştırBaşlatıldı)
-            //        {
-            //            Karıştır = true;
-            //            KarıştırBaşlatıldı = true;
-            //        }
-            //    }
-            //}
-            //if (Karıştır)
-            //{
-            //    if (!Karıştırıldı)
-            //    {
-            //        MikserKarıştır();
-            //    }
-            //    else
-            //    {
-            //        BoşaltımBaşlatıldı = false;
-            //        Boşalt = false;
-            //        KarıştırBaşlatıldı = false;
-            //        Karıştır = false;
-            //        Periyot++;
-            //        _malzemeBoşaltanlar.ForEach(x => x.ResetMalzemeBoşalt();
-            //    }
-            //}
+            MalzemeAl();
+            if (TümMalzemelerAlındı)
+            {
+                if (!BoşaltımBaşlatıldı)
+                {
+                    Boşalt = true;
+                    BoşaltımBaşlatıldı = true;
+                }
+            }
+            if (Boşalt)
+            {
+                if (!TümMalzemelerBoşaltıldı)
+                {
+                    MalzemeBoşalt();
+                }
+                else
+                {
+                    if (!KarıştırBaşlatıldı)
+                    {
+                        Karıştır = true;
+                        KarıştırBaşlatıldı = true;
+                    }
+                }
+            }
+            if (Karıştır)
+            {
+                if (!Karıştırıldı)
+                {
+                    MikserKarıştır();
+                }
+                else
+                {
+                    BoşaltımBaşlatıldı = false;
+                    Boşalt = false;
+                    KarıştırBaşlatıldı = false;
+                    Karıştır = false;
+                    Periyot++;
+                    _malzemeBoşaltanlar.ForEach(x => x.ResetMalzemeBoşalt();
+                }
+            }
         }
 
         private void MalzemeAl()

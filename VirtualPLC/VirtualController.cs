@@ -15,12 +15,25 @@ namespace VirtualPLC
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
-
+        /// <summary>
+        /// VirtualPLCProperty'leri.
+        /// </summary>
         public List<VirtualPLCProperty> VirtualPLCProperties { get; } = new List<VirtualPLCProperty>();
+        /// <summary>
+        /// Arka plan thread kontrolörü.
+        /// </summary>
         protected BackgroundWorker _worker;
+        /// <summary>
+        /// Retain olarak işaretlenmiş VirtualPLCProperty'lerin tam yolunu tutan liste.
+        /// </summary>
         protected List<string> RetainPaths = new List<string>();
-
+        /// <summary>
+        /// VirtualPLCObjeleri
+        /// </summary>
         public List<VirtualPLCObject> VirtualPLCObjects { get; } = new List<VirtualPLCObject>();
+        /// <summary>
+        /// Retain değişkenlerin kaydedileceği dosya yolu.
+        /// </summary>
         public string Path { get; set; }
 
         public VirtualController(string path) : this(true, path)
@@ -33,7 +46,9 @@ namespace VirtualPLC
             Path = path;
             Init();
         }
-
+        /// <summary>
+        /// Controller'ın başlangıç işlemleri.
+        /// </summary>
         public void Init()
         {
             InitImp();
@@ -44,19 +59,29 @@ namespace VirtualPLC
             _worker.RunWorkerCompleted += RunCompleted;
             _worker.RunWorkerAsync();
         }
-
+        /// <summary>
+        /// Controller'ın başlangıç işlemleri.
+        /// </summary>
         protected virtual void InitImp()
         {
          
         }
-
+        /// <summary>
+        /// Controller'ın çalışma işlemleri.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Run(object sender, DoWorkEventArgs e)
         {
             RestoreInputs();
             Process();
             SaveRetains();
         }
-
+        /// <summary>
+        /// Run işlemleri sonrası yapılacak işlemler.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RunCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             try
@@ -72,22 +97,32 @@ namespace VirtualPLC
                 _worker.RunWorkerAsync(); 
             }
         }
-
+        /// <summary>
+        /// Input değişkenlerinin değerleri gerçek değerlere yazılır.
+        /// </summary>
         private void RestoreInputs()
         {
             VirtualPLCObjects.ForEach(x => x.RestoreInputs());
         }
-
+        /// <summary>
+        /// Output değişkenleri bildirilir.
+        /// </summary>
         private void SetOutputs()
         {
             VirtualPLCObjects.ForEach(x => x.SetOutputs());
         }
-
+        /// <summary>
+        /// Retain değişkenlerin tam yolunu bulur.
+        /// </summary>
         private void FindRetainVariables()
         {
             ListObjectsProperties(this, string.Empty);
         }
-
+        /// <summary>
+        /// Controller içinde bulunan tüm VirtualPLCProperty'lere erişip, retain olanların tam yolunu bulur.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="parentPath"></param>
         private void ListObjectsProperties(object obj, string parentPath)
         {
             if(obj != null && !(obj is VirtualPLCProperty))
@@ -117,12 +152,16 @@ namespace VirtualPLC
                 }
             }
         }
-
+        /// <summary>
+        /// Input değişkenleri alındıktan sonra çalışan, esas çalışma kodlarının bulunması gereken method.
+        /// </summary>
         protected virtual void Process()
         {
 
         }
-
+        /// <summary>
+        /// Retain olarak işaretlenmiş VirtualPLCProperty'ler kaydedilir.
+        /// </summary>
         protected virtual void SaveRetains()
         {
             List<string> datas = new List<string>();
@@ -141,7 +180,9 @@ namespace VirtualPLC
             }
             File.WriteAllLines(Path, datas);
         }
-
+        /// <summary>
+        /// Retain değerler okunur ve VirtualPLCProperty objelerine yazılır.
+        /// </summary>
         protected virtual void RestoreRetains()
         {
             try
