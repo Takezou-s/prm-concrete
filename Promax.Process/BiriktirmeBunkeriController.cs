@@ -1,19 +1,16 @@
 ﻿using Promax.Core;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Utility.Binding;
 using VirtualPLC;
 
 namespace Promax.Process
 {
-    public class KantarController : VirtualPLCObject, IKantar, IVariableOwner, ICommander
+    public class BiriktirmeBunkeriController : VirtualPLCObject, IKantar, IVariableOwner, ICommander
     {
         public VirtualPLCProperty MalzemeAlındıProperty { get; private set; }
         public VirtualPLCProperty MalzemeBoşaltıldıProperty { get; private set; }
         public VirtualPLCProperty MalzemeBoşaltSenaryoProperty { get; private set; }
+        public VirtualPLCProperty MalzemeAlSenaryoProperty { get; private set; }
         public VirtualPLCProperty EjectedInfoProperty { get; private set; }
         public VirtualPLCProperty İstenenPeriyotProperty { get; private set; }
         public VirtualPLCProperty MalzemeAlTamamlananPeriyotProperty { get; private set; }
@@ -23,9 +20,12 @@ namespace Promax.Process
         private readonly int _boşaltıldıİzleSenaryo = 1;
         private readonly int _boşaltıldıResetleSenaryo = 2;
         private readonly int _boşaltıldıResetKontrolSenaryo = 3;
-        private int MalzemeBoşaltSenaryo { get => (int)GetValue(MalzemeBoşaltSenaryoProperty); set => SetValue(MalzemeBoşaltSenaryoProperty, value); }
+        private readonly int _malzemeHazırBekleSenaryo = 0;
+        private readonly int _kantarBoşaltSenaryo = 1;
 
-        public List<IMalzemeBoşalt> Silolar { get; set; } = new List<IMalzemeBoşalt>();
+        private int MalzemeBoşaltSenaryo { get => (int)GetValue(MalzemeBoşaltSenaryoProperty); set => SetValue(MalzemeBoşaltSenaryoProperty, value); }
+        private int MalzemeAlSenaryo { get => (int)GetValue(MalzemeAlSenaryoProperty); set => SetValue(MalzemeAlSenaryoProperty, value); }
+
         public bool MalzemeAlındı { get => (bool)GetValue(MalzemeAlındıProperty); private set => SetValue(MalzemeAlındıProperty, value); }
         public bool MalzemeBoşaltıldı { get => (bool)GetValue(MalzemeBoşaltıldıProperty); private set => SetValue(MalzemeBoşaltıldıProperty, value); }
         public bool MalzemeBoşaltılıyor { get => MalzemeBoşaltSenaryo == _boşaltıldıİzleSenaryo; }
@@ -35,15 +35,17 @@ namespace Promax.Process
         public int MalzemeBoşaltTamamlananPeriyot { get => (int)GetValue(MalzemeBoşaltTamamlananPeriyotProperty); private set => SetValue(MalzemeBoşaltTamamlananPeriyotProperty, value); }
         public bool MalzemeAlPeriyotTamamlandı => MalzemeAlTamamlananPeriyot >= İstenenPeriyot;
         public bool MalzemeBoşaltPeriyotTamamlandı => MalzemeBoşaltTamamlananPeriyot >= İstenenPeriyot;
+        public bool MalzemeHazır { get; set; }
+        public IMalzemeBoşalt MalzemeBoşaltan { get; set; }
 
-
-        public KantarController(VirtualController controller, string variableOwnerName, string commanderName) : base(controller)
+        public BiriktirmeBunkeriController(VirtualController controller, string variableOwnerName, string commanderName) : base(controller)
         {
             VariableOwnerName = variableOwnerName;
             CommanderName = commanderName;
             MalzemeAlındıProperty = VirtualPLCProperty.Register(nameof(MalzemeAlındı), typeof(bool), this, false, true, false);
             MalzemeBoşaltıldıProperty = VirtualPLCProperty.Register(nameof(MalzemeBoşaltıldı), typeof(bool), this, false, true, false);
             MalzemeBoşaltSenaryoProperty = VirtualPLCProperty.Register(nameof(MalzemeBoşaltSenaryo), typeof(int), this, false, true, false);
+            MalzemeAlSenaryoProperty = VirtualPLCProperty.Register(nameof(MalzemeAlSenaryo), typeof(int), this, false, true, false);
             EjectedInfoProperty = VirtualPLCProperty.Register(nameof(EjectedInfo), typeof(bool), this, true, true, false);
             İstenenPeriyotProperty = VirtualPLCProperty.Register(nameof(İstenenPeriyot), typeof(int), this, false, true, false);
             MalzemeAlTamamlananPeriyotProperty = VirtualPLCProperty.Register(nameof(MalzemeAlTamamlananPeriyot), typeof(int), this, false, true, false);
@@ -58,29 +60,26 @@ namespace Promax.Process
                 return;
             if (MalzemeAlındı)
                 return;
-            bool _alındı = true;
-            foreach (var silo in Silolar)
+            if(MalzemeAlSenaryo == _malzemeHazırBekleSenaryo)
             {
-                if (!silo.MalzemeBoşaltıldı)
-                {
-                    _alındı = false;
-                    silo.MalzemeBoşalt();
-                    break;
-                }
+                if (MalzemeHazır)
+                    MalzemeAlSenaryo = _kantarBoşaltSenaryo;
             }
-            if (_alındı)
+            else if (MalzemeAlSenaryo == _kantarBoşaltSenaryo)
             {
-                MalzemeAlındı = true;
-                MalzemeAlTamamlananPeriyot++;
+                if (!MalzemeBoşaltan.MalzemeBoşaltıldı)
+                    MalzemeBoşaltan.MalzemeBoşalt();
+                else
+                {
+                    MalzemeAlındı = true;
+                    MalzemeAlTamamlananPeriyot++;
+                }
             }
         }
 
         public void ResetMalzemeAl()
         {
-            foreach (var silo in Silolar)
-            {
-                silo.ResetMalzemeBoşalt();
-            }
+            MalzemeBoşaltan.ResetMalzemeBoşalt();
             MalzemeAlındı = false;
         }
 
@@ -90,12 +89,12 @@ namespace Promax.Process
                 return;
             if (MalzemeBoşaltıldı)
                 return;
-            if(MalzemeBoşaltSenaryo == _boşaltKomutuSenaryo)
+            if (MalzemeBoşaltSenaryo == _boşaltKomutuSenaryo)
             {
                 InvokeCommand(CommandNames.EjectCommand);
                 MalzemeBoşaltSenaryo = _boşaltıldıİzleSenaryo;
             }
-            else if(MalzemeBoşaltSenaryo == _boşaltıldıİzleSenaryo)
+            else if (MalzemeBoşaltSenaryo == _boşaltıldıİzleSenaryo)
             {
                 if (EjectedInfo)
                     MalzemeBoşaltSenaryo = _boşaltıldıResetleSenaryo;

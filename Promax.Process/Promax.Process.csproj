@@ -41,13 +41,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BiriktirmeBunkeriController.cs" />
     <Compile Include="ConcreteController.cs" />
+    <Compile Include="IKantar.cs" />
     <Compile Include="IKarıştır.cs" />
     <Compile Include="IMalzemeAl.cs" />
     <Compile Include="IMalzemeBoşalt.cs" />
     <Compile Include="KantarController.cs" />
+    <Compile Include="MikserController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SiloController.cs" />
+    <Compile Include="TransferBandıController.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Extensions\Extensions.csproj">
