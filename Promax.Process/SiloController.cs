@@ -15,12 +15,17 @@ namespace Promax.Process
     /// </summary>
     public class SiloController : VirtualPLCObject, IMalzemeBoşalt, IVariableOwner, ICommander
     {
+        private MyBinding _binding = new MyBinding();
+        private StockController _stockController;
         #region VirutalPLCProperty'ler
         public VirtualPLCProperty MalzemeBoşaltıldıProperty { get; private set; }
         public VirtualPLCProperty MalzemeBoşaltSenaryoProperty { get; private set; }
         public VirtualPLCProperty EjectedInfoProperty { get; private set; }
         public VirtualPLCProperty SaveBatchedProperty { get; private set; }
         public VirtualPLCProperty İstenenProperty { get; private set; }
+        public VirtualPLCProperty ÖlçülenProperty { get; private set; }
+        public VirtualPLCProperty AktifProperty { get; private set; }
+        public VirtualPLCProperty PasifBoşaltıldıProperty { get; private set; }
         #endregion
         #region Senaryo adımlarını belirten değişkenler.
         private readonly int _boşaltKomutuSenaryo = 0;
@@ -58,6 +63,10 @@ namespace Promax.Process
         /// </summary>
         public bool MalzemeBoşaltıldı { get => (bool)GetValue(MalzemeBoşaltıldıProperty); private set => SetValue(MalzemeBoşaltıldıProperty, value); }
         /// <summary>
+        /// Aktif olmayan durumdayken boşalt komutu gelirse bu değişken setlenir.
+        /// </summary>
+        public bool PasifBoşaltıldı { get => (bool)GetValue(PasifBoşaltıldıProperty); private set => SetValue(PasifBoşaltıldıProperty, value); }
+        /// <summary>
         /// Malzeme boşaltımının yapılıyor olduğunu belirtir.
         /// </summary>
         public bool MalzemeBoşaltılıyor { get => MalzemeBoşaltSenaryo == _boşaltıldıİzleSenaryo; }
@@ -73,6 +82,18 @@ namespace Promax.Process
         /// Boşaltılması gereken miktar.
         /// </summary>
         public double İstenen { get => (double)GetValue(İstenenProperty); set => SetValue(İstenenProperty, value); }
+        /// <summary>
+        /// Boşaltılan miktar.
+        /// </summary>
+        public double Ölçülen { get => (double)GetValue(ÖlçülenProperty); set => MalzemeBoşaltılıyor.DoIf(x => x, x => SetValue(ÖlçülenProperty, value)); }
+        /// <summary>
+        /// Stoğunun aktif silosu olup olmadığını belirtir. Aktif değilse boşaltım yapmaz, aktiflik durumu değişirse boşalt veya iptal komutu verir.
+        /// </summary>
+        public bool Aktif { get => (bool)GetValue(AktifProperty); set => SetValue(AktifProperty, value); }
+        /// <summary>
+        /// İstenen bilgisi alınır.
+        /// </summary>
+        public StockController StockController { get => _stockController; set => _stockController = value.DoReturn(x => x.AddSiloController(this)); }
 
         public SiloController(VirtualController controller, ParameterOwnerBase parameterOwner, string nameInRecipeScope, string nameInParameterScope, string variableOwnerName, string commanderName, IVariables parameterScope, IVariables recipeScope) : base(controller)
         {
@@ -89,7 +110,27 @@ namespace Promax.Process
             EjectedInfoProperty = builder.Reset().Name(nameof(EjectedInfo)).Type(typeof(bool)).Input(true).Retain(true).Get();
             SaveBatchedProperty = builder.Reset().Name(nameof(SaveBatched)).Type(typeof(bool)).Input(true).Retain(true).Get();
             İstenenProperty = builder.Reset().Name(nameof(İstenen)).Type(typeof(double)).Retain(true).Output(true).Get();
+            ÖlçülenProperty = builder.Reset().Name(nameof(Ölçülen)).Type(typeof(double)).Retain(true).Output(true).Get();
+            AktifProperty = builder.Reset().Name(nameof(Aktif)).Type(typeof(bool)).Get();
+            PasifBoşaltıldıProperty = builder.Reset().Name(nameof(PasifBoşaltıldı)).Type(typeof(bool)).Retain(true).Get();
             ParameterOwner.Parameters.ForEach(x => x.PropertyChanged += ParameterPropertyChanged);
+            InitVariables();
+            InitCommands();
+            _binding.CreateBinding().Behaviour(MyBindingBehaviour.Invoke).Source(this).SourceProperty(nameof(Aktif)).WhenSourcePropertyChanged(() =>
+            {
+                if (PasifBoşaltıldı && Aktif)
+                {
+                    PasifBoşaltıldı = false;
+                    MalzemeBoşaltıldı = false;
+                }
+                if (MalzemeBoşaltılıyor)
+                {
+                    if (Aktif)
+                        BoşaltKomutuGönder();
+                    else
+                        İptalKomutuGönder();
+                }
+            });
         }
         /// <summary>
         /// Parametre değeri değişmesi durumunda, malzeme boşaltımı yapılıyorsa değer PLC'ye yazılır.
@@ -112,6 +153,21 @@ namespace Promax.Process
                 return;
             if (MalzemeBoşaltSenaryo == _boşaltKomutuSenaryo)
             {
+                //Aktif değilse PasifBoşaltıldı ve MalzemeBoşaltıldı setlenir, geri döner.
+                if (!Aktif)
+                {
+                    PasifBoşaltıldı = true;
+                    MalzemeBoşaltıldı = true;
+                    return;
+                }
+                //StockController yok ise MalzemeBoşaltıldı setlenir, geri döner.
+                if(StockController == null)
+                {
+                    MalzemeBoşaltıldı = true;
+                    return;
+                }
+                //StockController'ın kalan miktarı istenen miktar olarak alınır.
+                İstenen = StockController.Kalan;
                 //İstenen miktar <= 0 ise boşaltıldı setlenir ve geri döner.
                 if (İstenen <= 0)
                 {
@@ -123,7 +179,7 @@ namespace Promax.Process
                 //Parametreler yazılır.
                 WriteParameters();
                 //Boşalt komutu verilir.
-                InvokeCommand(CommandNames.EjectCommand);
+                BoşaltKomutuGönder();
                 //Bir sonraki senaryo adımına geçilir.
                 MalzemeBoşaltSenaryo = _boşaltıldıİzleSenaryo;
             }
@@ -152,7 +208,11 @@ namespace Promax.Process
             else if (MalzemeBoşaltSenaryo == _batchKaydedildiİzleSenaryo)
             {
                 if (!SaveBatched)
+                {
                     MalzemeBoşaltıldı = true;
+                    //StockController'ın ToplamÖlçüleni artırılır.
+                    StockController.ToplamÖlçülen += Ölçülen;
+                }
             }
         }
         /// <summary>
@@ -160,6 +220,7 @@ namespace Promax.Process
         /// </summary>
         public void ResetMalzemeBoşalt()
         {
+            PasifBoşaltıldı = false;
             MalzemeBoşaltSenaryo = 0;
             MalzemeBoşaltıldı = false;
         }
@@ -177,6 +238,20 @@ namespace Promax.Process
         private void WriteParameter(IParameter parameter)
         {
             ParameterScope.Write(NameInParameterScope, parameter.Code, parameter.Value);
+        }
+        /// <summary>
+        /// Boşalt komutu gönderir.
+        /// </summary>
+        private void BoşaltKomutuGönder()
+        {
+            InvokeCommand(CommandNames.EjectCommand, new object[] { 1 });
+        }
+        /// <summary>
+        /// İptal komutu gönderir.
+        /// </summary>
+        private void İptalKomutuGönder()
+        {
+            InvokeCommand(CommandNames.EjectCommand, new object[] { 2 });
         }
         #region IVariableOwner
         private ConverterContainer _variableConverters = new ConverterContainer();
@@ -197,6 +272,7 @@ namespace Promax.Process
         }
         private void InitVariables()
         {
+            _variables.Add(nameof(Ölçülen));
             _variables.Add(nameof(EjectedInfo));
         }
         #endregion

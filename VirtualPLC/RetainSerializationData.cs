@@ -13,5 +13,9 @@
         /// Değer
         /// </summary>
         public object Value { get; set; }
+        /// <summary>
+        /// Geçici Değer
+        /// </summary>
+        public object TemporaryValue { get; set; }
     }
 }

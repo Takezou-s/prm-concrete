@@ -34,7 +34,11 @@ namespace Utility.Binding
         public MyBindingType BindingType { get; private set; } = MyBindingType.Automatic;
         public void RemoveBindingOfSource(object source)
         {
-            _handlers.Where(x => x.SourceObject.IsEqual(source)).ToList().ForEach(x => _handlers.Remove(x));
+            _handlers.Where(x => x.SourceObject.IsEqual(source)).ToList().ForEach(x =>
+            {
+                x.Deactivate();
+                _handlers.Remove(x);
+            });
         }
         
         public BindingHandler CreateBinding()

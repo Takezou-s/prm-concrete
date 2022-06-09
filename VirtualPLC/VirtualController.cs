@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Dynamic;
 using System.IO;
 using Utility.Binding;
 
@@ -8,6 +9,10 @@ namespace VirtualPLC
 {
     public class VirtualController : IVirtualPLCPropertyOwner
     {
+        /// <summary>
+        /// Dinamik olarak oluşturulan objeler için kullanılır.
+        /// </summary>
+        protected dynamic RuntimeObjects { get; set; } = new ExpandoObject();
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName)
@@ -26,7 +31,7 @@ namespace VirtualPLC
         /// <summary>
         /// Retain olarak işaretlenmiş VirtualPLCProperty'lerin tam yolunu tutan liste.
         /// </summary>
-        protected List<string> RetainPaths = new List<string>();
+        protected List<string> RetainPaths { get; } = new List<string>();
         /// <summary>
         /// VirtualPLCObjeleri
         /// </summary>
@@ -116,14 +121,14 @@ namespace VirtualPLC
         /// </summary>
         private void FindRetainVariables()
         {
-            ListObjectsProperties(this, string.Empty);
+            ListObjectsProperties(this, string.Empty, RetainPaths);
         }
         /// <summary>
         /// Controller içinde bulunan tüm VirtualPLCProperty'lere erişip, retain olanların tam yolunu bulur.
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="parentPath"></param>
-        private void ListObjectsProperties(object obj, string parentPath)
+        private void ListObjectsProperties(object obj, string parentPath, List<string> list)
         {
             if(obj != null && !(obj is VirtualPLCProperty))
             {
@@ -139,13 +144,13 @@ namespace VirtualPLC
                             {
                                 string path = !string.IsNullOrEmpty(parentPath) && !string.IsNullOrWhiteSpace(parentPath) ? parentPath.Trim() + "." : string.Empty;
                                 path += property.Name;
-                                RetainPaths.Add(path);
+                                list.Add(path);
                             }
                             else if (propValue is IVirtualPLCPropertyOwner)
                             {
                                 string path = !string.IsNullOrEmpty(parentPath) && !string.IsNullOrWhiteSpace(parentPath) ? parentPath.Trim() + "." : string.Empty;
                                 path += property.Name;
-                                ListObjectsProperties(propValue, path);
+                                ListObjectsProperties(propValue, path, list);
                             } 
                         }
                     }
@@ -170,7 +175,8 @@ namespace VirtualPLC
                 try
                 {
                     var value = ReflectionController.GetPropertyValue(this, item+".Value");
-                    var data = new RetainSerializationData() { Path = item, Value = value };
+                    var temporaryValue = ReflectionController.GetPropertyValue(this, item + ".TemporaryValue");
+                    var data = new RetainSerializationData() { Path = item, Value = value, TemporaryValue = temporaryValue };
                     datas.Add(JsonConvert.SerializeObject(data, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All }));
                 }
                 catch
@@ -193,7 +199,8 @@ namespace VirtualPLC
                     try
                     {
                         var data = JsonConvert.DeserializeObject<RetainSerializationData>(item, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All });
-                        ReflectionController.SetPropertyValue(this, data.Path+".Value", data.Value);
+                        ReflectionController.SetPropertyValue(this, data.Path + ".Value", data.Value);
+                        ReflectionController.SetPropertyValue(this, data.Path + ".TemporaryValue", data.TemporaryValue);
                     }
                     catch
                     {
@@ -205,6 +212,10 @@ namespace VirtualPLC
             {
                 ;
             }
+        }
+        protected virtual void AddRuntimeObject(string name, object obj)
+        {
+
         }
     }
 }

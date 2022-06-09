@@ -1,4 +1,5 @@
-﻿using Promax.Core;
+﻿using Extensions;
+using Promax.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,9 +35,21 @@ namespace Promax.Process
         /// </summary>
         private int MalzemeBoşaltSenaryo { get => (int)GetValue(MalzemeBoşaltSenaryoProperty); set => SetValue(MalzemeBoşaltSenaryoProperty, value); }
         /// <summary>
+        /// Siloların StockController'ları.
+        /// </summary>
+        private List<StockController> Stocks
+        {
+            get
+            {
+                var stocks = new List<StockController>();
+                Silolar.ForEach(x => x.StockController.DoIf(y => !stocks.Contains(y), y => stocks.Add(y)));
+                return stocks;
+            }
+        }
+        /// <summary>
         /// Siloların bulunduğu liste.
         /// </summary>
-        public List<IMalzemeBoşalt> Silolar { get; set; } = new List<IMalzemeBoşalt>();
+        public List<SiloController> Silolar { get; set; } = new List<SiloController>();
         /// <summary>
         /// Malzeme alımının tamamlandığını belirtir.
         /// </summary>
@@ -117,6 +130,10 @@ namespace Promax.Process
             {
                 MalzemeAlındı = true;
                 MalzemeAlTamamlananPeriyot++;
+                if(!MalzemeAlPeriyotTamamlandı)
+                {
+                    Stocks.ForEach(x => x.YeniPeriyotHesapla(MalzemeAlTamamlananPeriyot, İstenenPeriyot));
+                }
             }
         }
         /// <summary>
