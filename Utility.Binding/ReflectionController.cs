@@ -2,6 +2,8 @@
 using System.ComponentModel;
 using System.Reflection;
 using System.Globalization;
+using System.Dynamic;
+using System.Collections.Generic;
 
 namespace Utility.Binding
 {
@@ -18,14 +20,22 @@ namespace Utility.Binding
                     newProp += split[i] + ".";
                 }
                 newProp = newProp.Remove(newProp.Length - 1, 1);
-                Type type = Instance.GetType();
-                PropertyInfo prp = type.GetProperty(split[0], BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-                FieldInfo prp1 = type.GetField(split[0], BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
                 object newobj = null;
-                if (prp != null)
-                    newobj = prp.GetValue(Instance);
-                else if (prp1 != null)
-                    newobj = prp1.GetValue(Instance);
+                if(Instance is ExpandoObject)
+                {
+                    var dynoInstance = (IDictionary<string, object>)Instance;
+                    newobj = dynoInstance[split[0]];
+                }
+                else
+                {
+                    Type type = Instance.GetType();
+                    PropertyInfo prp = type.GetProperty(split[0], BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                    FieldInfo prp1 = type.GetField(split[0], BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                    if (prp != null)
+                        newobj = prp.GetValue(Instance);
+                    else if (prp1 != null)
+                        newobj = prp1.GetValue(Instance); 
+                }
                 if (newobj != null)
                     SetPropertyValue(newobj, newProp, Value);
             }
@@ -51,14 +61,22 @@ namespace Utility.Binding
                     newProp += split[i] + ".";
                 }
                 newProp = newProp.Remove(newProp.Length - 1, 1);
-                Type type = Instance.GetType();
-                PropertyInfo prp = type.GetProperty(split[0], BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-                FieldInfo prp1 = type.GetField(split[0], BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
                 object newobj = null;
-                if (prp != null)
-                    newobj = prp.GetValue(Instance);
-                else if (prp1 != null)
-                    newobj = prp1.GetValue(Instance);
+                if(Instance is ExpandoObject)
+                {
+                    var dynoInstance = (IDictionary<string, object>)Instance;
+                    newobj = dynoInstance[split[0]];
+                }
+                else
+                {
+                    Type type = Instance.GetType();
+                    PropertyInfo prp = type.GetProperty(split[0], BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                    FieldInfo prp1 = type.GetField(split[0], BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                    if (prp != null)
+                        newobj = prp.GetValue(Instance);
+                    else if (prp1 != null)
+                        newobj = prp1.GetValue(Instance); 
+                }
                 if (newobj != null)
                     SetPropertyValueInvariantCulture(newobj, newProp, Value);
             }
@@ -84,14 +102,22 @@ namespace Utility.Binding
                     newProp += split[i] + ".";
                 }
                 newProp = newProp.Remove(newProp.Length - 1, 1);
-                Type type = Instance.GetType();
-                PropertyInfo prp = type.GetProperty(split[0], BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-                FieldInfo prp1 = type.GetField(split[0], BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
                 object newobj = null;
-                if (prp != null)
-                    newobj = prp.GetValue(Instance);
-                else if (prp1 != null)
-                    newobj = prp1.GetValue(Instance);
+                if(Instance is ExpandoObject)
+                {
+                    var dynoInstance = (IDictionary<string, object>)Instance;
+                    newobj = dynoInstance[split[0]];
+                }
+                else
+                {
+                    Type type = Instance.GetType();
+                    PropertyInfo prp = type.GetProperty(split[0], BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                    FieldInfo prp1 = type.GetField(split[0], BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                    if (prp != null)
+                        newobj = prp.GetValue(Instance);
+                    else if (prp1 != null)
+                        newobj = prp1.GetValue(Instance); 
+                }
                 if (newobj != null)
                     SetPropertyValueInvariantCultureConverted(newobj, newProp, Value);
             }
@@ -126,14 +152,22 @@ namespace Utility.Binding
                         newProp += split[i] + ".";
                     }
                     newProp = newProp.Remove(newProp.Length - 1, 1);
-                    Type type = Instance.GetType();
-                    PropertyInfo prp = type.GetProperty(split[0], BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-                    FieldInfo prp1 = type.GetField(split[0], BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
                     object newobj = null;
-                    if (prp != null)
-                        newobj = prp.GetValue(Instance);
-                    else if (prp1 != null)
-                        newobj = prp1.GetValue(Instance);
+                    if (Instance is ExpandoObject)
+                    {
+                        var dynoInstance = (IDictionary<string, object>)Instance;
+                        newobj = dynoInstance[split[0]];
+                    }
+                    else
+                    {
+                        Type type = Instance.GetType();
+                        PropertyInfo prp = type.GetProperty(split[0], BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                        FieldInfo prp1 = type.GetField(split[0], BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                        if (prp != null)
+                            newobj = prp.GetValue(Instance);
+                        else if (prp1 != null)
+                            newobj = prp1.GetValue(Instance);
+                    }
                     if (newobj != null)
                         Value = GetPropertyValue(newobj, newProp);
                 }
@@ -166,14 +200,22 @@ namespace Utility.Binding
                     newProp += split[i] + ".";
                 }
                 newProp = newProp.Remove(newProp.Length - 1, 1);
-                Type type = Instance.GetType();
-                PropertyInfo prp = type.GetProperty(split[0], BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-                FieldInfo prp1 = type.GetField(split[0], BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
                 object newobj = null;
-                if (prp != null)
-                    newobj = prp.GetValue(Instance);
-                else if (prp1 != null)
-                    newobj = prp1.GetValue(Instance);
+                if(Instance is ExpandoObject)
+                {
+                    var dynoInstance = (IDictionary<string, object>)Instance;
+                    newobj = dynoInstance[split[0]];
+                }
+                else
+                {
+                    Type type = Instance.GetType();
+                    PropertyInfo prp = type.GetProperty(split[0], BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                    FieldInfo prp1 = type.GetField(split[0], BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                    if (prp != null)
+                        newobj = prp.GetValue(Instance);
+                    else if (prp1 != null)
+                        newobj = prp1.GetValue(Instance); 
+                }
                 if (newobj != null)
                     Value = GetPropertyValueConverted(newobj, newProp);
             }
@@ -208,14 +250,22 @@ namespace Utility.Binding
                     newProperty += split[i] + ".";
                 }
                 newProperty = newProperty.Remove(newProperty.Length - 1, 1);
-                Type type = Instance.GetType();
-                PropertyInfo property = type.GetProperty(split[0], BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-                FieldInfo field = type.GetField(split[0], BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
                 object newInstance = null;
-                if (property != null)
-                    newInstance = property.GetValue(Instance);
-                else if (field != null)
-                    newInstance = field.GetValue(Instance);
+                if(Instance is ExpandoObject)
+                {
+                    var dynoInstance = (IDictionary<string, object>)Instance;
+                    newInstance = dynoInstance[split[0]];
+                }
+                else
+                {
+                    Type type = Instance.GetType();
+                    PropertyInfo property = type.GetProperty(split[0], BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                    FieldInfo field = type.GetField(split[0], BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                    if (property != null)
+                        newInstance = property.GetValue(Instance);
+                    else if (field != null)
+                        newInstance = field.GetValue(Instance); 
+                }
                 if (newInstance != null)
                     value = GetProperty(newInstance, newProperty);
             }

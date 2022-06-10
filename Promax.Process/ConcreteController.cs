@@ -1,4 +1,6 @@
-﻿using Promax.Core;
+﻿using Promax.Business;
+using Promax.Core;
+using Promax.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,12 +50,12 @@ namespace Promax.Process
     {
         private List<IMalzemeAl> _malzemeAlanlar = new List<IMalzemeAl>();
         private List<IMalzemeBoşalt> _malzemeBoşaltanlar = new List<IMalzemeBoşalt>();
+        private List<StockController> _stockControllers = new List<StockController>();
+        private Container<Stock> _stockContainer;
 
         public IEnumerable<IMalzemeAl> MalzemeAlanlar => _malzemeAlanlar;
         public IEnumerable<IMalzemeBoşalt> MalzemeBoşaltanlar => _malzemeBoşaltanlar;
         public IKarıştır Mikser { get; private set; }
-        public ÜretimVariables ÜretimVariables { get; set; }
-        public SiloController SiloController { get; set; }
 
         public bool TümMalzemelerAlındı { get; private set; }
         public bool TümMalzemelerBoşaltıldı { get; private set; }
@@ -65,25 +67,41 @@ namespace Promax.Process
         public int Periyot { get; private set; }
         public int İstenenPeriyot { get; private set; }
 
-        public ConcreteController(string path) : base(path)
+        public ConcreteController(string path, Container<Stock> stockContainer) : this(true, path, stockContainer)
         {
         }
 
-        public ConcreteController(bool init, string path) : base(init, path)
+        public ConcreteController(bool init, string path, Container<Stock> stockContainer) : base(init, path)
         {
+            _stockContainer = stockContainer;
         }
 
         protected override void InitImp()
         {
-            ÜretimVariables = new ÜretimVariables(this);
-            SiloController = new SiloController(this, new ParameterOwner("a1","a1"), null, null, null, null, null, null);
+            //ÜretimVariables = new ÜretimVariables(this);
+            foreach (var stock in _stockContainer.Objects)
+            {
+                if (stock == null)
+                    continue;
+                var stockController = new StockController(this);
+                stockController.Stock = stock;
+                AddRuntimeObject("StockController" + stock.StockId, stockController);
+                _stockControllers.Add(stockController);
+            }
         }
-
+        int number;
+        bool a;
         protected override void Process()
         {
             Thread.Sleep(2500);
-            ÜretimVariables.Periyot++;
-
+            //ÜretimVariables.Periyot++;
+            if(a)
+            {
+                number++;
+                var abc = new StockController(this);
+                AddRuntimeObject("Stock" + number, abc);
+                a = false;
+            }
             //if (Periyot >= İstenenPeriyot)
             //    -Bitti -
             //MalzemeAl();
