@@ -241,6 +241,7 @@ namespace Promax.UI
             var StockRetentiveRepo = new RetentiveStockRepository(StockRepo, Mapper);
             StockRetentiveRepo.TriggerPeformer.CreateTrigger().After().Delete().Action((x, y) =>
             {
+                x.ClearSilos();
                 SiloManager.GetList(z => z.StockId == x.StockId)?.ForEach(z => z.Do(t => t.Stock = null));
                 RecipeContentManager.GetList(z => z.StockId == x.StockId)?.ForEach(z =>
                     z.Do(t =>

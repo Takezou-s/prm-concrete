@@ -9,6 +9,8 @@ namespace Promax.Entities
         private string _enabled = "false";
         private Stock stock;
 
+        public string UniqueName { get => SiloName +WegId + SiloNo; }
+
         public int SiloId { get; set; }
         public int WegId { get; set; }
         public string SiloName { get; set; }

@@ -17,7 +17,7 @@ namespace Promax.Process
     {
         private MyBinding _binding = new MyBinding();
         private StockController _stockController;
-        #region VirutalPLCProperty'ler
+        #region VirtualPLCProperty'ler
         public VirtualPLCProperty MalzemeBoşaltıldıProperty { get; private set; }
         public VirtualPLCProperty MalzemeBoşaltSenaryoProperty { get; private set; }
         public VirtualPLCProperty EjectedInfoProperty { get; private set; }
@@ -34,6 +34,7 @@ namespace Promax.Process
         private readonly int _boşaltıldıResetKontrolSenaryo = 3;
         private readonly int _batchKaydedildiİzleSenaryo = 4;
         #endregion
+        public string UniqueName { get; private set; }
         /// <summary>
         /// Malzeme boşaltım senaryosunun adımını tutan değişken.
         /// </summary>
@@ -94,9 +95,19 @@ namespace Promax.Process
         /// İstenen bilgisi alınır.
         /// </summary>
         public StockController StockController { get => _stockController; set => _stockController = value.DoReturn(x => x.AddSiloController(this)); }
-
-        public SiloController(VirtualController controller, ParameterOwnerBase parameterOwner, string nameInRecipeScope, string nameInParameterScope, string variableOwnerName, string commanderName, IVariables parameterScope, IVariables recipeScope) : base(controller)
+        public SiloController(VirtualController controller, string uniqueName, SiloInitializer siloInitializer) : this(controller, uniqueName, siloInitializer.GetSiloControllerDependencies(uniqueName))
         {
+
+        }
+        private SiloController(VirtualController controller, string uniqueName, SiloControllerDependencies a) : 
+            this(controller, uniqueName, a.ParameterOwner, a.NameInRecipeScope, a.NameInParameterScope, a.VariableOwnerName, a.CommanderName, a.ParameterScope, a.RecipeScope)
+        {
+
+        }
+
+        public SiloController(VirtualController controller, string uniqueName, ParameterOwnerBase parameterOwner, string nameInRecipeScope, string nameInParameterScope, string variableOwnerName, string commanderName, IVariables parameterScope, IVariables recipeScope) : base(controller)
+        {
+            UniqueName = uniqueName;
             ParameterOwner = parameterOwner;
             ParameterScope = parameterScope;
             RecipeScope = recipeScope;
