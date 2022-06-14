@@ -26,6 +26,7 @@ namespace Promax.Process
         public VirtualPLCProperty ÖlçülenProperty { get; private set; }
         public VirtualPLCProperty AktifProperty { get; private set; }
         public VirtualPLCProperty PasifBoşaltıldıProperty { get; private set; }
+        public VirtualPLCProperty PeriyotProperty { get; private set; }
         #endregion
         #region Senaryo adımlarını belirten değişkenler.
         private readonly int _boşaltKomutuSenaryo = 0;
@@ -92,6 +93,10 @@ namespace Promax.Process
         /// </summary>
         public bool Aktif { get => (bool)GetValue(AktifProperty); set => SetValue(AktifProperty, value); }
         /// <summary>
+        /// Periyot
+        /// </summary>
+        public int Periyot { get => (int)GetValue(PeriyotProperty); set => SetValue(PeriyotProperty, value); }
+        /// <summary>
         /// İstenen bilgisi alınır.
         /// </summary>
         public StockController StockController { get => _stockController; set => _stockController = value.DoReturn(x => x.AddSiloController(this)); }
@@ -124,6 +129,7 @@ namespace Promax.Process
             ÖlçülenProperty = builder.Reset().Name(nameof(Ölçülen)).Type(typeof(double)).Retain(true).Output(true).Get();
             AktifProperty = builder.Reset().Name(nameof(Aktif)).Type(typeof(bool)).Get();
             PasifBoşaltıldıProperty = builder.Reset().Name(nameof(PasifBoşaltıldı)).Type(typeof(bool)).Retain(true).Get();
+            PeriyotProperty = builder.Reset().Name(nameof(Periyot)).Type(typeof(int)).Retain(true).Get();
             ParameterOwner.Parameters.ForEach(x => x.PropertyChanged += ParameterPropertyChanged);
             InitVariables();
             InitCommands();
@@ -211,6 +217,7 @@ namespace Promax.Process
             {
                 if (!EjectedInfo)
                 {
+                    Periyot++;
                     SaveBatched = true;
                     MalzemeBoşaltSenaryo = _batchKaydedildiİzleSenaryo;
                 }

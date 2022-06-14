@@ -13,7 +13,7 @@ namespace Promax.Process
         public VirtualPLCProperty MalzemeBoşaltSenaryoProperty { get; private set; }
         public VirtualPLCProperty MalzemeAlSenaryoProperty { get; private set; }
         public VirtualPLCProperty EjectedInfoProperty { get; private set; }
-        public VirtualPLCProperty İstenenPeriyotProperty { get; private set; }
+        public VirtualPLCProperty İstenenPeriyotProperty { get; set; }
         public VirtualPLCProperty MalzemeAlTamamlananPeriyotProperty { get; private set; }
         public VirtualPLCProperty MalzemeBoşaltTamamlananPeriyotProperty { get; private set; }
         #endregion
@@ -78,7 +78,7 @@ namespace Promax.Process
         /// </summary>
         public IMalzemeBoşalt MalzemeBoşaltan { get; set; }
 
-        public BiriktirmeBunkeriController(VirtualController controller, string variableOwnerName, string commanderName) : base(controller)
+        public BiriktirmeBunkeriController(VirtualController controller, string variableOwnerName, string commanderName, VirtualPLCProperty istenenPeriyotProperty) : base(controller)
         {
             VariableOwnerName = variableOwnerName;
             CommanderName = commanderName;
@@ -88,7 +88,7 @@ namespace Promax.Process
             MalzemeBoşaltSenaryoProperty = builder.Reset().Name(nameof(MalzemeBoşaltSenaryo)).Type(typeof(int)).Retain(true).Get();
             MalzemeAlSenaryoProperty = builder.Reset().Name(nameof(MalzemeAlSenaryo)).Type(typeof(int)).Retain(true).Get();
             EjectedInfoProperty = builder.Reset().Name(nameof(EjectedInfo)).Type(typeof(bool)).Input(true).Retain(true).Get();
-            İstenenPeriyotProperty = builder.Reset().Name(nameof(İstenenPeriyot)).Type(typeof(int)).Retain(true).Get();
+            İstenenPeriyotProperty = istenenPeriyotProperty;
             MalzemeAlTamamlananPeriyotProperty = builder.Reset().Name(nameof(MalzemeAlTamamlananPeriyot)).Type(typeof(int)).Retain(true).Get();
             MalzemeBoşaltTamamlananPeriyotProperty = builder.Reset().Name(nameof(MalzemeBoşaltTamamlananPeriyot)).Type(typeof(int)).Retain(true).Get();
             InitVariables();

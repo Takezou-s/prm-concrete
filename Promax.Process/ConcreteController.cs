@@ -13,7 +13,7 @@ using VirtualPLC;
 
 namespace Promax.Process
 {
-    public class ÜretimVariables : VirtualPLCObject
+    public class ProdControlVariables : VirtualPLCObject
     {
         public VirtualPLCProperty TümMalzemelerAlındıProperty { get; private set; }
         public VirtualPLCProperty TümMalzemelerBoşaltıldıProperty { get; private set; }
@@ -22,8 +22,11 @@ namespace Promax.Process
         public VirtualPLCProperty KarıştırBaşlatıldıProperty { get; private set; }
         public VirtualPLCProperty KarıştırProperty { get; private set; }
         public VirtualPLCProperty BoşaltımBaşlatıldıProperty { get; private set; }
-        public VirtualPLCProperty PeriyotProperty { get; set; }
-        public VirtualPLCProperty İstenenPeriyotProperty { get; set; }
+        public VirtualPLCProperty PeriyotProperty { get; private set; }
+        public VirtualPLCProperty İstenenPeriyotProperty { get; private set; }
+        public VirtualPLCProperty ProductProperty { get; private set; }
+        public VirtualPLCProperty SenaryoProperty { get; private set; }
+        public VirtualPLCProperty AltSenaryoProperty { get; private set; }
 
         public bool TümMalzemelerAlındı { get => (bool)GetValue(TümMalzemelerAlındıProperty); set => SetValue(TümMalzemelerAlındıProperty, value); }
         public bool TümMalzemelerBoşaltıldı { get => (bool)GetValue(TümMalzemelerBoşaltıldıProperty); set => SetValue(TümMalzemelerBoşaltıldıProperty, value); }
@@ -34,8 +37,11 @@ namespace Promax.Process
         public bool BoşaltımBaşlatıldı { get => (bool)GetValue(BoşaltımBaşlatıldıProperty); set => SetValue(BoşaltımBaşlatıldıProperty, value); }
         public int Periyot { get => (int)GetValue(PeriyotProperty); set => SetValue(PeriyotProperty, value); }
         public int İstenenPeriyot { get => (int)GetValue(İstenenPeriyotProperty); set => SetValue(İstenenPeriyotProperty, value); }
+        public Product Product { get => (Product)GetValue(ProductProperty); set => SetValue(ProductProperty, value); }
+        public int Senaryo { get => (int)GetValue(SenaryoProperty); set => SetValue(SenaryoProperty, value); }
+        public int AltSenaryo { get => (int)GetValue(AltSenaryoProperty); set => SetValue(AltSenaryoProperty, value); }
 
-        public ÜretimVariables(VirtualController controller) : base(controller)
+        public ProdControlVariables(VirtualController controller) : base(controller)
         {
             TümMalzemelerAlındıProperty = VirtualPLCProperty.Register(nameof(TümMalzemelerAlındı), typeof(bool), this, false, true, false);
             TümMalzemelerBoşaltıldıProperty = VirtualPLCProperty.Register(nameof(TümMalzemelerBoşaltıldı), typeof(bool), this, false, true, false);
@@ -46,10 +52,14 @@ namespace Promax.Process
             BoşaltımBaşlatıldıProperty = VirtualPLCProperty.Register(nameof(BoşaltımBaşlatıldı), typeof(bool), this, false, true, false);
             PeriyotProperty = VirtualPLCProperty.Register(nameof(Periyot), typeof(int), this, false, true, false);
             İstenenPeriyotProperty = VirtualPLCProperty.Register(nameof(İstenenPeriyot), typeof(int), this, false, true, false);
+            ProductProperty = new VirtualPLCPropertyBuilder(this).Name(nameof(Product)).Type(typeof(Product)).Retain(true).Get();
+            SenaryoProperty = new VirtualPLCPropertyBuilder(this).Name(nameof(Senaryo)).Type(typeof(int)).Input(true).Retain(true).Get();
+            AltSenaryoProperty = new VirtualPLCPropertyBuilder(this).Name(nameof(AltSenaryo)).Type(typeof(int)).Retain(true).Get();
         }
     }
     public class ConcreteController : VirtualController
     {
+        public ProdControlVariables ProdVariables { get; set; }
         private MyBinding _binding = new MyBinding();
         private List<IMalzemeAl> _malzemeAlanlar = new List<IMalzemeAl>();
         private List<IMalzemeBoşalt> _malzemeBoşaltanlar = new List<IMalzemeBoşalt>();
@@ -57,6 +67,8 @@ namespace Promax.Process
         private Dictionary<Silo, SiloController> _siloControllers = new Dictionary<Silo, SiloController>();
         private Container<Stock> _stockContainer;
         private SiloInitializer _siloInitializer;
+        private IBatchedStockManager _batchedStockManager;
+        private IProductManager _productManager;
         #region SiloControllers
         public SiloController Agrega11 { get; private set; }
         public SiloController Agrega12 { get; private set; }
@@ -106,37 +118,120 @@ namespace Promax.Process
         public SiloController Katkı83 { get; private set; }
         public SiloController Katkı84 { get; private set; }
         #endregion
-
+        #region KantarControllers
+        public KantarController TartıBandı1 { get; private set; }
+        public KantarController TartıBandı2 { get; private set; }
+        public KantarController ÇimentoBunkeri1 { get; private set; }
+        public KantarController ÇimentoBunkeri2 { get; private set; }
+        public KantarController SuBunkeri1 { get; private set; }
+        public KantarController SuBunkeri2 { get; private set; }
+        public KantarController KatkıBunkeri1 { get; private set; }
+        public KantarController KatkıBunkeri2 { get; private set; }
+        #endregion
+        public SaveBatchController SaveBatchController { get; private set; }
         public IEnumerable<IMalzemeAl> MalzemeAlanlar => _malzemeAlanlar;
         public IEnumerable<IMalzemeBoşalt> MalzemeBoşaltanlar => _malzemeBoşaltanlar;
         public IKarıştır Mikser { get; private set; }
+        
 
-        public bool TümMalzemelerAlındı { get; private set; }
-        public bool TümMalzemelerBoşaltıldı { get; private set; }
-        public bool Karıştırıldı { get; private set; }
-        public bool Boşalt { get; private set; }
-        public bool KarıştırBaşlatıldı { get; private set; }
-        public bool Karıştır { get; private set; }
-        public bool BoşaltımBaşlatıldı { get; private set; }
-        public int Periyot { get; private set; }
-        public int İstenenPeriyot { get; private set; }
+        public bool TümMalzemelerAlındı { get => ProdVariables.TümMalzemelerAlındı; private set => ProdVariables.TümMalzemelerAlındı = value; }
+        public bool TümMalzemelerBoşaltıldı { get => ProdVariables.TümMalzemelerBoşaltıldı; private set => ProdVariables.TümMalzemelerBoşaltıldı = value; }
+        public bool Karıştırıldı { get => ProdVariables.Karıştırıldı; private set => ProdVariables.Karıştırıldı = value; }
+        public bool Boşalt { get => ProdVariables.Boşalt; private set => ProdVariables.Boşalt = value; }
+        public bool KarıştırBaşlatıldı { get => ProdVariables.KarıştırBaşlatıldı; private set => ProdVariables.KarıştırBaşlatıldı = value; }
+        public bool Karıştır { get => ProdVariables.Karıştır; private set => ProdVariables.Karıştır = value; }
+        public bool BoşaltımBaşlatıldı { get => ProdVariables.BoşaltımBaşlatıldı; private set => ProdVariables.BoşaltımBaşlatıldı = value; }
+        public int Periyot { get => ProdVariables.Periyot; private set => ProdVariables.Periyot = value; }
+        public int İstenenPeriyot { get => ProdVariables.İstenenPeriyot; private set => ProdVariables.İstenenPeriyot = value; }
+        public Product Product { get => ProdVariables.Product; private set => ProdVariables.Product = value; }
+        public int Senaryo { get => ProdVariables.Senaryo; set => ProdVariables.Senaryo = value; }
+        public int AltSenaryo { get => ProdVariables.AltSenaryo; set => ProdVariables.AltSenaryo = value; }
+        public bool ÜretimVerilebilir { get => Senaryo == 0; }
+        public User User { get; set; }
+        public ConcreteController(string path) : base(true, path)
+        {
 
-        public ConcreteController(string path, Container<Stock> stockContainer, SiloInitializer siloInitializer) : this(true, path, stockContainer, siloInitializer)
+        }
+
+        public ConcreteController(string path, Container<Stock> stockContainer, SiloInitializer siloInitializer, IBatchedStockManager batchedStockManager, IProductManager productManager) : this(true, path, stockContainer, siloInitializer, batchedStockManager, productManager)
         {
         }
 
-        public ConcreteController(bool init, string path, Container<Stock> stockContainer, SiloInitializer siloInitializer) : base(init, path)
+        public ConcreteController(bool init, string path, Container<Stock> stockContainer, SiloInitializer siloInitializer, IBatchedStockManager batchedStockManager, IProductManager productManager) : base(init, path)
         {
             _stockContainer = stockContainer;
             _siloInitializer = siloInitializer;
+            _batchedStockManager = batchedStockManager;
+            _productManager = productManager;
         }
 
         protected override void InitImp()
         {
-            //ÜretimVariables = new ÜretimVariables(this);
+            ProdVariables = new ProdControlVariables(this);
 
             InitSiloControllers();
             InitStockControllers();
+            InitKantarControllers();
+            SaveBatchController = new SaveBatchController(this, _siloControllers, _batchedStockManager);
+        }
+        private void InitKantarControllers()
+        {
+            TartıBandı1 = new KantarController(this, "Weg1", "Weg1", ProdVariables.İstenenPeriyotProperty);
+            TartıBandı2 = new KantarController(this, "Weg2", "Weg2", ProdVariables.İstenenPeriyotProperty);
+            ÇimentoBunkeri1 = new KantarController(this, "Weg3", "Weg3", ProdVariables.İstenenPeriyotProperty);
+            ÇimentoBunkeri2 = new KantarController(this, "Weg4", "Weg4", ProdVariables.İstenenPeriyotProperty);
+            SuBunkeri1 = new KantarController(this, "Weg5", "Weg5", ProdVariables.İstenenPeriyotProperty);
+            SuBunkeri2 = new KantarController(this, "Weg6", "Weg6", ProdVariables.İstenenPeriyotProperty);
+            KatkıBunkeri1 = new KantarController(this, "Weg7", "Weg7", ProdVariables.İstenenPeriyotProperty);
+            KatkıBunkeri2 = new KantarController(this, "Weg8", "Weg8", ProdVariables.İstenenPeriyotProperty);
+
+            TartıBandı1.Silolar.Add(Agrega11);
+            TartıBandı1.Silolar.Add(Agrega12);
+            TartıBandı1.Silolar.Add(Agrega13);
+            TartıBandı1.Silolar.Add(Agrega14);
+            TartıBandı1.Silolar.Add(Agrega15);
+            TartıBandı1.Silolar.Add(Agrega16);
+            TartıBandı1.Silolar.Add(Agrega17);
+            TartıBandı1.Silolar.Add(Agrega18);
+
+            TartıBandı2.Silolar.Add(Agrega21);
+            TartıBandı2.Silolar.Add(Agrega22);
+            TartıBandı2.Silolar.Add(Agrega23);
+            TartıBandı2.Silolar.Add(Agrega24);
+            TartıBandı2.Silolar.Add(Agrega25);
+            TartıBandı2.Silolar.Add(Agrega26);
+            TartıBandı2.Silolar.Add(Agrega27);
+            TartıBandı2.Silolar.Add(Agrega28);
+
+            ÇimentoBunkeri1.Silolar.Add(Çimento31);
+            ÇimentoBunkeri1.Silolar.Add(Çimento32);
+            ÇimentoBunkeri1.Silolar.Add(Çimento33);
+            ÇimentoBunkeri1.Silolar.Add(Çimento34);
+
+            ÇimentoBunkeri2.Silolar.Add(Çimento41);
+            ÇimentoBunkeri2.Silolar.Add(Çimento42);
+            ÇimentoBunkeri2.Silolar.Add(Çimento43);
+            ÇimentoBunkeri2.Silolar.Add(Çimento44);
+
+            SuBunkeri1.Silolar.Add(Su51);
+            SuBunkeri1.Silolar.Add(Su52);
+            SuBunkeri1.Silolar.Add(Su53);
+            SuBunkeri1.Silolar.Add(Su54);
+
+            SuBunkeri2.Silolar.Add(Su61);
+            SuBunkeri2.Silolar.Add(Su62);
+            SuBunkeri2.Silolar.Add(Su63);
+            SuBunkeri2.Silolar.Add(Su64);
+
+            KatkıBunkeri1.Silolar.Add(Katkı71);
+            KatkıBunkeri1.Silolar.Add(Katkı72);
+            KatkıBunkeri1.Silolar.Add(Katkı73);
+            KatkıBunkeri1.Silolar.Add(Katkı74);
+
+            KatkıBunkeri2.Silolar.Add(Katkı81);
+            KatkıBunkeri2.Silolar.Add(Katkı82);
+            KatkıBunkeri2.Silolar.Add(Katkı83);
+            KatkıBunkeri2.Silolar.Add(Katkı84);
         }
         #region SiloController
         private void InitSiloControllers()
@@ -290,15 +385,70 @@ namespace Promax.Process
         bool a;
         protected override void Process()
         {
-            Thread.Sleep(2500);
+            //Thread.Sleep(2500);
             //ÜretimVariables.Periyot++;
-            if(a)
+            //if (a)
+            //{
+            //    number++;
+            //    var abc = new StockController(this);
+            //    AddRuntimeObject("Stock" + number, abc);
+            //    a = false;
+            //}
+            YeniProses();
+        }
+        public void ÜretimBaşlat(Product product)
+        {
+            if (!ÜretimVerilebilir || product == null)
+                return;
+            Product = product;
+            Senaryo = 1;
+        }
+        private void YeniProses()
+        {
+            if(Senaryo == 1)
             {
-                number++;
-                var abc = new StockController(this);
-                AddRuntimeObject("Stock" + number, abc);
-                a = false;
+                _stockControllers.ForEach(x => x.ÜretimBaşıİstenenHesapla(Product));
+                İstenenPeriyot = Product.AimBatch;
+                Senaryo = 2;
             }
+            else if (Senaryo == 2)
+            {
+                MalzemeAl();
+                if(AltSenaryo == 0)
+                {
+                    if (TümMalzemelerAlındı)
+                        AltSenaryo = 1;
+                }
+                else if(AltSenaryo == 1)
+                {
+                    MalzemeBoşalt();
+                    if(TümMalzemelerBoşaltıldı)
+                    {
+                        Periyot++;
+                        Product.RtmBatch = Periyot;
+                        Karıştır = true;
+                        AltSenaryo = 2;
+                        if(Periyot >= İstenenPeriyot)
+                        {
+                            Product.PosStatus = ProductionStatus.NormalBitiş;
+                            _productManager.Update(Product, Product);
+                            Senaryo = 0;
+                        }
+                    }
+                }
+            }
+            if(Karıştır)
+            {
+                MikserKarıştır();
+                if(Karıştırıldı)
+                {
+                    Karıştır = false;
+                    AltSenaryo = 0;
+                }
+            }
+        }
+        private void Eskiproses()
+        {
             //if (Periyot >= İstenenPeriyot)
             //    -Bitti -
             //MalzemeAl();

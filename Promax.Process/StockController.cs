@@ -16,11 +16,13 @@ namespace Promax.Process
         private List<SiloController> _siloControllers = new List<SiloController>();
 
         public VirtualPLCProperty İstenenProperty { get; private set; }
+        public VirtualPLCProperty İlaveMiktarProperty { get; private set; }
         public VirtualPLCProperty ToplamİstenenProperty { get; private set; }
         public VirtualPLCProperty ToplamÖlçülenProperty { get; private set; }
 
         public IEnumerable<SiloController> SiloControllers => _siloControllers;
         public double İstenen { get => (double)GetValue(İstenenProperty); set => SetValue(İstenenProperty, value); }
+        public double İlaveMiktar { get => (double)GetValue(İlaveMiktarProperty); set => SetValue(İlaveMiktarProperty, value); }
         public double Toplamİstenen { get => (double)GetValue(ToplamİstenenProperty); set => SetValue(ToplamİstenenProperty, value); }
         public double ToplamÖlçülen { get => (double)GetValue(ToplamÖlçülenProperty); set => SetValue(ToplamÖlçülenProperty, value); }
         public double Ölçülen
@@ -32,13 +34,14 @@ namespace Promax.Process
                 return d;
             }
         }
-        public double Kalan { get => İstenen - Ölçülen; }
+        public double Kalan { get => İstenen - Ölçülen + İlaveMiktar; }
         public Stock Stock { get; set; }
 
         public StockController(VirtualController controller) : base(controller)
         {
             var builder = new VirtualPLCPropertyBuilder(this);
             İstenenProperty = builder.Reset().Name(nameof(İstenen)).Type(typeof(double)).Retain(true).Output(true).Get();
+            İlaveMiktarProperty = builder.Reset().Name(nameof(İlaveMiktar)).Type(typeof(double)).Retain(true).Output(true).Get();
             ToplamİstenenProperty = builder.Reset().Name(nameof(Toplamİstenen)).Type(typeof(double)).Retain(true).Output(true).Get();
             ToplamÖlçülenProperty = builder.Reset().Name(nameof(ToplamÖlçülen)).Type(typeof(double)).Retain(true).Output(true).Get();
             _bindings.CreateBinding().Behaviour(MyBindingBehaviour.Invoke).Source(this).SourceProperty(nameof(Ölçülen)).WhenSourcePropertyChanged(() => OnPropertyChanged(nameof(Kalan)));

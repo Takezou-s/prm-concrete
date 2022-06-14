@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Dynamic;
@@ -297,7 +298,7 @@ namespace VirtualPLC
                             ReflectionController.SetPropertyValue(this, data.Path + ".Value", data.Value);
                             ReflectionController.SetPropertyValue(this, data.Path + ".TemporaryValue", data.TemporaryValue);
                         }
-                        catch
+                        catch(Exception ex)
                         {
                             ;
                         }

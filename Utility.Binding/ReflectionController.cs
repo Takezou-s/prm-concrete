@@ -45,9 +45,19 @@ namespace Utility.Binding
                 PropertyInfo prp = type.GetProperty(PropertyName, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
                 FieldInfo prp1 = type.GetField(PropertyName, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
                 if (prp != null)
-                    prp.SetValue(Instance, Convert.ChangeType(Value, prp.PropertyType));
+                {
+                    if (Value is IConvertible)
+                        prp.SetValue(Instance, Convert.ChangeType(Value, prp.PropertyType));
+                    else
+                        prp.SetValue(Instance, Value);
+                }
                 else if (prp1 != null)
-                    prp1.SetValue(Instance, Convert.ChangeType(Value, prp.PropertyType));
+                {
+                    if (Value is IConvertible)
+                        prp1.SetValue(Instance, Convert.ChangeType(Value, prp.PropertyType));
+                    else
+                        prp1.SetValue(Instance, Value);
+                }
             }
         }
         public static void SetPropertyValueInvariantCulture(object Instance, string PropertyName, object Value)
@@ -86,9 +96,19 @@ namespace Utility.Binding
                 PropertyInfo prp = type.GetProperty(PropertyName, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
                 FieldInfo prp1 = type.GetField(PropertyName, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
                 if (prp != null)
-                    prp.SetValue(Instance, Convert.ChangeType(Value, prp.PropertyType, CultureInfo.InvariantCulture));
+                {
+                    if (Value is IConvertible)
+                        prp.SetValue(Instance, Convert.ChangeType(Value, prp.PropertyType, CultureInfo.InvariantCulture));
+                    else
+                        prp.SetValue(Instance, Value);
+                }
                 else if (prp1 != null)
-                    prp1.SetValue(Instance, Convert.ChangeType(Value, prp1.FieldType, CultureInfo.InvariantCulture));
+                {
+                    if (Value is IConvertible)
+                        prp1.SetValue(Instance, Convert.ChangeType(Value, prp1.FieldType, CultureInfo.InvariantCulture));
+                    else
+                        prp1.SetValue(Instance, Value);
+                }
             }
         }
         public static void SetPropertyValueInvariantCultureConverted(object Instance, string PropertyName, object Value)
@@ -128,13 +148,27 @@ namespace Utility.Binding
                 FieldInfo prp1 = type.GetField(PropertyName, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
                 if (prp != null)
                 {
-                    var converter = TypeDescriptor.GetConverter(prp.PropertyType);
-                    prp.SetValue(Instance, converter.ConvertFromInvariantString((string)Value));
+                    try
+                    {
+                        var converter = TypeDescriptor.GetConverter(prp.PropertyType);
+                        prp.SetValue(Instance, converter.ConvertFromInvariantString((string)Value));
+                    }
+                    catch
+                    {
+                        prp.SetValue(Instance, Value);
+                    }
                 }
                 else if (prp1 != null)
                 {
-                    var converter = TypeDescriptor.GetConverter(prp1.FieldType);
-                    prp1.SetValue(Instance, converter.ConvertFromInvariantString((string)Value));
+                    try
+                    {
+                        var converter = TypeDescriptor.GetConverter(prp1.FieldType);
+                        prp1.SetValue(Instance, converter.ConvertFromInvariantString((string)Value));
+                    }
+                    catch
+                    {
+                        prp1.SetValue(Instance, Value);
+                    }
                 }
             }
         }
@@ -226,14 +260,28 @@ namespace Utility.Binding
                 FieldInfo prp1 = type.GetField(PropertyName, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
                 if (prp != null && prp.PropertyType != null)
                 {
-                    var converter = TypeDescriptor.GetConverter(prp.PropertyType);
-                    Value = converter.ConvertToInvariantString(prp.GetValue(Instance));
+                    try
+                    {
+                        var converter = TypeDescriptor.GetConverter(prp.PropertyType);
+                        Value = converter.ConvertToInvariantString(prp.GetValue(Instance));
+                    }
+                    catch
+                    {
+                        Value = prp.GetValue(Instance);
+                    }
 
                 }
                 else if (prp1 != null && prp1.FieldType != null)
                 {
-                    var converter = TypeDescriptor.GetConverter(prp1.FieldType);
-                    Value = converter.ConvertToInvariantString(prp1.GetValue(Instance));
+                    try
+                    {
+                        var converter = TypeDescriptor.GetConverter(prp1.FieldType);
+                        Value = converter.ConvertToInvariantString(prp1.GetValue(Instance));
+                    }
+                    catch
+                    {
+                        Value = prp1.GetValue(Instance);
+                    }
                 }
             }
             return Value;
