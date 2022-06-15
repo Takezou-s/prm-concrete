@@ -58,6 +58,7 @@ namespace Promax.Entities
                 }
             }
         }
+
         #endregion
 
     }

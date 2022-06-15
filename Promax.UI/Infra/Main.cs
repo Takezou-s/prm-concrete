@@ -174,6 +174,7 @@ namespace Promax.UI
         public ParameterOwnerContainer ParameterOwnerContainer { get; private set; } = new ParameterOwnerContainer();
         public CommanderContainer CommanderContainer { get; private set; } = new CommanderContainer();
         public EntitiesWithStringKeyContainer EntityContainer { get; private set; } = new EntitiesWithStringKeyContainer();
+        public Container<Product> ProductContainer { get; private set; } = new Container<Product>();
 
         public MyParameterDomain ParameterDomain { get; private set; }
         public VariableController VariableController { get; private set; }
@@ -255,41 +256,180 @@ namespace Promax.UI
             #region StockEntryManager
             var StockEntryRepo = new EntityRepository<StockEntryDTO, ExpertContext>();
             var StockEntryNonRetentiveRepo = new NonRetentiveStockEntryRepository(StockEntryRepo, Mapper);
+            StockEntryNonRetentiveRepo.TriggerPeformer.CreateTrigger().After().Delete().Action((x, y) =>
+            {
+                StockManager.GetList(z => z.StockId == x.StockId)?.ForEach(z => z.Do(t => t.Balance -= x.Entry));
+                SiloManager.GetList(z => z.SiloId == x.SiloId)?.ForEach(z => z.Do(t => t.Balance -= x.Entry));
+            });
+            StockEntryNonRetentiveRepo.TriggerPeformer.CreateTrigger().After().Insert().Action((x, y) =>
+            {
+                StockManager.GetList(z => z.StockId == x.StockId)?.ForEach(z => z.Do(t => t.Balance += x.Entry));
+                SiloManager.GetList(z => z.SiloId == x.SiloId)?.ForEach(z => z.Do(t => t.Balance += x.Entry));
+            });
+            StockEntryNonRetentiveRepo.TriggerPeformer.CreateTrigger().After().Update().Action((x, y) =>
+            {
+                StockManager.GetList(z => z.StockId == x.StockId)?.ForEach(z => z.Do(t => t.Balance += x.Entry - y.Entry));
+                SiloManager.GetList(z => z.SiloId == x.SiloId)?.ForEach(z => z.Do(t => t.Balance += x.Entry - y.Entry));
+            });
             StockEntryManager = new StockEntryManager(StockEntryNonRetentiveRepo);
             #endregion
             #region SiloManager
             var SiloRepo = new EntityRepository<SiloDTO, ExpertContext>();
             var SiloRetentiveRepo = new RetentiveSiloRepository(SiloRepo, Mapper);
+            SiloRetentiveRepo.TriggerPeformer.CreateTrigger().After().Update().Action((x, y) =>
+            {
+                y.Do(z => StockManager.Get(stock => stock.StockId == z.StockId).Do(stock => SiloManager.Get(silo => silo.SiloId == z.SiloId).Do(silo => stock.RemoveSilo(silo))));
+                x.Do(z => StockManager.Get(stock => stock.StockId == z.StockId).Do(stock => SiloManager.Get(silo => silo.SiloId == z.SiloId).Do(silo => stock.AddSilo(silo))));
+                //x.Do(z => _stockManager.Get(stock => stock.StockId == z.StockId).Do(stock => stock.AddSilo(x)));
+                //y.Stock.Do(t => t.RemoveSilo(y));
+                //x.Stock = _stockManager.Get(stock => stock.StockId == x.StockId);
+                CheckSiloInStock(x);
+            });
+            SiloRetentiveRepo.TriggerPeformer.CreateTrigger().Before().Insert().Update().Action((x, y) =>
+            {
+                x.DoIf(z => z.Enabled.GetBool() && y.Stock != null, t =>
+                {
+                    t.IsStock = "true";
+                    bool activeFound = false;
+                    foreach (var item in t.Stock.Silos)
+                    {
+                        if (item != null && !item.Equals(t))
+                        {
+                            if (item.IsActive.GetBool())
+                            {
+                                activeFound = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!activeFound)
+                        t.IsActive = "true";
+                }
+                );
+            });
             SiloManager = new SiloManager(SiloRetentiveRepo);
             #endregion
             #region BatchedStockManager
             var BatchedStockRepo = new EntityRepository<BatchedStockDTO, ExpertContext>();
             var BatchedStockNonRetentiveRepo = new NonRetentiveBatchedStockRepository(BatchedStockRepo, Mapper);
+            BatchedStockNonRetentiveRepo.TriggerPeformer.CreateTrigger().After().Delete().Action((x, y) =>
+            {
+                StockManager.GetList(z => z.StockId == x.StockId)?.ForEach(z => z.Do(t => t.Balance += x.Batched));
+                SiloManager.GetList(z => z.SiloId == x.SiloId)?.ForEach(z => z.Do(t => t.Balance += x.Batched));
+            });
+            BatchedStockNonRetentiveRepo.TriggerPeformer.CreateTrigger().After().Insert().Action((x, y) =>
+            {
+                StockManager.GetList(z => z.StockId == x.StockId)?.ForEach(z => z.Do(t => t.Balance -= x.Batched));
+                SiloManager.GetList(z => z.SiloId == x.SiloId)?.ForEach(z => z.Do(t => t.Balance -= x.Batched));
+            });
+            BatchedStockNonRetentiveRepo.TriggerPeformer.CreateTrigger().After().Update().Action((x, y) =>
+            {
+                StockManager.GetList(z => z.StockId == x.StockId)?.ForEach(z => z.Do(t => t.Balance += y.Batched - x.Batched));
+                SiloManager.GetList(z => z.SiloId == x.SiloId)?.ForEach(z => z.Do(t => t.Balance += y.Batched - x.Batched));
+            });
             BatchedStockManager = new BatchedStockManager(BatchedStockNonRetentiveRepo);
             #endregion
             #region ConsumedStockManager
             var ConsumedStockRepo = new EntityRepository<ConsumedStockDTO, ExpertContext>();
             var ConsumedStockNonRetentiveRepo = new NonRetentiveConsumedStockRepository(ConsumedStockRepo, Mapper);
+            ConsumedStockNonRetentiveRepo.TriggerPeformer.CreateTrigger().After().Delete().Action((x, y) =>
+            {
+                StockManager.GetList(z => z.StockId == x.StockId)?.ForEach(z => z.Do(t => t.Balance += x.Consumed));
+                SiloManager.GetList(z => z.SiloId == x.SiloId)?.ForEach(z => z.Do(t => t.Balance += x.Consumed));
+            });
+            ConsumedStockNonRetentiveRepo.TriggerPeformer.CreateTrigger().After().Insert().Action((x, y) =>
+            {
+                StockManager.GetList(z => z.StockId == x.StockId)?.ForEach(z => z.Do(t => t.Balance -= x.Consumed));
+                SiloManager.GetList(z => z.SiloId == x.SiloId)?.ForEach(z => z.Do(t => t.Balance -= x.Consumed));
+            });
+            ConsumedStockNonRetentiveRepo.TriggerPeformer.CreateTrigger().After().Update().Action((x, y) =>
+            {
+                StockManager.GetList(z => z.StockId == x.StockId)?.ForEach(z => z.Do(t => t.Balance += y.Consumed - x.Consumed));
+                SiloManager.GetList(z => z.SiloId == x.SiloId)?.ForEach(z => z.Do(t => t.Balance += y.Consumed - x.Consumed));
+            });
             ConsumedStockManager = new ConsumedStockManager(ConsumedStockNonRetentiveRepo);
             #endregion
             #region DriverManager
             var DriverRepo = new EntityRepository<DriverDTO, ExpertContext>();
             var DriverRetentiveRepo = new RetentiveDriverRepository(DriverRepo, Mapper);
+            DriverRetentiveRepo.TriggerPeformer.CreateTrigger().After().Delete().Action((x, y) =>
+            {
+                ServiceManager.GetList(z => z.DriverId == x.DriverId)?.ForEach(z => z.Do(t => t.Driver = null));
+            });
+            DriverRetentiveRepo.TriggerPeformer.CreateTrigger().After().Update().Action((x, y) =>
+            {
+                x.DoIf(q => q.IsHidden.GetBool(), w => ServiceManager.GetList(z => z.DriverId == x.DriverId)?.ForEach(z => z.Do(t => t.Driver = null)));
+            });
             DriverManager = new DriverManager(DriverRetentiveRepo);
             #endregion
             #region ServiceManager
             var ServiceRepo = new EntityRepository<ServiceDTO, ExpertContext>();
             var ServiceRetentiveRepo = new RetentiveServiceRepository(ServiceRepo, Mapper);
+            ServiceRetentiveRepo.TriggerPeformer.CreateTrigger().Before().Insert().Update().Action((x, y) =>
+            {
+                x.ServiceCode.DoIf(z => !string.IsNullOrEmpty(z), z => x.ServiceName = z);
+                x.LicencePlate.DoIf(z => !string.IsNullOrEmpty(z), z => x.ServiceName += " " + z);
+            });
             ServiceManager = new ServiceManager(ServiceRetentiveRepo);
             #endregion
             #region ProductManager
             var ProductRepo = new EntityRepository<ProductDTO, ExpertContext>();
             var ProductNonRetentiveRepo = new NonRetentiveProductRepository(ProductRepo, Mapper);
+            ProductNonRetentiveRepo.TriggerPeformer.CreateTrigger().After().Insert().Action((x, y) =>
+            {
+                OrderManager.Do(orderManager => orderManager.Get(order => order.OrderId == x.OrderId).Do(order => order.Produced += x.Shipped));
+            });
+            ProductNonRetentiveRepo.TriggerPeformer.CreateTrigger().After().Insert().Update().Action((x, y) =>
+            {
+                OrderManager.Do(orderManager => orderManager.Get(order => order.OrderId == x.OrderId).Do(order =>
+                {
+                    order.AddWater = x.AddWater;
+                    order.PumpServiceId = x.PumpServiceId;
+                    order.ServiceCatNum = x.ServiceCatNum;
+                }));
+                x.DoIf(z => z.Pos >= 3, z => ProductContainer.Unregister(z));
+                FillProduct(x);
+            });
+            ProductNonRetentiveRepo.TriggerPeformer.CreateTrigger().After().Update().Action((x, y) =>
+            {
+                x.DoIfElse(z =>
+                {
+                    int id = -1;
+                    y.Do(yy => id = yy.OrderId);
+                    return !z.OrderId.IsEqual(id);
+                }, z =>
+                OrderManager.Do(orderManager => orderManager.Get(order => order.OrderId == x.OrderId).Do(order => order.Produced += x.Shipped - y.Shipped)), z =>
+                {
+                    OrderManager.Do(orderManager => orderManager.Get(order => order.OrderId == x.OrderId).Do(order => order.Produced += x.Shipped));
+                    OrderManager.Do(orderManager => orderManager.Get(order => order.OrderId == y.OrderId).Do(order => order.Produced -= y.Shipped));
+                });
+            });
+            ProductNonRetentiveRepo.TriggerPeformer.CreateTrigger().Before().Insert().Update().Action((x, y) =>
+            {
+                x.RealTarget = x.Target - x.Addon;
+                x.Shipped = x.Produced + x.Addon;
+                x.Recycled = x.Returned + x.Transfer;
+                x.Delivered = x.Shipped - x.Returned;
+
+                x.DoIfElse(z => z.Capacity > 0, z => z.AimBatch = (int)Math.Ceiling(z.RealTarget / z.Capacity), z => z.AimBatch = 0);
+                x.DoIfElse(z => z.AimBatch > 0, z => z.Ubm = z.RealTarget / ((double)z.AimBatch), z => z.Ubm = 0);
+
+            });
             ProductManager = new ProductManager(ProductNonRetentiveRepo);
             #endregion
             #region OrderManager
             var OrderRepo = new EntityRepository<OrderDTO, ExpertContext>();
             var OrderRetentiveRepo = new RetentiveOrderRepository(OrderRepo, Mapper);
+            OrderRetentiveRepo.TriggerPeformer.CreateTrigger().Before().Insert().Update().Action((x, y) =>
+            {
+                x.Remaining = x.Quantity - x.Produced;
+            });
+            OrderRetentiveRepo.TriggerPeformer.CreateTrigger().After().Insert().Update().Action((x, y) =>
+            {
+                x.OrderDate.DoIf(date => date.IsEarlierThan(date.MakeFirstDate().AddDays(-7)), date => x.OrderStatusEnum = OrderStatus.ZamanAşımı);
+                x.OrderDate.DoIf(date => date.IsEarlierThan(date.MakeFirstDate().AddDays(-14)), date => OrderManager.Delete(x));
+                FillOrderProperties(x);
+            });
             OrderManager = new OrderManager(OrderRetentiveRepo);
             #endregion
             #region UserManager
@@ -340,6 +480,8 @@ namespace Promax.UI
             _binding.CreateBinding().Source(Settings).SourceProperty(nameof(Settings.Ip)).Target(VariableController).TargetProperty(nameof(VariableController.Ip)).Mode(MyBindingMode.OneWay);
             _binding.CreateBinding().Source(Settings).SourceProperty(nameof(Settings.Timeout)).Target(VariableController).TargetProperty(nameof(VariableController.Timeout)).Mode(MyBindingMode.OneWay);
 
+            InitEntities();
+
         }
         public void FillContainers(object item)
         {
@@ -347,6 +489,67 @@ namespace Promax.UI
             item.DoIf(x => x is IVariableOwner, x => VariableOwnerContainer.Register(x as IVariableOwner));
             item.DoIf(x => x is IParameterOwner, x => ParameterOwnerContainer.Register(x as IParameterOwner));
             item.DoIf(x => x is IAnimationObject, x => AnimationObjectContainer.Register(x as IAnimationObject));
+        }
+        private void CheckSiloInStock(Silo x)
+        {
+            x.DoIf(z => !z.Enabled.GetBool() || !z.IsStock.GetBool(), t => StockManager.Get(z => z.StockId == t.StockId).Do(z => z.RemoveSilo(t)));
+            x.DoIf(z => z.Enabled.GetBool() || z.IsStock.GetBool(), t => StockManager.Get(z => z.StockId == t.StockId).Do(z => z.AddSilo(t)));
+        }
+        private void FillProduct(Product x)
+        {
+            x.Do(y => ClientManager.Get(client => client.ClientId == y.ClientId && !client.IsHidden.GetBool()).Do(z => y.Client = z));
+            x.Do(y => SiteManager.Get(site => site.SiteId == y.SiteId && !site.IsHidden.GetBool()).Do(z => y.Site = z));
+            x.Do(y => OrderManager.Get(order => order.OrderId == y.OrderId).Do(z => y.Order = z));
+            x.Do(y => RecipeManager.Get(recipe => recipe.RecipeId == y.RecipeId && !recipe.IsHidden.GetBool()).Do(z => y.Recipe = z));
+            x.Do(y => ServiceCategoryManager.Get(serviceCategory => serviceCategory.CatNum == y.ServiceCatNum).Do(z => y.ServiceCategory = z));
+            x.Do(y => ServiceManager.Get(service => service.ServiceId == y.ServiceId && !service.IsHidden.GetBool()).Do(z => y.Service = z));
+            x.Do(y => DriverManager.Get(driver => driver.DriverId == y.DriverId && !driver.IsHidden.GetBool()).Do(z => y.Driver = z));
+        }
+        private void FillOrderProperties(Order order)
+        {
+            order.Do(x => x.Client = ClientManager.Get(y => y.ClientId == x.ClientId));
+            order.Do(x => x.Site = SiteManager.Get(y => y.SiteId == x.SiteId));
+            order.Do(x => x.Recipe = RecipeManager.Get(y => y.RecipeId == x.RecipeId));
+            order.Do(x => x.ServiceCategory = ServiceCategoryManager.Get(y => y.CatNum == x.ServiceCatNum));
+        }
+        void InitEntities()
+        {
+            ServiceCategoryManager.GetList();
+            ClientManager.GetList()?.ForEach(x =>
+            {
+                SiteManager.GetList(y => x.ClientId == y.ClientId).ForEach(t => t.Do(z => x.AddSite(z)));
+                SentViewReader.GetList(" where CLIENT_ID='" + x.ClientId.ToString() + "' and PRODUCT_DATE between '" + DateTime.Now.MakeFirstDate().StartOfYear().ToString("yyyy-MM-dd") + "' and '" + DateTime.Now.MakeLastDate().ToString("yyyy-MM-dd") + "'")?.ForEach(y => x.Do(z => z.Delivered += y.Delivered));
+            });
+            StockManager.GetList()?.ForEach(x =>
+            {
+                SiloManager.GetList(y => x.StockId == y.StockId && y.Enabled.GetBool() && y.IsStock.GetBool()).ForEach(t => t.Do(z => x.AddSilo(z)));
+                SiloManager.GetList(y => y.StockCatNum == x.StockCatNum).ForEach(y => y.Do(silo => silo.AvailableStocks.Add(x)));
+            });
+            RecipeManager.GetList()?.ForEach(x =>
+            {
+                RecipeContentManager.GetList(y => x.RecipeId == y.RecipeId).ForEach(t => t.Do(z => x.AddRecipeContent(z)));
+            });
+            RecipeContentManager.GetList()?.ForEach(x =>
+            {
+                StockManager.Get(y => y.StockId == x.StockId).Do(y => x.Stock = y);
+            });
+            ServiceManager.GetList()?.ForEach(x =>
+            {
+                DriverManager.Get(y => x.DriverId == y.DriverId && !y.IsHidden.GetBool()).Do(t => x.Driver = t);
+            });
+            UserManager.GetList();
+            OrderManager.GetList().ForEach(x =>
+            {
+                x.Do(y => ClientManager.Get(client => client.ClientId == y.ClientId && !client.IsHidden.GetBool()).Do(z => y.Client = z));
+                x.Do(y => SiteManager.Get(site => site.SiteId == y.SiteId && !site.IsHidden.GetBool()).Do(z => y.Site = z));
+                x.Do(y => RecipeManager.Get(recipe => recipe.RecipeId == y.RecipeId && !recipe.IsHidden.GetBool()).Do(z => y.Recipe = z));
+                x.Do(y => ServiceCategoryManager.Get(serviceCategory => serviceCategory.CatNum == y.ServiceCatNum).Do(z => y.ServiceCategory = z));
+            });
+            ProductManager.GetList(x=>x.Pos < 3).ForEach(x =>
+            {
+                ProductContainer.Register(x);
+                FillProduct(x);
+            });
         }
     }
 }

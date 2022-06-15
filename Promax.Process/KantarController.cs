@@ -86,7 +86,10 @@ namespace Promax.Process
         /// İstenen sayı kadar malzeme boşaltımının yapıldığını belirtir.
         /// </summary>
         public bool MalzemeBoşaltPeriyotTamamlandı => MalzemeBoşaltTamamlananPeriyot >= İstenenPeriyot;
-
+        /// <summary>
+        /// KantarController'ın sisteme dahil olup olmadığını belirtir, False ise MMalzemeAlındı ve MalzemeBoşaltıldı direk setlenir.
+        /// </summary>
+        public bool Enabled { get; set; }
 
         public KantarController(VirtualController controller, string variableOwnerName, string commanderName, VirtualPLCProperty istenenPeriyotProperty) : base(controller)
         {
@@ -114,6 +117,11 @@ namespace Promax.Process
             //Malzeme alındı ise geri dön.
             if (MalzemeAlındı)
                 return;
+            if(!Enabled)
+            {
+                MalzemeAlındı = true;
+                return;
+            }
             //Tüm siloların boşaltım tamamlandı durumuna göre _alındı değişkeninin değeri belirlenir. Boşaltımı bitmemiş ilk silonun MalzemeBoşalt methodu çağırılır.
             bool _alındı = true;
             foreach (var silo in Silolar)
@@ -158,8 +166,13 @@ namespace Promax.Process
             //Boşaltıldı ise geri dön.
             if (MalzemeBoşaltıldı)
                 return;
+            if (!Enabled)
+            {
+                MalzemeBoşaltıldı = true;
+                return;
+            }
             //İlk senaryo, boşalt komutu verilir ve bir sonraki senaryo adımına geçilir.
-            if(MalzemeBoşaltSenaryo == _boşaltKomutuSenaryo)
+            if (MalzemeBoşaltSenaryo == _boşaltKomutuSenaryo)
             {
                 InvokeCommand(CommandNames.EjectCommand);
                 MalzemeBoşaltSenaryo = _boşaltıldıİzleSenaryo;

@@ -11,7 +11,7 @@ namespace Promax.Business
     {
         public override void InitParameterOwners()
         {
-
+            
         }
     }
 }

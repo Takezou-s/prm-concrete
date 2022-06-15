@@ -1,0 +1,134 @@
+﻿<Window x:Class="Promax.UI.HomeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Promax.UI"
+        mc:Ignorable="d"
+        Title="MCSSoft v1.00" Width="1050" Height="650" Loaded="AnaSayfa_Loaded" WindowState="Maximized">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid Background="#FFF0F0F0" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Column="0">
+                <local:NewMenuButton x:Name="ScadaButon" Grid.Column="0" TheFrame="{Binding ElementName=Frame1}" ImageSource="Pictures/Icons/automation.png" Text="Scada" Style="{DynamicResource  MainTabControlStyle}">
+                    <local:NewMenuButton.TheWindow>
+                        <local:ScadaSayfası/>
+                    </local:NewMenuButton.TheWindow>
+                </local:NewMenuButton>
+                <Border   Grid.Column="1" Style="{StaticResource MainTabControlBorderStyle}"/>
+                <local:NewMenuButton  Grid.Column="2" TheFrame="{Binding ElementName=Frame1}" ImageSource="Pictures/Icons/folders.png" Text="Üretimler" Style="{DynamicResource  MainTabControlStyle}">
+                    <local:NewMenuButton.TheWindow>
+                        <local:ÜretimlerSayfası/>
+                    </local:NewMenuButton.TheWindow>
+                </local:NewMenuButton>
+                <Border  Grid.Column="3" Style="{StaticResource MainTabControlBorderStyle}"/>
+                <local:NewMenuButton  Grid.Column="4" TheFrame="{Binding ElementName=Frame1}" ImageSource="Pictures/Icons/growth.png" Text="Raporlar" Style="{DynamicResource  MainTabControlStyle}">
+                    <local:NewMenuButton.TheWindow>
+                        <local:MüşterilerSayfası/>
+                    </local:NewMenuButton.TheWindow>
+                </local:NewMenuButton>
+                <Border  Grid.Column="5" Style="{StaticResource MainTabControlBorderStyle}"/>
+                <local:NewMenuButton  Grid.Column="6" TheFrame="{Binding ElementName=Frame1}" ImageSource="Pictures/Icons/manager.png" Text="Müşteriler" Style="{DynamicResource  MainTabControlStyle}">
+                    <local:NewMenuButton.TheWindow>
+                        <local:MüşterilerSayfası/>
+                    </local:NewMenuButton.TheWindow>
+                </local:NewMenuButton>
+                <Border  Grid.Column="7" Style="{StaticResource MainTabControlBorderStyle}"/>
+                <local:NewMenuButton  Grid.Column="8" TheFrame="{Binding ElementName=Frame1}" ImageSource="Pictures/Icons/flask.png" Text="Reçeteler" Style="{DynamicResource  MainTabControlStyle}">
+                    <local:NewMenuButton.TheWindow>
+                        <local:ReçetelerSayfası/>
+                    </local:NewMenuButton.TheWindow>
+                </local:NewMenuButton>
+                <Border  Grid.Column="9" Style="{StaticResource MainTabControlBorderStyle}"/>
+                <local:NewMenuButton  Grid.Column="10" TheFrame="{Binding ElementName=Frame1}" ImageSource="Pictures/Icons/packages.png" Text="Stoklar" Style="{DynamicResource  MainTabControlStyle}">
+                    <local:NewMenuButton.TheWindow>
+                        <local:StoklarSayfası/>
+                    </local:NewMenuButton.TheWindow>
+                </local:NewMenuButton>
+                <Border  Grid.Column="11" Style="{StaticResource MainTabControlBorderStyle}"/>
+                <local:NewMenuButton  Grid.Column="12" TheFrame="{Binding ElementName=Frame1}" ImageSource="Pictures/Icons/concretes.png" Text="Servisler" Style="{DynamicResource  MainTabControlStyle}">
+                    <local:NewMenuButton.TheWindow>
+                        <local:ServislerSayfası/>
+                    </local:NewMenuButton.TheWindow>
+                </local:NewMenuButton>
+                <Border  Grid.Column="13" Style="{StaticResource MainTabControlBorderStyle}"/>
+                <Menu VerticalAlignment="Center">
+                    <MenuItem Template="{DynamicResource MainTabControlMenuButonStyle}">
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/Promax.UI;component/Pictures/Icons/consult.png" Width="20" Height="20" />
+                                <TextBlock Text="Teknik" Padding="5,0,5,0"/>
+                                <Image Source="/Promax.UI;component/Pictures/Icons/right-arrow.png" Width="8" Height="8"/>
+                            </StackPanel>
+                        </MenuItem.Header>
+                        <MenuItem  Header="Kullanıcı Değiştir" Template="{DynamicResource MenuItemPopUpStyle}" Click="Kullanici_Degistir_Click"/>
+                        <Separator/>
+                        <MenuItem Header="Kullanıcı Paneli" Template="{DynamicResource MenuItemPopUpStyle}" Click="Kullanici_Paneli_Click"/>
+                    </MenuItem>
+                </Menu>
+            </StackPanel>
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <Border   Style="{StaticResource MainTabControlBorderStyle}"/>
+                <local:MainTabControlMarkaButon/>
+                <Border  Style="{StaticResource MainTabControlBorderStyle}"/>
+                <Button  Click="MainTabControlAyarlarButon_Click" Style="{StaticResource MainTabControlButtonStyle}">
+                    <Button.Content >
+                        <Image  x:Name="BtnImage" Source="/Promax.UI;component/Pictures/Icons/wrenchgear.png" Width="32" Height="32" />
+                    </Button.Content>
+                </Button>
+                <Border   Style="{StaticResource MainTabControlBorderStyle}"/>
+                <Menu Width="25" Height="25" Margin="0,0,3,0">
+                    <MenuItem Template="{DynamicResource  MainTabControlMenuButonStyle}">
+                        <MenuItem.Icon>
+                            <Image Source="/Promax.UI;component/Pictures/Icons/menu.png" />
+                        </MenuItem.Icon>
+                        <local:MyMenuItem Header="Şimdi Yedekle"/>
+                        <Separator/>
+                        <MenuItem Template="{DynamicResource MenuItemTemplate2}" >
+                            <MenuItem.Header>
+                                <TextBlock Text="Diller"/>
+                            </MenuItem.Header>
+                            <local:MyMenuItem Header="_Türkçe" />
+                            <local:MyMenuItem Header="_İngilizce" IsCheckable="True"/>
+                            <local:MyMenuItem Header="_Russian" IsCheckable="True" />
+                            <local:MyMenuItem Header="_French" IsCheckable="True"/>
+                            <local:MyMenuItem Header="_Arabic" IsCheckable="True" />
+                            <local:MyMenuItem Header="_Farsi" IsCheckable="True"/>
+                            <local:MyMenuItem Header="_Espanol" IsCheckable="True" />
+                            <local:MyMenuItem Header="_Serbian" IsCheckable="True"/>
+                            <local:MyMenuItem Header="_Macedonian" IsCheckable="True" />
+                            <local:MyMenuItem Header="_Hungarian" IsCheckable="True"/>
+                            <local:MyMenuItem Header="_Polish" IsCheckable="True" />
+                            <local:MyMenuItem Header="_Deutsch" IsCheckable="True"/>
+                            <local:MyMenuItem Header="_Romanian" IsCheckable="True" />
+                            <local:MyMenuItem Header="_Chinese" IsCheckable="True"/>
+                            <local:MyMenuItem Header="_Czech" IsCheckable="True" />
+                            <local:MyMenuItem Header="_Slovak" IsCheckable="True"/>
+                        </MenuItem>
+                        <Separator/>
+                        <local:MyMenuItem Header="_Kalibrasyon" Click="Kalibrasyon_Click"/>
+                        <local:MyMenuItem Header="_Ayarlar" Click="MainTabControlAyarlarButon_Click"/>
+                        <Separator/>
+                        <local:MyMenuItem Header="_Firma Bilgileri" Click="Firma_Bilgileri_Click"/>
+                        <Separator/>
+                        <local:MyMenuItem Header="_Uygulamayı Kapat" />
+                    </MenuItem>
+
+
+                </Menu>
+            </StackPanel>
+        </Grid>
+        <Frame Name="Frame1"  NavigationUIVisibility="Hidden" Grid.Row="1"/>
+    </Grid>
+</Window>

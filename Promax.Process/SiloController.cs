@@ -93,6 +93,10 @@ namespace Promax.Process
         /// </summary>
         public bool Aktif { get => (bool)GetValue(AktifProperty); set => SetValue(AktifProperty, value); }
         /// <summary>
+        /// SiloController'ın sisteme dahil olup olmadığını belirtir, False ise MalzemeBoşaltıldı direk setlenir.
+        /// </summary>
+        public bool Enabled { get; set; }
+        /// <summary>
         /// Periyot
         /// </summary>
         public int Periyot { get => (int)GetValue(PeriyotProperty); set => SetValue(PeriyotProperty, value); }
@@ -168,6 +172,11 @@ namespace Promax.Process
             //Boşaltıldı ise geri dön.
             if (MalzemeBoşaltıldı)
                 return;
+            if(!Enabled)
+            {
+                MalzemeBoşaltıldı = true;
+                return;
+            }
             if (MalzemeBoşaltSenaryo == _boşaltKomutuSenaryo)
             {
                 //Aktif değilse PasifBoşaltıldı ve MalzemeBoşaltıldı setlenir, geri döner.
