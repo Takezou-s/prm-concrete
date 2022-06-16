@@ -54,7 +54,7 @@ namespace Utility.Binding
                 else if (prp1 != null)
                 {
                     if (Value is IConvertible)
-                        prp1.SetValue(Instance, Convert.ChangeType(Value, prp.PropertyType));
+                        prp1.SetValue(Instance, Convert.ChangeType(Value, prp1.FieldType));
                     else
                         prp1.SetValue(Instance, Value);
                 }
@@ -326,6 +326,43 @@ namespace Utility.Binding
                     value = property;
                 else if (field != null)
                     value = field;
+            }
+            return value;
+        }
+        public static PropertyInfo GetPropertyInfo(object Instance, string PropertyName)
+        {
+            PropertyInfo value = null;
+            if (PropertyName.Contains("."))
+            {
+                string[] split = PropertyName.Split('.');
+                string newProperty = string.Empty;
+                for (int i = 1; i <= split.Length - 1; i++)
+                {
+                    newProperty += split[i] + ".";
+                }
+                newProperty = newProperty.Remove(newProperty.Length - 1, 1);
+                object newInstance = null;
+                if (Instance is ExpandoObject)
+                {
+                    var dynoInstance = (IDictionary<string, object>)Instance;
+                    newInstance = dynoInstance[split[0]];
+                }
+                else
+                {
+                    Type type = Instance.GetType();
+                    PropertyInfo property = type.GetProperty(split[0], BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                    if (property != null)
+                        newInstance = property.GetValue(Instance);
+                }
+                if (newInstance != null)
+                    value = GetPropertyInfo(newInstance, newProperty);
+            }
+            else
+            {
+                Type type = Instance.GetType();
+                PropertyInfo property = type.GetProperty(PropertyName, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                if (property != null)
+                    value = property;
             }
             return value;
         }

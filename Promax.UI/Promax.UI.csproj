@@ -107,6 +107,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BindableDeneme.cs" />
     <Compile Include="Controllers\BatchedStockGridAdapter.cs" />
     <Compile Include="Controllers\BatchedStockGridAdapterCollection.cs" />
     <Compile Include="Controllers\ValidationErrorContainer.cs" />

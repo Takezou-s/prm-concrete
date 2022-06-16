@@ -83,6 +83,7 @@
     <Compile Include="ICommander\ICommander.cs" />
     <Compile Include="ICommander\ICommandScope.cs" />
     <Compile Include="IDirectedPropertyOwner.cs" />
+    <Compile Include="IFillContainer.cs" />
     <Compile Include="IMyEntity.cs" />
     <Compile Include="ICommander\MyCommand.cs" />
     <Compile Include="INameableObject.cs" />

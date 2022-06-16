@@ -95,7 +95,7 @@ namespace Promax.Process
         /// <summary>
         /// SiloController'ın sisteme dahil olup olmadığını belirtir, False ise MalzemeBoşaltıldı direk setlenir.
         /// </summary>
-        public bool Enabled { get; set; }
+        public bool Enabled { get; set; } = true;
         /// <summary>
         /// Periyot
         /// </summary>

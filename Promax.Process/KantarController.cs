@@ -87,9 +87,9 @@ namespace Promax.Process
         /// </summary>
         public bool MalzemeBoşaltPeriyotTamamlandı => MalzemeBoşaltTamamlananPeriyot >= İstenenPeriyot;
         /// <summary>
-        /// KantarController'ın sisteme dahil olup olmadığını belirtir, False ise MMalzemeAlındı ve MalzemeBoşaltıldı direk setlenir.
+        /// KantarController'ın sisteme dahil olup olmadığını belirtir, False ise MalzemeAlındı ve MalzemeBoşaltıldı direk setlenir.
         /// </summary>
-        public bool Enabled { get; set; }
+        public bool Enabled { get; set; } = true;
 
         public KantarController(VirtualController controller, string variableOwnerName, string commanderName, VirtualPLCProperty istenenPeriyotProperty) : base(controller)
         {

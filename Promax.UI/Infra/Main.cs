@@ -15,7 +15,7 @@ using Promax.Entities;
 
 namespace Promax.UI
 {
-    public class Main : IExceptionHandler, IExceptionLogger, INotifyPropertyChanged
+    public class Main : IExceptionHandler, IExceptionLogger, IFillContainer, INotifyPropertyChanged
     {
         private List<string> _loggedStackTraces = new List<string>();
         private MyBinding _binding;

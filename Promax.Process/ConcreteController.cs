@@ -69,6 +69,7 @@ namespace Promax.Process
         private SiloInitializer _siloInitializer;
         private IBatchedStockManager _batchedStockManager;
         private IProductManager _productManager;
+        private IFillContainer _fillContainer;
         #region SiloControllers
         public SiloController Agrega11 { get; private set; }
         public SiloController Agrega12 { get; private set; }
@@ -128,10 +129,15 @@ namespace Promax.Process
         public KantarController KatkıBunkeri1 { get; private set; }
         public KantarController KatkıBunkeri2 { get; private set; }
         #endregion
+        #region MikserControllers
+        public MikserController Mikser1 { get; private set; }
+        public MikserController Mikser2 { get; private set; }
+        #endregion
         public SaveBatchController SaveBatchController { get; private set; }
         public IEnumerable<IMalzemeAl> MalzemeAlanlar => _malzemeAlanlar;
         public IEnumerable<IMalzemeBoşalt> MalzemeBoşaltanlar => _malzemeBoşaltanlar;
         public IKarıştır Mikser { get; private set; }
+        public SistemAyarları SistemAyarları { get; set; }
         
 
         public bool TümMalzemelerAlındı { get => ProdVariables.TümMalzemelerAlındı; private set => ProdVariables.TümMalzemelerAlındı = value; }
@@ -148,42 +154,51 @@ namespace Promax.Process
         public int AltSenaryo { get => ProdVariables.AltSenaryo; set => ProdVariables.AltSenaryo = value; }
         public bool ÜretimVerilebilir { get => Senaryo == 0; }
         public User User { get; set; }
+        BindableDeneme deneme = new BindableDeneme();
+        bindabledeneme2 deneme2 = new bindabledeneme2();
         public ConcreteController(string path) : base(true, path)
         {
 
         }
 
-        public ConcreteController(string path, Container<Stock> stockContainer, SiloInitializer siloInitializer, IBatchedStockManager batchedStockManager, IProductManager productManager) : this(true, path, stockContainer, siloInitializer, batchedStockManager, productManager)
+        public ConcreteController(string path, Container<Stock> stockContainer, SiloInitializer siloInitializer, IBatchedStockManager batchedStockManager, IProductManager productManager, IFillContainer fillContainer) : this(true, path, stockContainer, siloInitializer, batchedStockManager, productManager, fillContainer)
         {
         }
 
-        public ConcreteController(bool init, string path, Container<Stock> stockContainer, SiloInitializer siloInitializer, IBatchedStockManager batchedStockManager, IProductManager productManager) : base(init, path)
+        public ConcreteController(bool init, string path, Container<Stock> stockContainer, SiloInitializer siloInitializer, IBatchedStockManager batchedStockManager, IProductManager productManager, IFillContainer fillContainer) : base(init, path)
         {
             _stockContainer = stockContainer;
             _siloInitializer = siloInitializer;
             _batchedStockManager = batchedStockManager;
             _productManager = productManager;
+            _fillContainer = fillContainer;
         }
 
         protected override void InitImp()
         {
             ProdVariables = new ProdControlVariables(this);
-
-            InitSiloControllers();
-            InitStockControllers();
-            InitKantarControllers();
-            SaveBatchController = new SaveBatchController(this, _siloControllers, _batchedStockManager);
+            deneme2.bindableDeneme = deneme;
+            //InitSiloControllers();
+            //InitStockControllers();
+            //InitKantarControllers();
+            //InitMikserControllers();
+            //SaveBatchController = new SaveBatchController(this, _siloControllers, _batchedStockManager);
+        }
+        private void InitMikserControllers()
+        {
+            Mikser1 = Created(new MikserController(this, "Mixer1", "Mixer1"));
+            Mikser2 = Created(new MikserController(this, "Mixer2", "Mixer2"));
         }
         private void InitKantarControllers()
         {
-            TartıBandı1 = new KantarController(this, "Weg1", "Weg1", ProdVariables.İstenenPeriyotProperty);
-            TartıBandı2 = new KantarController(this, "Weg2", "Weg2", ProdVariables.İstenenPeriyotProperty);
-            ÇimentoBunkeri1 = new KantarController(this, "Weg3", "Weg3", ProdVariables.İstenenPeriyotProperty);
-            ÇimentoBunkeri2 = new KantarController(this, "Weg4", "Weg4", ProdVariables.İstenenPeriyotProperty);
-            SuBunkeri1 = new KantarController(this, "Weg5", "Weg5", ProdVariables.İstenenPeriyotProperty);
-            SuBunkeri2 = new KantarController(this, "Weg6", "Weg6", ProdVariables.İstenenPeriyotProperty);
-            KatkıBunkeri1 = new KantarController(this, "Weg7", "Weg7", ProdVariables.İstenenPeriyotProperty);
-            KatkıBunkeri2 = new KantarController(this, "Weg8", "Weg8", ProdVariables.İstenenPeriyotProperty);
+            TartıBandı1 = Created(new KantarController(this, "Weg1", "Weg1", ProdVariables.İstenenPeriyotProperty));
+            TartıBandı2 = Created(new KantarController(this, "Weg2", "Weg2", ProdVariables.İstenenPeriyotProperty));
+            ÇimentoBunkeri1 = Created(new KantarController(this, "Weg3", "Weg3", ProdVariables.İstenenPeriyotProperty));
+            ÇimentoBunkeri2 = Created(new KantarController(this, "Weg4", "Weg4", ProdVariables.İstenenPeriyotProperty));
+            SuBunkeri1 = Created(new KantarController(this, "Weg5", "Weg5", ProdVariables.İstenenPeriyotProperty));
+            SuBunkeri2 = Created(new KantarController(this, "Weg6", "Weg6", ProdVariables.İstenenPeriyotProperty));
+            KatkıBunkeri1 = Created(new KantarController(this, "Weg7", "Weg7", ProdVariables.İstenenPeriyotProperty));
+            KatkıBunkeri2 = Created(new KantarController(this, "Weg8", "Weg8", ProdVariables.İstenenPeriyotProperty));
 
             TartıBandı1.Silolar.Add(Agrega11);
             TartıBandı1.Silolar.Add(Agrega12);
@@ -236,53 +251,53 @@ namespace Promax.Process
         #region SiloController
         private void InitSiloControllers()
         {
-            Agrega11 = CreateSiloController("AGG11");
-            Agrega12 = CreateSiloController("AGG12");
-            Agrega13 = CreateSiloController("AGG13");
-            Agrega14 = CreateSiloController("AGG14");
-            Agrega15 = CreateSiloController("AGG15");
-            Agrega16 = CreateSiloController("AGG16");
-            Agrega17 = CreateSiloController("AGG17");
-            Agrega18 = CreateSiloController("AGG18");
+            Agrega11 = Created(CreateSiloController("AGG11"));
+            Agrega12 = Created(CreateSiloController("AGG12"));
+            Agrega13 = Created(CreateSiloController("AGG13"));
+            Agrega14 = Created(CreateSiloController("AGG14"));
+            Agrega15 = Created(CreateSiloController("AGG15"));
+            Agrega16 = Created(CreateSiloController("AGG16"));
+            Agrega17 = Created(CreateSiloController("AGG17"));
+            Agrega18 = Created(CreateSiloController("AGG18"));
 
-            Agrega21 = CreateSiloController("AGG21");
-            Agrega22 = CreateSiloController("AGG22");
-            Agrega23 = CreateSiloController("AGG23");
-            Agrega24 = CreateSiloController("AGG24");
-            Agrega25 = CreateSiloController("AGG25");
-            Agrega26 = CreateSiloController("AGG26");
-            Agrega27 = CreateSiloController("AGG27");
-            Agrega28 = CreateSiloController("AGG28");
+            Agrega21 = Created(CreateSiloController("AGG21"));
+            Agrega22 = Created(CreateSiloController("AGG22"));
+            Agrega23 = Created(CreateSiloController("AGG23"));
+            Agrega24 = Created(CreateSiloController("AGG24"));
+            Agrega25 = Created(CreateSiloController("AGG25"));
+            Agrega26 = Created(CreateSiloController("AGG26"));
+            Agrega27 = Created(CreateSiloController("AGG27"));
+            Agrega28 = Created(CreateSiloController("AGG28"));
 
-            Çimento31 = CreateSiloController("CEM31");
-            Çimento32 = CreateSiloController("CEM32");
-            Çimento33 = CreateSiloController("CEM33");
-            Çimento34 = CreateSiloController("CEM34");
+            Çimento31 = Created(CreateSiloController("CEM31"));
+            Çimento32 = Created(CreateSiloController("CEM32"));
+            Çimento33 = Created(CreateSiloController("CEM33"));
+            Çimento34 = Created(CreateSiloController("CEM34"));
 
-            Çimento41 = CreateSiloController("CEM41");
-            Çimento42 = CreateSiloController("CEM42");
-            Çimento43 = CreateSiloController("CEM43");
-            Çimento44 = CreateSiloController("CEM44");
+            Çimento41 = Created(CreateSiloController("CEM41"));
+            Çimento42 = Created(CreateSiloController("CEM42"));
+            Çimento43 = Created(CreateSiloController("CEM43"));
+            Çimento44 = Created(CreateSiloController("CEM44"));
 
-            Su51 = CreateSiloController("WTR51");
-            Su52 = CreateSiloController("WTR52");
-            Su53 = CreateSiloController("WTR53");
-            Su54 = CreateSiloController("WTR54");
+            Su51 = Created(CreateSiloController("WTR51"));
+            Su52 = Created(CreateSiloController("WTR52"));
+            Su53 = Created(CreateSiloController("WTR53"));
+            Su54 = Created(CreateSiloController("WTR54"));
 
-            Su61 = CreateSiloController("WTR61");
-            Su62 = CreateSiloController("WTR62");
-            Su63 = CreateSiloController("WTR63");
-            Su64 = CreateSiloController("WTR64");
+            Su61 = Created(CreateSiloController("WTR61"));
+            Su62 = Created(CreateSiloController("WTR62"));
+            Su63 = Created(CreateSiloController("WTR63"));
+            Su64 = Created(CreateSiloController("WTR64"));
 
-            Katkı71 = CreateSiloController("ADV71");
-            Katkı72 = CreateSiloController("ADV72");
-            Katkı73 = CreateSiloController("ADV73");
-            Katkı74 = CreateSiloController("ADV74");
+            Katkı71 = Created(CreateSiloController("ADV71"));
+            Katkı72 = Created(CreateSiloController("ADV72"));
+            Katkı73 = Created(CreateSiloController("ADV73"));
+            Katkı74 = Created(CreateSiloController("ADV74"));
 
-            Katkı81 = CreateSiloController("ADV81");
-            Katkı82 = CreateSiloController("ADV82");
-            Katkı83 = CreateSiloController("ADV83");
-            Katkı84 = CreateSiloController("ADV84");
+            Katkı81 = Created(CreateSiloController("ADV81"));
+            Katkı82 = Created(CreateSiloController("ADV82"));
+            Katkı83 = Created(CreateSiloController("ADV83"));
+            Katkı84 = Created(CreateSiloController("ADV84"));
         }
         private SiloController CreateSiloController(string uniqueName)
         {
@@ -380,12 +395,32 @@ namespace Promax.Process
             }
         } 
         #endregion
-
+        private T Created<T>(T obj)
+        {
+            _fillContainer.FillContainers(obj);
+            return obj;
+        }
         int number;
         bool a;
         protected override void Process()
         {
-            //Thread.Sleep(2500);
+            Thread.Sleep(2500);
+            if(a)
+            {
+                ;
+                deneme.Int += 1;
+                
+            }
+            bool b = false;
+            if(b)
+            {
+                deneme.Sys = new SistemAyarları();
+            }
+            bool c = false; 
+            if(c)
+            {
+                deneme.Sys.Mikser1_KapakSayısı += 2;
+            }
             //ÜretimVariables.Periyot++;
             //if (a)
             //{
@@ -394,7 +429,9 @@ namespace Promax.Process
             //    AddRuntimeObject("Stock" + number, abc);
             //    a = false;
             //}
-            YeniProses();
+
+            //SistemAyarlarınıYap();
+            //YeniProses();
         }
         public void ÜretimBaşlat(Product product)
         {
@@ -403,6 +440,36 @@ namespace Promax.Process
             Product = product;
             Senaryo = 1;
         }
+        private void SistemAyarlarınıYap()
+        {
+            if (SistemAyarları == null || !ÜretimVerilebilir)
+                return;
+            TartıBandı1.Enabled = SistemAyarları.TartıBandı1_Var;
+            TartıBandı2.Enabled = SistemAyarları.TartıBandı2_Var;
+            ÇimentoBunkeri1.Enabled = SistemAyarları.ÇimentoBunkeri1_Var;
+            ÇimentoBunkeri2.Enabled = SistemAyarları.ÇimentoBunkeri2_Var;
+            SuBunkeri1.Enabled = SistemAyarları.SuBunkeri1_Var;
+            SuBunkeri2.Enabled = SistemAyarları.SuBunkeri2_Var;
+            KatkıBunkeri1.Enabled = SistemAyarları.KatkıBunkeri1_Var;
+            KatkıBunkeri2.Enabled = SistemAyarları.KatkıBunkeri2_Var;
+            SiloControllerEnabledAyarla(TartıBandı1, SistemAyarları.TartıBandı1_SiloSayısı);
+            SiloControllerEnabledAyarla(TartıBandı2, SistemAyarları.TartıBandı2_SiloSayısı);
+            SiloControllerEnabledAyarla(ÇimentoBunkeri1, SistemAyarları.ÇimentoBunkeri1_SiloSayısı);
+            SiloControllerEnabledAyarla(ÇimentoBunkeri2, SistemAyarları.ÇimentoBunkeri2_SiloSayısı);
+            SiloControllerEnabledAyarla(SuBunkeri1, SistemAyarları.SuBunkeri1_SiloSayısı);
+            SiloControllerEnabledAyarla(SuBunkeri2, SistemAyarları.SuBunkeri2_SiloSayısı);
+            SiloControllerEnabledAyarla(KatkıBunkeri1, SistemAyarları.KatkıBunkeri1_SiloSayısı);
+            SiloControllerEnabledAyarla(KatkıBunkeri2, SistemAyarları.KatkıBunkeri2_SiloSayısı);
+        }
+
+        private void SiloControllerEnabledAyarla(KantarController kantarController, int siloSayısı)
+        {
+            for (int i = 0; i < kantarController.Silolar.Count; i++)
+            {
+                kantarController.Silolar[i].Enabled = i < siloSayısı;
+            }
+        }
+
         private void YeniProses()
         {
             if(Senaryo == 1)
@@ -522,5 +589,57 @@ namespace Promax.Process
             Mikser.Karıştır();
             Karıştırıldı = Mikser.Karıştırıldı;
         }
+    }
+    class BindableDeneme : BindableObject
+    {
+        #region FieldsByAutoPropCreator
+        private int _int;
+        private SistemAyarları _sys;
+        #endregion
+        #region PropertiesByAutoPropCreator
+        public int Int
+        {
+            get
+            {
+                return _int;
+            }
+            set
+            {
+                SetValue(nameof(Int), value, nameof(_int));
+            }
+        }
+        public SistemAyarları Sys
+        {
+            get
+            {
+                return _sys;
+            }
+            set
+            {
+                SetValue(nameof(Sys), value, nameof(_sys));
+            }
+        }
+        #endregion
+
+    }
+    class bindabledeneme2:BindableObject
+    {
+        #region FieldsByAutoPropCreator
+        private BindableDeneme _bindableDeneme;
+        #endregion
+        #region PropertiesByAutoPropCreator
+        public BindableDeneme bindableDeneme
+        {
+            get
+            {
+                return _bindableDeneme;
+            }
+            set
+            {
+                SetValue(nameof(bindableDeneme), value, nameof(_bindableDeneme));
+            }
+        }
+        #endregion
+
     }
 }

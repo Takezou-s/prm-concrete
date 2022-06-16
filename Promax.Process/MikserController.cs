@@ -29,7 +29,7 @@ namespace Promax.Process
         /// Dışarıdan gelen "Karıştırıldı" bilgisi. Karıştır komutu verildikten sonra bu bilgi takip edilir.
         /// </summary>
         public bool MixingDoneInfo { get => (bool)GetValue(MixingDoneInfoProperty); set => SetValue(MixingDoneInfoProperty, value); }
-
+        
         public MikserController(VirtualController controller, string variableOwnerName, string commanderName) : base(controller)
         {
             VariableOwnerName = variableOwnerName;

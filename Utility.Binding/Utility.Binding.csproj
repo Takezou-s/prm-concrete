@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BindableObject.cs" />
     <Compile Include="BindingHandler.cs" />
     <Compile Include="FuncConverter.cs" />
     <Compile Include="IBeeValueConverter.cs" />

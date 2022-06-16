@@ -45,7 +45,7 @@ namespace Promax.UI
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Load();
-            //new ConcreteController("deneme.txt");
+            new ConcreteController("deneme.txt");
         }
         private void Load()
         {
