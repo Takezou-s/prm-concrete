@@ -104,17 +104,21 @@ namespace Promax.Process
         /// İstenen bilgisi alınır.
         /// </summary>
         public StockController StockController { get => _stockController; set => _stockController = value.DoReturn(x => x.AddSiloController(this)); }
+        /// <summary>
+        /// Silo numarası.
+        /// </summary>
+        public int SiloNo { get; set; }
         public SiloController(VirtualController controller, string uniqueName, SiloInitializer siloInitializer) : this(controller, uniqueName, siloInitializer.GetSiloControllerDependencies(uniqueName))
         {
 
         }
         private SiloController(VirtualController controller, string uniqueName, SiloControllerDependencies a) : 
-            this(controller, uniqueName, a.ParameterOwner, a.NameInRecipeScope, a.NameInParameterScope, a.VariableOwnerName, a.CommanderName, a.ParameterScope, a.RecipeScope)
+            this(controller, uniqueName, a.ParameterOwner, a.NameInRecipeScope, a.NameInParameterScope, a.VariableOwnerName, a.CommanderName, a.ParameterScope, a.RecipeScope, a.SiloNo)
         {
 
         }
 
-        public SiloController(VirtualController controller, string uniqueName, ParameterOwnerBase parameterOwner, string nameInRecipeScope, string nameInParameterScope, string variableOwnerName, string commanderName, IVariables parameterScope, IVariables recipeScope) : base(controller)
+        public SiloController(VirtualController controller, string uniqueName, ParameterOwnerBase parameterOwner, string nameInRecipeScope, string nameInParameterScope, string variableOwnerName, string commanderName, IVariables parameterScope, IVariables recipeScope, int siloNo) : base(controller)
         {
             UniqueName = uniqueName;
             ParameterOwner = parameterOwner;
@@ -124,6 +128,7 @@ namespace Promax.Process
             NameInParameterScope = nameInParameterScope;
             VariableOwnerName = variableOwnerName;
             CommanderName = commanderName;
+            SiloNo = siloNo;
             var builder = new VirtualPLCPropertyBuilder(this);
             MalzemeBoşaltıldıProperty = builder.Reset().Name(nameof(MalzemeBoşaltıldı)).Type(typeof(bool)).Retain(true).Get();
             MalzemeBoşaltSenaryoProperty = builder.Reset().Name(nameof(MalzemeBoşaltSenaryo)).Type(typeof(int)).Retain(true).Get();
@@ -202,6 +207,8 @@ namespace Promax.Process
                 }
                 //İstenen değer yazılır.
                 RecipeScope.Write(NameInRecipeScope, "İstenen", İstenen);
+                //Silo numarası yazılır.
+                ParameterScope.Write(NameInParameterScope, "SiloNo", SiloNo);
                 //Parametreler yazılır.
                 WriteParameters();
                 //Boşalt komutu verilir.

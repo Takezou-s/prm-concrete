@@ -10,9 +10,10 @@ namespace Promax.Core
     {
         public static readonly string EjectCommand = "EjectCommand";
         public static readonly string EjectedInfoResponse = "EjectedInfoResponse";
-        public static readonly string StopCommand="StopCommand";
-        public static readonly string RunCommand="RunCommand";
-        public static readonly string MixCommand="MixCommand";
-        public static readonly string MixingDoneInfoResponse= "MixingDoneInfoResponse";
+        public static readonly string StopCommand = "StopCommand";
+        public static readonly string RunCommand = "RunCommand";
+        public static readonly string MixCommand = "MixCommand";
+        public static readonly string MixingDoneInfoResponse = "MixingDoneInfoResponse";
+        public static readonly string SelectGateNumCommand = "SelectGateNum;
     }
 }

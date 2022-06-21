@@ -12,6 +12,7 @@ using System.Windows;
 using Utility.Binding;
 using Promax.DataAccess;
 using Promax.Entities;
+using Promax.Process;
 
 namespace Promax.UI
 {
@@ -175,9 +176,13 @@ namespace Promax.UI
         public CommanderContainer CommanderContainer { get; private set; } = new CommanderContainer();
         public EntitiesWithStringKeyContainer EntityContainer { get; private set; } = new EntitiesWithStringKeyContainer();
         public Container<Product> ProductContainer { get; private set; } = new Container<Product>();
+        public Container<Stock> StockContainer { get; private set; } = new Container<Stock>();
+        public Container<Silo> SiloContainer { get; private set; } = new Container<Silo>();
+        public SiloInitializer SiloInitializer { get; private set; } = new SiloInitializer();
 
         public MyParameterDomain ParameterDomain { get; private set; }
         public VariableController VariableController { get; private set; }
+        public ConcreteController ConcreteController { get; private set; }
         public void Init()
         {
             _binding = new MyBinding();
@@ -250,6 +255,7 @@ namespace Promax.UI
                         t.Recipe?.RemoveRecipeContent(t);
                         RecipeContentManager.Delete(t);
                     }));
+                StockContainer.Unregister(x);
             });
             StockManager = new StockManager(StockRetentiveRepo);
             #endregion
@@ -459,6 +465,8 @@ namespace Promax.UI
             Serializer = new Serializer("saves\\Settings.json");
             RetainVariableController = new RetainVariableController(Serializer, Settings);
 
+            InitEntities();
+
             VariableCommunicator = new EasyModbusCommunicator(this);
             VariableScope = new VariableScope(VariableCommunicator);
             VariableCommunicator.SetVariables(VariableScope);
@@ -480,8 +488,57 @@ namespace Promax.UI
             _binding.CreateBinding().Source(Settings).SourceProperty(nameof(Settings.Ip)).Target(VariableController).TargetProperty(nameof(VariableController.Ip)).Mode(MyBindingMode.OneWay);
             _binding.CreateBinding().Source(Settings).SourceProperty(nameof(Settings.Timeout)).Target(VariableController).TargetProperty(nameof(VariableController.Timeout)).Mode(MyBindingMode.OneWay);
 
-            InitEntities();
+            var builder = new SiloControllerDependenciesBuilder().SetParameterScope(RetentiveParameters).SetRecipeScope(RecipeScope);
+            SiloInitializer.SiloContainer = SiloContainer;
+            SiloInitializer.Add("AGG11", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.AGG11).SetAllName("Weg1Silo").SetSiloNo(1).Create());
+            SiloInitializer.Add("AGG12", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.AGG12).SetSiloNo(2).Create());
+            SiloInitializer.Add("AGG13", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.AGG13).SetSiloNo(3).Create());
+            SiloInitializer.Add("AGG14", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.AGG14).SetSiloNo(4).Create());
+            SiloInitializer.Add("AGG15", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.AGG15).SetSiloNo(5).Create());
+            SiloInitializer.Add("AGG16", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.AGG16).SetSiloNo(6).Create());
+            SiloInitializer.Add("AGG17", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.AGG17).SetSiloNo(7).Create());
+            SiloInitializer.Add("AGG18", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.AGG18).SetSiloNo(8).Create());
 
+            SiloInitializer.Add("AGG21", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.AGG21).SetAllName("Weg2Silo").SetSiloNo(1).Create());
+            SiloInitializer.Add("AGG22", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.AGG22).SetSiloNo(2).Create());
+            SiloInitializer.Add("AGG23", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.AGG23).SetSiloNo(3).Create());
+            SiloInitializer.Add("AGG24", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.AGG24).SetSiloNo(4).Create());
+            SiloInitializer.Add("AGG25", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.AGG25).SetSiloNo(5).Create());
+            SiloInitializer.Add("AGG26", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.AGG26).SetSiloNo(6).Create());
+            SiloInitializer.Add("AGG27", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.AGG27).SetSiloNo(7).Create());
+            SiloInitializer.Add("AGG28", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.AGG28).SetSiloNo(8).Create());
+
+            SiloInitializer.Add("CEM31", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.CEM31).SetAllName("Weg3Silo").SetSiloNo(1).Create());
+            SiloInitializer.Add("CEM32", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.CEM32).SetSiloNo(2).Create());
+            SiloInitializer.Add("CEM33", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.CEM33).SetSiloNo(3).Create());
+            SiloInitializer.Add("CEM34", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.CEM34).SetSiloNo(4).Create());
+
+            SiloInitializer.Add("CEM41", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.CEM41).SetAllName("Weg4Silo").SetSiloNo(1).Create());
+            SiloInitializer.Add("CEM42", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.CEM42).SetSiloNo(2).Create());
+            SiloInitializer.Add("CEM43", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.CEM43).SetSiloNo(3).Create());
+            SiloInitializer.Add("CEM44", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.CEM44).SetSiloNo(4).Create());
+
+            SiloInitializer.Add("WTR51", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.WTR51).SetAllName("Weg5Silo").SetSiloNo(1).Create());
+            SiloInitializer.Add("WTR52", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.WTR52).SetSiloNo(2).Create());
+            SiloInitializer.Add("WTR53", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.WTR53).SetSiloNo(3).Create());
+            SiloInitializer.Add("WTR54", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.WTR54).SetSiloNo(4).Create());
+                                 
+            SiloInitializer.Add("WTR61", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.WTR61).SetAllName("Weg6Silo").SetSiloNo(1).Create());
+            SiloInitializer.Add("WTR62", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.WTR62).SetSiloNo(2).Create());
+            SiloInitializer.Add("WTR63", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.WTR63).SetSiloNo(3).Create());
+            SiloInitializer.Add("WTR64", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.WTR64).SetSiloNo(4).Create());
+
+            SiloInitializer.Add("ADV71", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.ADV71).SetAllName("Weg7Silo").SetSiloNo(1).Create());
+            SiloInitializer.Add("ADV72", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.ADV72).SetSiloNo(2).Create());
+            SiloInitializer.Add("ADV73", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.ADV73).SetSiloNo(3).Create());
+            SiloInitializer.Add("ADV74", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.ADV74).SetSiloNo(4).Create());
+
+            SiloInitializer.Add("ADV81", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.ADV81).SetAllName("Weg8Silo").SetSiloNo(1).Create());
+            SiloInitializer.Add("ADV82", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.ADV82).SetSiloNo(2).Create());
+            SiloInitializer.Add("ADV83", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.ADV83).SetSiloNo(3).Create());
+            SiloInitializer.Add("ADV84", builder.SetParameterOwner(ParameterDomain.ParameterOwnerContext.ADV84).SetSiloNo(4).Create());
+
+            ConcreteController = new ConcreteController("RetainVariables.json", StockContainer, SiloInitializer, BatchedStockManager, ProductManager, this);
         }
         public void FillContainers(object item)
         {
@@ -524,6 +581,11 @@ namespace Promax.UI
             {
                 SiloManager.GetList(y => x.StockId == y.StockId && y.Enabled.GetBool() && y.IsStock.GetBool()).ForEach(t => t.Do(z => x.AddSilo(z)));
                 SiloManager.GetList(y => y.StockCatNum == x.StockCatNum).ForEach(y => y.Do(silo => silo.AvailableStocks.Add(x)));
+                StockContainer.Register(x);
+            });
+            SiloManager.GetList().ForEach(x =>
+            {
+                SiloContainer.Register(x);
             });
             RecipeManager.GetList()?.ForEach(x =>
             {

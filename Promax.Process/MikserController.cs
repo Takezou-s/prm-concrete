@@ -11,6 +11,7 @@ namespace Promax.Process
         public VirtualPLCProperty KarıştırıldıProperty { get; private set; }
         public VirtualPLCProperty KarıştırSenaryoProperty { get; private set; }
         public VirtualPLCProperty MixingDoneInfoProperty { get; private set; }
+        public VirtualPLCProperty GateNumProperty { get; private set; }
         #endregion
         #region Senaryo adımları
         private readonly int _karıştırKomutuSenaryo = 0;
@@ -29,7 +30,10 @@ namespace Promax.Process
         /// Dışarıdan gelen "Karıştırıldı" bilgisi. Karıştır komutu verildikten sonra bu bilgi takip edilir.
         /// </summary>
         public bool MixingDoneInfo { get => (bool)GetValue(MixingDoneInfoProperty); set => SetValue(MixingDoneInfoProperty, value); }
-        
+        /// <summary>
+        /// Seçili kapak numarası.
+        /// </summary>
+        public int GateNum { get => (int)GetValue(GateNumProperty); set => SetValue(GateNumProperty, value); }
         public MikserController(VirtualController controller, string variableOwnerName, string commanderName) : base(controller)
         {
             VariableOwnerName = variableOwnerName;
@@ -38,6 +42,7 @@ namespace Promax.Process
             KarıştırıldıProperty = builder.Reset().Name(nameof(Karıştırıldı)).Type(typeof(bool)).Retain(true).Get();
             KarıştırSenaryoProperty = builder.Reset().Name(nameof(KarıştırSenaryo)).Type(typeof(int)).Retain(true).Get();
             MixingDoneInfoProperty = builder.Reset().Name(nameof(MixingDoneInfo)).Type(typeof(bool)).Input(true).Retain(true).Get();
+            GateNumProperty = builder.Reset().Name(nameof(MixingDoneInfo)).Type(typeof(int)).Retain(true).Get();
             InitVariables();
             InitCommands();
         }
@@ -51,6 +56,7 @@ namespace Promax.Process
             //Karıştır komutu verilir.
             if (KarıştırSenaryo == _karıştırKomutuSenaryo)
             {
+                InvokeCommand(CommandNames.SelectGateNumCommand, new object[] { GateNum });
                 InvokeCommand(CommandNames.MixCommand);
                 KarıştırSenaryo = _karıştırıldıİzleSenaryo;
             }
